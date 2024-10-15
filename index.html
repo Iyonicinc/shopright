@@ -3,9 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Homepage</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Header Example</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
 </head>
+<body>
+
+<header>
+    <!-- Logo -->
+    <div class="logo">
+        <img src="https://via.placeholder.com/40" alt="Logo">
+    </div>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#">Home</a>
+        <a href="#">All Destinations</a>
+        <div class="dropdown">
+            <a href="#">Hire Cars</a>
+            <div class="dropdown-content">
+                <a href="#">Car Type 1</a>
+                <a href="#">Car Type 2</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <input type="text" placeholder="Search...">
+        <button type="submit">&#128269;</button>
+    </div>
+
+    <!-- User Icon -->
+    <div class="user-icon">
+        <div class="dropdown">
+            <img src="https://via.placeholder.com/30" alt="User Icon">
+            <div class="dropdown-content">
+                <a href="#">Profile</a>
+                <a href="#">Logout</a>
+            </div>
+        </div>
+    </div>
+</header>
 <body>
 
     <div id="wrap" class="oe_structure oe_empty">
