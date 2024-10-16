@@ -3,203 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Header Example</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to external CSS file -->
+    <title>Header with Categories</title>
+    <link rel="stylesheet" href="style.css"> <!-- Link to the external CSS file -->
 </head>
 <body>
 
 <header>
-    <!-- Logo -->
+    <!-- Logo Section -->
     <div class="logo">
-        <img src="https://via.placeholder.com/40" alt="Logo">
+        <img src="https://via.placeholder.com/50" alt="Logo">
     </div>
 
-    <!-- Navigation -->
+    <!-- Navigation Section -->
     <nav>
-        <a href="#">Home</a>
-        <a href="#">All Destinations</a>
+        <!-- Phones Category -->
         <div class="dropdown">
-            <a href="#">Hire Cars</a>
+            <a href="#" class="dropdown-btn">Phones</a>
             <div class="dropdown-content">
-                <a href="#">Car Type 1</a>
-                <a href="#">Car Type 2</a>
+                <a href="#">Samsung</a>
+                <a href="#">Redmi</a>
+                <a href="#">Infinix</a>
+                <a href="#">Oppo</a>
+            </div>
+        </div>
+
+        <!-- Laptops Category -->
+        <div class="dropdown">
+            <a href="#" class="dropdown-btn">Laptops</a>
+            <div class="dropdown-content">
+                <a href="#">HP</a>
+                <a href="#">Lenovo</a>
+                <a href="#">Dell</a>
+            </div>
+        </div>
+
+        <!-- TVs Category -->
+        <div class="dropdown">
+            <a href="#" class="dropdown-btn">TVs</a>
+            <div class="dropdown-content">
+                <a href="#">Samsung</a>
+                <a href="#">Hisense</a>
+                <a href="#">TCL</a>
             </div>
         </div>
     </nav>
 
-    <!-- Search Bar -->
+    <!-- Search Bar Section -->
     <div class="search-bar">
         <input type="text" placeholder="Search...">
         <button type="submit">&#128269;</button>
     </div>
-
-    <!-- User Icon -->
-    <div class="user-icon">
-        <div class="dropdown">
-            <img src="https://via.placeholder.com/30" alt="User Icon">
-            <div class="dropdown-content">
-                <a href="#">Profile</a>
-                <a href="#">Logout</a>
-            </div>
-        </div>
-    </div>
 </header>
-<body>
-
-    <div id="wrap" class="oe_structure oe_empty">
-        
-        <!-- Search Section -->
-        <section class="s_text_block o_colored_level pt0 pb0 bg-black">
-            <div class="s_allow_columns o_container_small">
-                <form method="get" class="o_searchbar_form s_searchbar_input" action="/website/search">
-                    <div role="search" class="input-group">
-                        <input type="search" name="search" class="search-query form-control oe_search_box" placeholder="Search..." autocomplete="off"/>
-                        <button type="submit" aria-label="Search" title="Search" class="btn oe_search_button btn-primary">
-                            <i class="oi oi-search"></i>​​
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </section>
-        
-        <!-- Empty Section -->
-        <section class="s_text_block o_colored_level pb0 pt0 bg-900">
-            <div class="container s_allow_columns"></div>
-        </section>
-        
-        <!-- Cover Section with Background Image -->
-        <section class="s_cover bg-black-50 o_colored_level s_parallax_no_overflow_hidden pb256 pt256" style="background-image: url('/unsplash/Yux2A4_l0nU/Nice%20city%20at%20night.jpg');">
-            <div class="o_we_bg_filter bg-black-15"></div>
-        </section>
-        
-        <!-- Title Section -->
-        <section class="s_title o_colored_level bg-900 pt0 pb0" style="position: relative;">
-            <div class="s_allow_columns container">
-                <h2 class="display-3-fs" style="text-align: center;">
-                    <span class="bg-900">Trending&nbsp;Destinations</span>
-                    <span style="background-color: rgb(177, 138, 167);"></span>
-                </h2>
-            </div>
-        </section>
-        
-        <!-- Monte Carlo Section -->
-        <section class="s_text_image o_colored_level pb0 bg-900 pt0">
-            <div class="container">
-                <div class="row o_grid_mode">
-                    <div class="o_colored_level o_grid_item g-col-lg-6 o_animate o_anim_slide_in o_anim_from_left col-lg-6" style="grid-area: 3 / 1 / 9 / 7;">
-                        <h2 class="o_default_snippet_text"><em>Monte-Carlo<br/><br/></em></h2>
-                        <p class="o_default_snippet_text">
-                            &nbsp;The glamour and luxury of Monte Carlo, a dazzling destination nestled on the Jewel of the French Riviera&nbsp;<br/>
-                        </p>
-                        <p><br/>
-                            <a href="/monte-carlo" class="btn btn-primary o_anim_bounce_in">
-                                <strong>View More</strong>
-                            </a><br/>
-                        </p>
-                    </div>
-                    <div class="o_colored_level o_grid_item g-col-lg-5 col-lg-5 border" style="grid-area: 3 / 8 / 9 / 13; border-color: rgb(0, 255, 255);">
-                        <img src="/unsplash/LWRE8kzhB54/monte carlo.jpg" alt="red convertible near bollard" class="img img-fluid mx-auto o_we_custom_image o_anim_zoom_in" loading="eager"/>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Nice Section -->
-        <section class="s_text_image o_colored_level pb0 pt0 bg-900">
-            <div class="container">
-                <div class="row o_grid_mode">
-                    <div class="o_colored_level o_grid_item g-col-lg-6 o_anim_slide_in o_anim_from_right col-lg-6" style="grid-area: 3 / 7 / 9 / 13;">
-                        <h2 class="o_default_snippet_text">Nice&nbsp;</h2>
-                        <p>&nbsp;Nice, a must-visit destination for travelers seeking a blend of relaxation and adventure.</p>
-                        <p>
-                            <a href="/destinations/france/nice" class="btn btn-primary o_anim_bounce_in">
-                                <strong>View More</strong>
-                            </a><br/>
-                        </p>
-                    </div>
-                    <div class="o_colored_level o_grid_item g-col-lg-5 col-lg-5 border" style="grid-area: 3 / 1 / 9 / 6; border-color: rgb(0, 255, 255);">
-                        <img src="/unsplash/5g8dJvtYRYA/france.jpg" alt="aerial photography of lighted concrete buildings at night" class="img img-fluid mx-auto o_we_custom_image o_anim_zoom_in" loading="eager"/>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Paris Section -->
-        <section class="s_text_image o_colored_level bg-900 pt0 pb16">
-            <div class="container">
-                <div class="row o_grid_mode">
-                    <div class="o_colored_level o_grid_item col-lg-6 o_anim_slide_in o_anim_from_left" style="grid-area: 1 / 1 / 7 / 7;">
-                        <h2 class="o_default_snippet_text">Paris</h2>
-                        <p class="o_default_snippet_text">&nbsp;<br/>Discover the timeless allure of Paris, a city renowned for its rich history, world-class art, and stunning architecture<br/><br/><br/></p>
-                        <p>
-                            <a href="/destinations/france/paris" class="btn btn-primary o_anim_bounce_in">
-                                <strong>View More</strong>
-                            </a><br/>
-                        </p>
-                    </div>
-                    <div class="o_colored_level o_grid_item col-lg-5 border" style="grid-area: 1 / 8 / 7 / 13; border-color: rgb(0, 255, 255);">
-                        <img src="/unsplash/R5scocnOOdM/paris.jpg" alt="bridge during night time" class="img img-fluid mx-auto o_we_custom_image o_anim_zoom_in" loading="eager"/>
-                    </div>
-                </div>
-            </div>
-        </section>
-        
-        <!-- Title Section -->
-        <section class="s_title pt40 pb40 o_colored_level bg-900">
-            <div class="s_allow_columns container">
-                <h2 class="display-3-fs" style="text-align: center;">
-                    <strong><span class="text-gradient" style="background-image: linear-gradient(135deg, rgb(240, 142, 5) 1%, rgb(226, 51, 255) 100%);">A Must Visit In Africa</span></strong><br/>
-                </h2>
-            </div>
-        </section>
-        
-        <!-- Columns Section -->
-        <section class="s_three_columns o_colored_level o_cc o_cc2 bg-900 pt8 pb48">
-            <div class="container">
-                <div class="row d-flex o_grid_mode">
-                    
-                    <!-- Botswana Card -->
-                    <div class="s_col_no_bgcolor o_grid_item col-lg-4" style="grid-area: 1 / 1 / 10 / 5;">
-                        <div class="card text-bg-white h-100 border" style="border-color: rgb(205, 5, 250);">
-                            <img src="/web/image/497-95034892/delta_camp_26-16.webp" alt="" class="card-img-top img-fluid"/>
-                            <div class="card-body">
-                                <h3><strong>Botswana<br/><br/>
-                                    <a href="/all-destinations/botswana" class="btn btn-primary">
-                                        <strong>View Destination</strong>
-                                    </a></strong></h3>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- South Africa Card -->
-                    <div class="s_col_no_bgcolor o_grid_item col-lg-4" style="grid-area: 1 / 5 / 10 / 9;">
-                        <div class="card text-bg-white h-100 border" style="border-color: rgb(207, 21, 249);">
-                            <img src="/web/image/493/cape-town-colorful-houses.jpg" alt="" class="card-img-top img-fluid"/>
-                            <div class="card-body">
-                                <h3 class="card-title"><strong>South Africa<br/><br/>
-                                    <a href="#" class="btn btn-primary"><strong>View Destination</strong></a><br/>
-                                </strong></h3>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Zanzibar Card -->
-                    <div class="s_col_no_bgcolor o_grid_item col-lg-4" style="grid-area: 1 / 9 / 10 / 13;">
-                        <div class="card text-bg-white h-100 border" style="border-color: rgb(200, 35, 251);">
-                            <img src="/web/image/494/zanzibar.jpg" alt="" class="card-img-top img-fluid"/>
-                            <div class="card-body">
-                                <h3 class="card-title"><strong>Zanzibar<br/><br/>
-                                    <a href="#" class="btn btn-primary"><strong>View Destination</strong></a><br/>
-                                </strong></h3>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-        
-    </div>
 
 </body>
 </html>
