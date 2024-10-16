@@ -1,10 +1,94 @@
+/* Reset styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+header {
+    background-color: #000;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo img {
+    width: 50px;
+    height: auto;
+}
+
+nav {
+    display: flex;
+}
+
+nav .dropdown {
+    position: relative;
+    margin-right: 20px;
+}
+
+nav .dropdown-btn {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    font-weight: bold;
+}
+
+nav .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    color: black;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+nav .dropdown-content a {
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    color: black;
+}
+
+nav .dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Search bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    padding: 10px;
+    border-radius: 20px;
+    border: none;
+}
+
+.search-bar button {
+    background-color: #5d3a6d;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 0 20px 20px 0;
+    cursor: pointer;
+}
+
+/* Products section */
 .products-section {
     padding: 20px;
 }
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 20px;
 }
 
@@ -15,17 +99,17 @@
     text-align: center;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
+    flex-direction: column; /* Ensure elements are vertically aligned */
+    justify-content: space-between; /* Space out the elements evenly */
+    height: 100%; /* Make sure all cards have equal height */   
 }
 
 .product-item img {
-    max-width: 100%;
-    height: auto;
-    max-height: 200px;
-    border-radius: 5px;
-}
+        max-width: 100%;
+        height: auto;
+        max-height: 200px; /* Prevents images from stretching too much */
+        border-radius: 5px;
+    }
 
 .product-item h3 {
     margin: 10px 0;
@@ -49,8 +133,8 @@
 
 .add-to-cart,
 .whatsapp-btn {
-    display: inline-block;
-    width: 100%;
+    display: inline-block; /* Ensure they only take up necessary space */
+    width: 100%; /* This can be adjusted as needed */
     margin: 10px 0;
     padding: 10px;
     text-align: center;
@@ -72,6 +156,54 @@
     background-color: #128C7E;
 }
 
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Company Name Styling */
+.company-name {
+    margin-top: 20px;
+}
+
+.company-name p {
+    font-size: 14px;
+    font-style: italic;
+    color: #aaa;
+}
+
+.social-media img {
+    margin-right: 10px;
+}
+
+.quick-access ul {
+    list-style-type: none;
+}
+
+.quick-access li {
+    margin: 5px 0;
+}
+
+.quick-access a {
+    color: white;
+    text-decoration: none;
+}
+
+.contact-info p {
+    margin: 5px 0;
+}
+
+/* Responsive Styles */
 @media (max-width: 768px) {
     .products-grid {
         grid-template-columns: repeat(2, 1fr);
