@@ -39,11 +39,6 @@ nav {
     display: flex;
 }
 
-nav .link {
-    position: relative;
-    margin-right: 20px;
-}
-
 nav .dropdown {
     position: relative;
     margin-right: 20px;
@@ -111,8 +106,9 @@ nav .dropdown:hover .dropdown-content {
 
 .product-item {
     background-color: #f9f9f9;
-    padding: 15px;
+    padding: 17px;
     border-radius: 10px;
+    border-color: aqua;
     text-align: center;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -159,11 +155,11 @@ nav .dropdown:hover .dropdown-content {
     background-color: #5d3a6d;
     color: white;
     border: none;
-    padding: 10px;
+    padding: 12px;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-    width: 48%; /* Make buttons take equal width */
+    width: 50%; /* Make buttons take equal width */
 }
 
 /* Footer styles */
