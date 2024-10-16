@@ -9,6 +9,13 @@ body {
     font-family: Arial, sans-serif;
 }
 
+/* Container to hold the entire layout */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures the container takes at least the full height of the viewport */
+}
+
 /* Header styling */
 header {
     background-color: #000;
@@ -84,6 +91,7 @@ nav .dropdown:hover .dropdown-content {
 /* Products section */
 .products-section {
     padding: 20px;
+    flex: 1; /* Allow the main content to expand and fill the space */
 }
 
 .products-grid {
@@ -101,15 +109,15 @@ nav .dropdown:hover .dropdown-content {
     display: flex;
     flex-direction: column; /* Ensure elements are vertically aligned */
     justify-content: space-between; /* Space out the elements evenly */
-    height: 100%; /* Make sure all cards have equal height */   
+    height: 100%; /* Make sure all cards have equal height */
 }
 
 .product-item img {
-        max-width: 100%;
-        height: auto;
-        max-height: 200px; /* Prevents images from stretching too much */
-        border-radius: 5px;
-    }
+    max-width: 100%;
+    height: auto;
+    max-height: 200px; /* Prevents images from stretching too much */
+    border-radius: 5px;
+}
 
 .product-item h3 {
     margin: 10px 0;
@@ -133,9 +141,9 @@ nav .dropdown:hover .dropdown-content {
 
 .add-to-cart,
 .whatsapp-btn {
-    display: inline-block; /* Ensure they only take up necessary space */
-    width: 100%; /* This can be adjusted as needed */
-    margin: 10px 0;
+    display: inline-block; /* Display them in a row */
+    width: auto; /* Allow the width to fit content */
+    margin: 10px; /* Space between buttons */
     padding: 10px;
     text-align: center;
     border-radius: 5px;
@@ -144,12 +152,13 @@ nav .dropdown:hover .dropdown-content {
     color: white;
 }
 
+/* Example styles for specific buttons */
 .add-to-cart {
-    background-color: #4CAF50;
+    background-color: #2224c2; /* Blue background for Add to Cart */
 }
 
 .whatsapp-btn {
-    background-color: #25D366;
+    background-color: #25D366; /* WhatsApp green background */
 }
 
 .whatsapp-btn:hover {
@@ -162,6 +171,7 @@ footer {
     color: white;
     padding: 20px;
     text-align: center;
+    margin-top: auto; /* Ensures the footer is pushed to the bottom */
 }
 
 .footer-content {
@@ -169,17 +179,6 @@ footer {
     justify-content: space-between;
     align-items: flex-start;
     flex-wrap: wrap;
-}
-
-/* Company Name Styling */
-.company-name {
-    margin-top: 20px;
-}
-
-.company-name p {
-    font-size: 14px;
-    font-style: italic;
-    color: #aaa;
 }
 
 .social-media img {
