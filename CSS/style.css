@@ -135,7 +135,7 @@ nav .dropdown:hover .dropdown-content {
 }
 
 .price {
-    margin: 8px 0;
+    margin: 7px 0;
 }
 
 .old-price {
@@ -223,7 +223,7 @@ footer {
 /* To lock the footer and prevent scrolling */
 html, body {
     height: 100%;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: scroll; /* Prevent scrolling */
 }
 
 .container {
