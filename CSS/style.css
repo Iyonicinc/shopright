@@ -139,78 +139,51 @@ nav .dropdown:hover .dropdown-content {
     font-weight: bold;
 }
 
-.add-to-cart,
-.whatsapp-btn {
-    display: inline-block; /* Display them in a row */
-    width: auto; /* Allow the width to fit content */
-    margin: 10px; /* Space between buttons */
+/* Ensure Add to Cart and WhatsApp buttons are in a row */
+.product-actions {
+    display: flex;
+    justify-content: space-between; /* Space between buttons */
+    margin-top: 10px; /* Space above buttons */
+}
+
+.add-to-cart, .whatsapp-btn {
+    background-color: #5d3a6d;
+    color: white;
+    border: none;
     padding: 10px;
-    text-align: center;
     border-radius: 5px;
     cursor: pointer;
-    text-decoration: none;
-    color: white;
+    text-align: center;
+    width: 48%; /* Make buttons take equal width */
 }
 
-/* Example styles for specific buttons */
-.add-to-cart {
-    background-color: #2224c2; /* Blue background for Add to Cart */
-}
-
-.whatsapp-btn {
-    background-color: #25D366; /* WhatsApp green background */
-}
-
-.whatsapp-btn:hover {
-    background-color: #128C7E;
-}
-
-/* Footer Section */
+/* Footer styles */
 footer {
-    background-color: #333;
+    background-color: #5d3a6d;
     color: white;
     padding: 20px;
-    text-align: center;
-    margin-top: auto; /* Ensures the footer is pushed to the bottom */
+    margin-top: auto; /* Ensure footer stays at the bottom */
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
-
-.social-media img {
-    margin-right: 10px;
+    flex-wrap: wrap; /* Allows elements to wrap on smaller screens */
 }
 
 .quick-access ul {
     list-style-type: none;
 }
 
-.quick-access li {
-    margin: 5px 0;
-}
-
-.quick-access a {
+.quick-access a, .contact-info p {
     color: white;
-    text-decoration: none;
 }
 
-.contact-info p {
-    margin: 5px 0;
+.social-media a {
+    margin: 0 10px; /* Space between icons */
 }
 
-/* Responsive Styles */
-@media (max-width: 768px) {
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 576px) {
-    .products-grid {
-        grid-template-columns: 1fr;
-    }
+.company-name {
+    text-align: center;
+    margin-top: 10px; /* Space above company name */
 }
