@@ -117,64 +117,68 @@ nav .dropdown:hover .dropdown-content {
 
 .old-price {
     text-decoration: line-through;
-    color: red;
+    color: grey;
 }
 
 .new-price {
-    color: green;
+    color: red;
     font-weight: bold;
 }
 
-.add-to-cart {
-    background-color: #5d3a6d;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin: 10px 5px;
-    cursor: pointer;
+.add-to-cart,
+.whatsapp-btn {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    text-align: center;
     border-radius: 5px;
+    cursor: pointer;
+    text-decoration: none;
+    color: white;
+}
+
+.add-to-cart {
+    background-color: #4CAF50;
 }
 
 .whatsapp-btn {
     background-color: #25D366;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    margin: 10px 5px;
-    cursor: pointer;
-    border-radius: 5px;
 }
 
-/* Footer styling */
+.whatsapp-btn:hover {
+    background-color: #128C7E;
+}
+
+/* Footer Section */
 footer {
-    background-color: #000;
+    background-color: #333;
     color: white;
     padding: 20px;
-    display: flex;
-    justify-content: space-between;
+    text-align: center;
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 
-.social-media a img {
-    width: 20px;
-    height: auto;
+.social-media img {
     margin-right: 10px;
 }
 
 .quick-access ul {
-    list-style: none;
+    list-style-type: none;
 }
 
-.quick-access ul li a {
+.quick-access li {
+    margin: 5px 0;
+}
+
+.quick-access a {
     color: white;
     text-decoration: none;
-    display: block;
-    margin: 5px 0;
 }
 
 .contact-info p {
