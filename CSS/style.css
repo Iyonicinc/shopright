@@ -39,6 +39,11 @@ nav {
     display: flex;
 }
 
+nav .link {
+    position: relative;
+    margin-right: 20px;
+}
+
 nav .dropdown {
     position: relative;
     margin-right: 20px;
@@ -130,7 +135,7 @@ nav .dropdown:hover .dropdown-content {
 }
 
 .price {
-    margin: 5px 0;
+    margin: 8px 0;
 }
 
 .old-price {
