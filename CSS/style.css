@@ -73,11 +73,13 @@ nav .dropdown:hover .dropdown-content {
 
 /* Search bar */
 .search-bar {
+    flex: 1; /* Allow search bar to take up remaining space */
     display: flex;
     align-items: center;
 }
 
 .search-bar input {
+    width: 100%; /* Full width on mobile */
     padding: 10px;
     border-radius: 20px;
     border: none;
@@ -87,6 +89,8 @@ nav .dropdown:hover .dropdown-content {
     background-color: #5d3a6d;
     color: white;
     padding: 10px;
+    width: auto; /* Adjust button size */
+    width: auto; /* Adjust button size */
     border: none;
     border-radius: 0 20px 20px 0;
     cursor: pointer;
@@ -153,35 +157,51 @@ nav .dropdown:hover .dropdown-content {
 
 .add-to-cart, .whatsapp-btn {
     background-color: #5d3a6d;
+    font-weight: bold; /* Make buttons bold */
+    margin: 10px; /* Space between buttons */
     color: white;
     border: none;
-    padding: 12px;
+    padding: 10px;
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
-    width: 50%; /* Make buttons take equal width */
+    width: 45%; /* Make buttons take equal width */
 }
 
 /* Footer styles */
 footer {
-    background-color: #5d3a6d;
+    background-color: #333;
     color: white;
     padding: 20px;
-    margin-top: auto; /* Ensure footer stays at the bottom */
+    text-align: center;
+    margin-top: auto; /* Ensures the footer is pushed to the bottom */
+    position: relative; /* Allows absolute positioning inside */
 }
 
 .footer-content {
     display: flex;
     justify-content: space-between;
-    flex-wrap: wrap; /* Allows elements to wrap on smaller screens */
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Quick Access and Contact Info */
+.quick-access, .contact-info {
+    margin: 10px;
 }
 
 .quick-access ul {
     list-style-type: none;
+    padding: 0;
 }
 
-.quick-access a, .contact-info p {
+.quick-access li {
+    margin: 5px 0;
+}
+
+.quick-access a {
     color: white;
+    text-decoration: none;
 }
 
 .social-media a {
@@ -189,6 +209,11 @@ footer {
 }
 
 .company-name {
-    text-align: left;
-    margin-top: 10px; /* Space above company name */
+    background-color: #333; /* Match footer color */
+    padding: 10px 0; /* Padding for spacing */
+    position: absolute; /* Positioning at the bottom */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    text-align: left; /* Align text to the left */
 }
