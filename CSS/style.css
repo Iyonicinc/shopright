@@ -148,24 +148,21 @@ nav .dropdown:hover .dropdown-content {
     font-weight: bold;
 }
 
-/* Ensure Add to Cart and WhatsApp buttons are in a row */
-.product-actions {
-    display: flex;
-    justify-content: space-between; /* Space between buttons */
-    margin-top: 10px; /* Space above buttons */
+.add-to-cart,
+.whatsapp-btn {
+    font-weight: bold; /* Make buttons bold */
+    padding: 10px 15px; /* Increase padding for better appearance */
+    margin: 10px; /* Space between buttons */
 }
 
-.add-to-cart, .whatsapp-btn {
-    background-color: #5d3a6d;
-    font-weight: bold; /* Make buttons bold */
-    margin: 10px; /* Space between buttons */
-    color: white;
-    border: none;
-    padding: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    text-align: center;
-    width: 45%; /* Make buttons take equal width */
+/* WhatsApp button official colors */
+.whatsapp-btn {
+    background-color: #25D366; /* WhatsApp green */
+    color: white; /* Text color */
+}
+
+.whatsapp-btn:hover {
+    background-color: #128C7E; /* Darker green on hover */
 }
 
 /* Footer styles */
@@ -174,8 +171,9 @@ footer {
     color: white;
     padding: 20px;
     text-align: center;
-    margin-top: auto; /* Ensures the footer is pushed to the bottom */
-    position: relative; /* Allows absolute positioning inside */
+    position: relative; /* Ensure footer is positioned properly */
+    margin-top: auto; /* Push footer to bottom */
+    height: 100px; /* Set a fixed height for the footer */
 }
 
 .footer-content {
@@ -204,16 +202,31 @@ footer {
     text-decoration: none;
 }
 
+.contact-info p {
+    margin: 5px 0;
+}
+
 .social-media a {
     margin: 0 10px; /* Space between icons */
 }
 
+/* Company Name at the bottom */
 .company-name {
-    background-color: #333; /* Match footer color */
-    padding: 10px 0; /* Padding for spacing */
-    position: absolute; /* Positioning at the bottom */
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: absolute; /* Fixed position to stay at the bottom */
+    bottom: 0; /* Align at the very bottom */
+    left: 0; /* Align to the left */
+    right: 0; /* Make it stretch across */
     text-align: left; /* Align text to the left */
+    padding: 10px 20px; /* Add some padding */
+}
+
+/* To lock the footer and prevent scrolling */
+html, body {
+    height: 100%;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.container {
+    overflow-y: auto; /* Enable scrolling within the container */
+    padding-bottom: 120px; /* Enough space for the footer */
 }
