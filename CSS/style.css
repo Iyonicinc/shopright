@@ -165,24 +165,6 @@ nav .dropdown:hover .dropdown-content {
     background-color: #128C7E; /* Darker green on hover */
 }
 
-/* Footer styles */
-footer {
-    background-color: #333;
-    color: white;
-    padding: 20px;
-    text-align: center;
-    position: relative; /* Ensure footer is positioned properly */
-    margin-top: auto; /* Push footer to bottom */
-    height: 100px; /* Set a fixed height for the footer */
-}
-
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-}
-
 /* Quick Access and Contact Info */
 .quick-access, .contact-info {
     margin: 10px;
@@ -208,6 +190,24 @@ footer {
 
 .social-media a {
     margin: 0 10px; /* Space between icons */
+}
+
+/* Footer styles */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    position: relative; /* Ensure footer is positioned properly */
+    margin-top: auto; /* Push footer to bottom */
+    height: 100px; /* Set a fixed height for the footer */
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
 }
 
 /* Company Name at the bottom */
