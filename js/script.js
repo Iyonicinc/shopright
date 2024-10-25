@@ -1,27 +1,47 @@
-// JavaScript for dropdown functionality
-const dropdowns = document.querySelectorAll('.dropdown');
+// Wait for the DOM content to be fully loaded before running the script
+document.addEventListener("DOMContentLoaded", function () {
+    // Reference to the main content div
+    const mainContent = document.getElementById('main-content');
 
-dropdowns.forEach(dropdown => {
-    const dropdownButton = dropdown.querySelector('.dropdown-btn');
-    const dropdownContent = dropdown.querySelector('.dropdown-content');
+    // Function to load content dynamically using fetch()
+    function loadContent(page) {
+        fetch(`pages/${page}.html`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error loading page');
+                }
+                return response.text();
+            })
+            .then(data => {
+                mainContent.innerHTML = data;
+            })
+            .catch(error => {
+                console.error('Error loading content:', error);
+                mainContent.innerHTML = '<p>Error loading page content.</p>';
+            });
+    }
 
-    dropdownButton.addEventListener('click', (e) => {
+    // Event listeners for navigation links
+    document.getElementById('home-link').addEventListener('click', function (e) {
         e.preventDefault();
-        dropdownContent.classList.toggle('show');
+        mainContent.innerHTML = `
+            <h1 class="text-3xl font-bold mb-4">Welcome to Shop Right</h1>
+            <p class="text-lg">This is the homepage of your online store.</p>
+        `;
     });
 
-    window.addEventListener('click', (e) => {
-        if (!dropdown.contains(e.target)) {
-            dropdownContent.classList.remove('show');
-        }
+    document.getElementById('shop-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        loadContent('shop');  // Load shop.html dynamically
     });
-});
 
-document.addEventListener('DOMContentLoaded', () => {
-    const addToCartButtons = document.querySelectorAll('.add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            alert('Product added to cart!');
-        });
+    document.getElementById('cart-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        loadContent('cart');  // Load cart.html dynamically
+    });
+
+    document.getElementById('contact-link').addEventListener('click', function (e) {
+        e.preventDefault();
+        loadContent('contact');  // Load contact.html dynamically
     });
 });

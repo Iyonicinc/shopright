@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopRight Kenya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100">
+<!-- Header --> 
+<header class="bg-white-700 top-0 z-50 shadow-md">
+  <div class="container mx-auto flex justify-between items-center p-4">
+
+    <!-- Left Section: Hamburger Menu and Logo -->
+    <div class="flex space-x-4 items-center">
+      <!-- Hamburger Menu (visible on mobile) -->
+      <button id="hamburger-btn" class="md:hidden text-gray-700 focus:outline-none">
+        <i class="fas fa-bars text-xl"></i> <!-- Font Awesome Hamburger Icon -->
+      </button>
+
+      <!-- Logo (slightly moved right for mobile) -->
+      <div class="flex-1 ml-4 md:mx-0">
+        <img src="img/logo" alt="Logo" class="w-24">
+      </div>
+    </div>
+
+    <!-- Navigation (Desktop Only) -->
+    <nav class="hidden md:flex space-x-6">
+      <a href="#" class="text-black hover:text-blue-500 font-bold">Home</a>
+      <a href="#" class="text-black hover:text-blue-500 font-bold">Shop All Products</a>
+      <a href="#" class="text-black hover:text-blue-500 font-bold">Contact Us</a>
+      <a href="#" class="text-black hover:text-blue-500 font-bold">Staff Portal</a>
+    </nav>
+
+    <!-- Right Icons (Search, Cart, etc.) -->
+    <div class="flex items-center space-x-4">
+      <!-- Search Icon Button -->
+      <button id="search-btn" class="md:hidden text-gray-700 hover:text-blue-500 focus:outline-none">
+        <i id="search-icon" class="fas fa-search text-xl"></i> <!-- Font Awesome Search Icon -->
+      </button>
+
+      <!-- Search Content (Initially Hidden for Mobile, Visible on Click) --> 
+      <div id="search-content" class="hidden md:hidden p-4">
+        <div class="flex">
+          <!-- Search Input -->
+          <input type="text" id="search-input" placeholder="Search for products" class="w-full p-3 border border-gray-300 rounded">
+          <!-- Search Submit Button -->
+          <button id="search-btn-submit" class="bg-yellow-400 text-white p-3 rounded ml-2">Search</button>
+        </div>
+      </div>
+
+      <!-- Cart and Button Container -->
+      <div class="flex justify-end space-x-4">
+        <!-- Add to Cart Link with Cart Icon -->
+        <a href="#" class="bg-yellow-400 text-black hover:text-blue-500 px-4 py-2 rounded flex items-center">
+          <i class="fas fa-shopping-cart"></i> <!-- Cart icon -->
+        </a>
+
+  <!-- Mobile Categories Menu (Initially Hidden) -->
+  <div id="mobile-categories-menu" class="hidden md:hidden bg-white shadow-md absolute left-0 top-16 w-full">
+    <div class="p-4">
+ <!-- Phones Category with Dropdown -->
+ <div class="relative">
+  <button id="category-dropdown-toggle" class="text-black hover:text-blue-500 py-2 w-full text-left font-bold p-2 border border-gray-100 rounded" onclick="toggleDropdown('category-dropdown-menu', 'laptops-dropdown-menu')">
+    Phones <i class="fas fa-chevron-down float-right"></i> <!-- Dropdown Icon -->
+  </button>
+
+  <!-- Dropdown Menu (Initially Hidden) -->
+  <div id="category-dropdown-menu" class="hidden bg-white shadow-md mt-2 ml-4 pl-2">
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded ">Samsung</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Realme</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Oppo</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Redmi</a>
+  </div>
+</div>
+
+<!-- Laptops Category with Dropdown -->
+<div class="relative">
+  <button id="laptops-dropdown-toggle" class="text-black hover:text-blue-500 py-2 w-full text-left font-bold p-2 border border-gray-100 rounded" onclick="toggleDropdown('laptops-dropdown-menu', 'category-dropdown-menu')">
+    Laptops <i class="fas fa-chevron-down float-right"></i> <!-- Dropdown Icon -->
+  </button>
+
+  <!-- Dropdown Menu (Initially Hidden) -->
+  <div id="laptops-dropdown-menu" class="hidden bg-white shadow-md mt-2 ml-4 pl-2">
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Dell</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">HP</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Apple</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Lenovo</a>
+    <a href="#" class="block text-black-400 hover:text-blue-500 py-2 p-2 border border-gray-100 rounded">Acer</a>
+  </div>
+</div>
+</ul>
+</div>
+</header>
+
+<!-- Script for Dropdown Functionality -->
+<script>
+  // Hamburger and Categories Dropdown Functionality
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const mobileCategoriesMenu = document.getElementById('mobile-categories-menu');
+  const categoryDropdownToggle = document.getElementById('category-dropdown-toggle');
+  const categoryDropdownMenu = document.getElementById('category-dropdown-menu');
+
+  // Toggle mobile menu when hamburger button is clicked
+  hamburgerBtn.addEventListener('click', () => {
+    mobileCategoriesMenu.classList.toggle('hidden'); // Show or hide the all the categories
+  });
+
+  // Function to toggle dropdown visibility
+  function toggleDropdown(activeDropdownId, otherDropdownId) {
+    const activeDropdown = document.getElementById(activeDropdownId);
+    const otherDropdown = document.getElementById(otherDropdownId);
+    
+    // Check if the active dropdown is currently hidden
+    if (activeDropdown.classList.contains('hidden')) {
+      // Show the active dropdown
+      activeDropdown.classList.remove('hidden');
+      
+      // Hide the other dropdown if it's open
+      if (!otherDropdown.classList.contains('hidden')) {
+        otherDropdown.classList.add('hidden');
+      }
+    } else {
+      // Hide the active dropdown if it was already open
+      activeDropdown.classList.add('hidden');
+    }
+  }
+
+  // Existing search functionality
+  const searchBtn = document.getElementById('search-btn');
+  const searchContent = document.getElementById('search-content');
+  const searchIcon = document.getElementById('search-icon');
+  const searchInput = document.getElementById('search-input');
+  const searchBtnSubmit = document.getElementById('search-btn-submit');
+  const productList = document.getElementById('product-list');
+  const noResults = document.getElementById('no-results');
+  const cancelBtn = document.getElementById('cancel-btn');
+
+  searchBtn.addEventListener('click', () => {
+    searchContent.classList.toggle('hidden');
+    searchIcon.classList.toggle('fa-search');
+    searchIcon.classList.toggle('fa-times');
+  });
+
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.trim().toLowerCase();
+    filterProducts(searchTerm);
+  });
+
+  searchBtnSubmit.addEventListener('click', () => {
+    const searchTerm = searchInput.value.trim();
+    const products = Array.from(document.querySelectorAll('.product-item'));
+
+    const filteredProducts = products.filter(product =>
+      product.textContent.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    products.forEach(product => product.style.display = 'none');
+
+    if (filteredProducts.length > 0) {
+      filteredProducts.forEach(product => {
+        product.style.display = 'block';
+      });
+      noResults.classList.add('hidden');
+      cancelBtn.classList.remove('hidden');
+    } else {
+      noResults.classList.remove('hidden');
+      cancelBtn.classList.remove('hidden');
+    }
+  });
+
+  searchInput.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter') {
+      searchBtnSubmit.click();
+    }
+  });
+
+  searchBtn.addEventListener('click', () => {
+    if (searchIcon.classList.contains('fa-times')) {
+      searchInput.value = '';
+      const products = document.querySelectorAll('.product-item');
+      products.forEach(product => product.style.display = 'block');
+      noResults.classList.add('hidden');
+      cancelBtn.classList.add('hidden');
+      searchIcon.classList.remove('fa-times');
+      searchIcon.classList.add('fa-search');
+    }
+  });
+</script>
+
+  <!-- Main Content -->
+  <main class="container mx-auto my-8">
+    <div class="flex space-x-4">
+        <!-- Categories Sidebar -->
+        <aside class="w-full md:w-1/4 shadow rounded bg-transparent md:bg-gray-100">
+          <h2 class="hidden md:flex text-lg font-bold underline">Shop by Department</h2>
+          <ul class="p-4 ml-2 space-y-5 hidden md:block">
+            <li><a href="#" class="text-gray-700 hover:text-blue-500 font-bold border border-gray-100 rounded">Accessories</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-500 font-bold border border-gray-100 rounded">Laptops</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-500 font-bold border border-gray-100 rounded">Networking</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-500 font-bold border border-gray-100 rounded">Phones</a></li>
+            <li><a href="#" class="text-gray-700 hover:text-blue-500 font-bold border border-gray-100 rounded">Adapters</a></li>
+            <!-- Add more categories here -->
+          </ul>
+        </aside>
+       <!-- Search and Slider Section -->
+<section class="w-full md:w-3/4">
+  <!-- Search Bar, visible only on laptops and larger screens -->
+  <div class="p-2 px-2 py-1 shadow rounded menu-btn flex space-x-4 hidden lg:flex">
+    <input type="text" placeholder="Search for products" class="w-full p-3 border border-gray-300 rounded font-bold">
+    <select class="p-3 border border-gray-300 rounded font-bold text-darkGray-100">
+      <option>All Categories</option>
+      <option>Phones</option>
+      <option>Laptops</option>
+      <option>Tvs</option>
+    </select>
+    <button class="bg-yellow-400 text-black px-6 py-3 rounded font-bold">Search</button>
+  </div>
+
+  <!-- Categories Section -->
+  <section class="container mx-auto py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      
+      <!-- Category 1: Computers & Laptops -->
+      <div class="bg-white shadow-lg p-6 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Computers & Laptops</h2>
+        <ul class="mb-6">
+          <li><a href="#" class="text-green-600 hover:underline">Laptops</a></li>
+          <li><a href="#" class="text-green-600 hover:underline">Desktops</a></li>
+          <li><a href="#" class="text-green-600 hover:underline">Accessories</a></li>
+        </ul>
+        <!-- Example products for Category 1 -->
+        <div class="grid grid-cols-1 gap-4">
+          <a href="product1.html" class="block bg-gray-100 p-4 rounded-lg shadow">
+            <img src="../img/laptop.jpg" alt="Laptop" class="w-full h-32 object-cover">
+            <h3 class="font-bold mt-2">Dell Inspiron 15</h3>
+            <p class="text-green-600 font-bold">KSh 50,000.00</p>
+          </a>
+          <!-- Add more products here as needed -->
+        </div>
+      </div>
+
+      <!-- Category 2: Phones & Tablets -->
+      <div class="bg-white shadow-lg p-6 rounded-lg">
+        <h2 class="text-2xl font-bold mb-4">Phones & Tablets</h2>
+        <ul class="mb-6">
+          <li><a href="#" class="text-green-600 hover:underline">Smartphones</a></li>
+          <li><a href="#" class="text-green-600 hover:underline">Tablets</a></li>
+          <li><a href="#" class="text-green-600 hover:underline">Accessories</a></li>
+        </ul>
+        <!-- Example products for Category 2 -->
+        <div class="grid grid-cols-1 gap-4">
+          <a href="product2.html" class="block bg-gray-100 p-4 rounded-lg shadow">
+            <img src="../img/phone.jpg" alt="Phone" class="w-full h-32 object-cover">
+            <h3 class="font-bold mt-2">iPhone 13 Pro</h3>
+            <p class="text-green-600 font-bold">KSh 120,000.00</p>
+          </a>
+          <!-- Add more products here as needed -->
+        </div>
+      </div>
+
+      <!-- Add more categories as needed -->
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-green-600 text-white p-4 text-center">
+    &copy; 2024 ShopRight Kenya. All rights reserved.
+  </footer>
+
+</body>
+</html>
