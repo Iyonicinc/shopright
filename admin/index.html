@@ -1,0 +1,2209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- For data visualization -->
+    <style>
+        .chart-container {
+            width: 100%;
+            max-width: 600px;
+        }
+        .widget {
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        } 
+        .widget {
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.product img {
+  width: 100%;
+  border-radius: 0.5rem;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+}
+ 
+  button:disabled {
+    background-color: #d1d5db; /* Gray */
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+/* Modal container */
+#modal-container {
+    display: none; /* Initially hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Background with opacity */
+    z-index: 50; /* Make sure it overlays everything */
+}
+
+/* Modal content */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+    position: relative;
+}
+
+/* Close button */
+.close-button {
+    font-size: 24px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+}
+
+    </style>
+</head>
+<body class="bg-blue-100">
+
+<!-- Main Content -->
+<main id="main-content" class="lg:ml-72 p-4 transition-all">
+    <header class="bg-blue-100 shadow-md p-4 mb-6">
+        <h1 class="text-2xl font-bold text-blue-600">Admin Dashboard</h1>
+    <button id="hamburger" class="fixed top-4 right-4 text-blue-900 p-2 rounded-md lg:hidden">☰</button>
+    </header>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 w-72 h-full bg-blue-100 shadow-lg transform -translate-x-full lg:translate-x-0 overflow-y-auto transition-transform">
+        <div class="p-4 bg-blue-200">
+            <h1 class="text-2xl font-bold text-black">Admin Panel</h1>
+        </div>
+        <nav class="p-4">
+            <!-- Dashboard -->
+            <a href="#overview" onclick="openDashboard()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📊 Dashboard</a>
+
+            <!-- Orders -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Orders</h2>
+            <a href="#orders-overview" onclick="openOrderOverview('overview')" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📦 Order Overview</a>
+            <a href="#pending-orders" onclick="fetchOrdersByStatus('pending')" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">⏳ Pending Orders</a>
+            <a href="#processing-orders" onclick="fetchOrdersByStatus('processing')" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🔄 Processing Orders</a>
+            <a href="#completed-orders" onclick="fetchOrdersByStatus('completed')" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">✅ Completed Orders</a>
+
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Management</h2>
+                <a href="#all-products" onclick="openProducts()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🛒 All Products</a>
+                <a href="#add-product" onclick="openAddProduct()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">➕ Add Product</a>
+                <a href="#categories" onclick="openCategories()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📂 Categories</a>
+                <a href="#subcategories" onclick="openSubCategories()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📁 Subcategories</a>
+                <a href="#promotional-tags" onclick="openPromotionalTags()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🏷 Promotional Tags</a>
+
+            <!-- Customers -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Customers</h2>
+            <a href="#all-customers" onclick="openUserDetailsTable()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">👥 All Customers></a>
+            <a href="#customer-details" onclick="openCustomerDetails()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📋 Customer Details</a>
+            <a href="#customer-chats" onclick="openCustomerChats()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">💬 Customer Chats</a>
+
+            <!-- Analytics -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Analytics</h2>
+            <a href="#sales-reports" onclick="openSalesReports()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📈 Sales Reports</a>
+            <a href="#customer-reports" onclick="openCustomerReports()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📊 Customer Reports</a>
+            <a href="#product-reports" onclick="openProductReports()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🛍️ Product Reports</a>
+
+            <!-- Marketing -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Marketing</h2>
+            <a href="#discounts" onclick="openDiscounts()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🎟️ Discounts</a>
+            <a href="#email-campaigns" onclick="openEmailCampaigns()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">✉️ Email Campaigns</a>
+
+            <!-- Shipping -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Shipping</h2>
+            <a href="#shipping-options" onclick="openShippingOptions()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">🚚 Shipping Options</a>
+            <a href="#order-tracking" onclick="openOrderTracking()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">📦 Order Tracking</a>
+
+            <!-- Payments -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Payments</h2>
+            <a href="#transactions" onclick="openTransactions()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">💳 Transactions</a>
+            <a href="#payouts" onclick="openPayouts()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">💸 Payouts</a>
+
+            <!-- Settings -->
+            <h2 class="text-sm font-semibold text-gray-400 mt-4 uppercase">Settings</h2>
+            <a href="#store-settings" onclick="openStoreSettings()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">⚙️ Store Settings</a>
+            <a href="#user-management" onclick="openUserManagement()" class="block py-2 px-4 hover:bg-blue-400 hover:text-white rounded sidebar-link">👤 User Management</a>
+
+            <!-- Logout -->
+            <a href="#logout" onclick="logout()" class="block py-2 px-4 bg-red-600 hover:bg-red-700 hover:text-white text-center rounded">🚪 Logout</a>
+        </nav>
+    </aside>
+
+
+        <!-- Dynamic content will be rendered here based on the section -->
+        <section id="content"></section>
+</main>
+
+    <script>
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarLinks = document.querySelectorAll('.sidebar-link');
+
+        hamburger.addEventListener('click', () => {
+            sidebar.classList.toggle('-translate-x-full');
+        });
+
+        sidebarLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (window.innerWidth <= 1024) {
+                    sidebar.classList.add('-translate-x-full');
+                }
+            });
+        });
+
+window.addEventListener('resize', () => {
+    if (window.innerWidth > 1024) {
+        sidebar.classList.remove('-translate-x-full'); // Ensure sidebar is visible on large screens
+
+    }
+});
+
+
+        const token = sessionStorage.getItem('token');
+
+        // Simulated API call for mock data
+const mockDashboardData = {
+    newOrders: 12,
+    totalIncome: 8000,
+    totalExpense: 5000,
+    newUsers: 7,
+    summary: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug'],
+        values: [600, 100, 900, 917, 400, 1901, 2060, 2780],
+    },
+    topProducts: [
+        { image: 'img/HP Elite Dragonfly Core i5 8th Gen.jpg', name: 'HP Elite Dragonfly Core i5 8th Gen', description: 'Best Seller', price: '$25', rating: 5 },
+        { image: 'img/Samsung Galaxy A35 5G.jpg', name: 'Samsung Galaxy A35 5G', description: 'Highly Rated', price: '$30', rating: 4 },
+        { image: 'img/Dell-Latitude-5490-Business-Laptop.png', name: 'Dell-Latitude-5490-Business-Laptop', description: 'Popular Choice', price: '$20', rating: 4.5 },
+    ],
+    activities:[
+    '2453  65837  24/09/24  completed ksh 5400'  
+    ],
+    recentProducts: [
+        { image: 'img/Desktop.jpg', name: 'Hp Desktop' },
+        { image: 'img/HP EliteBook x360.jpg', name: 'Elitebook 840 G3 Laptop' },
+    ],
+};
+
+/**
+ * Fetch dashboard data with mock or real API.
+ * @param {boolean} useMock - Whether to use mock data or fetch from the API.
+ * @returns {Promise<Object>} Dashboard data.
+ */
+async function fetchDashboardData(useMock = true) {
+    if (useMock) {
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(mockDashboardData), 1000); // Simulate delay
+        });
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/admin/dashboard');
+        if (!response.ok) throw new Error('Failed to fetch dashboard data');
+        return await response.json();
+    } catch (error) {
+        console.error('Error fetching dashboard data:', error);
+        throw error;
+    }
+}
+
+/**
+ * Initialize the dashboard.
+ */
+async function openDashboard() {
+    const content = document.getElementById('content');
+    content.innerHTML = `<p class="text-gray-500 text-center mt-4">Loading dashboard data...</p>`;
+
+    try {
+        const data = await fetchDashboardData(); // Use mock or real data
+        renderDashboard(data);
+    } catch (error) {
+        content.innerHTML = `
+            <div class="text-red-500 text-center p-6">
+                <h2 class="text-2xl font-bold">Unable to load dashboard</h2>
+                <p>Please check your network connection or try again later.</p>
+            </div>`;
+    }
+}
+
+/**
+ * Render the dashboard dynamically.
+ * @param {Object} data - Dashboard data.
+ */
+function renderDashboard(data) {
+    const { newOrders, totalIncome, totalExpense, newUsers, summary, topProducts, activities, recentProducts } = data;
+
+    const content = document.getElementById('content');
+    content.innerHTML = ''; // Clear previous content
+
+    // Render widgets (Overview cards)
+    const widgets = [
+        { title: 'New Orders', value: newOrders, percentage: '+2.0%', bgColor: 'bg-purple-500' },
+        { title: 'Total Income', value: `$${totalIncome}`, percentage: '+7.35%', bgColor: 'bg-green-500' },
+        { title: 'Total Expense', value: `$${totalExpense}`, percentage: '-3.25%', bgColor: 'bg-blue-500' },
+        { title: 'New Users', value: newUsers, percentage: '+5.14%', bgColor: 'bg-orange-500' },
+    ];
+
+    const widgetHTML = widgets
+        .map(
+            (widget) => `
+                <div class="widget p-6 rounded text-white ${widget.bgColor}">
+                    <h3 class="text-lg font-bold">${widget.title}</h3>
+                    <p class="text-4xl font-bold">${widget.value}</p>
+                    <span class="text-sm">${widget.percentage} from last period</span>
+                </div>`
+        )
+        .join('');
+
+    // Dashboard layout
+    content.innerHTML = `
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">${widgetHTML}</div>
+    <div class="bg-white shadow rounded p-6 mb-6">
+        <h3 class="font-bold text-gray-700 mb-4 text-lg sm:text-xl md:text-2xl lg:text-3xl">Revenue Summary</h3>
+        <canvas id="summaryChart" class="w-full h-96"></canvas>
+    </div>
+`;
+
+
+    // Render additional sections
+    renderSummaryChart(summary);
+    renderTopProducts(topProducts);
+    renderActivityAndCarousel(activities, recentProducts);
+}
+
+/**
+ * Render the revenue summary chart.
+ * @param {Object} summaryData - Data for the summary chart.
+ */
+function renderSummaryChart(summaryData) {
+    const ctx = document.getElementById('summaryChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: summaryData.labels,
+            datasets: [
+                {
+                    label: 'Revenue',
+                    data: summaryData.values,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                },
+            
+            ],
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+            },
+        },
+    });
+}
+
+/**
+ * Render the top products section.
+ * @param {Array} topProducts - List of top products.
+ */
+function renderTopProducts(topProducts) {
+    const content = document.getElementById('content');
+    const productsSection = document.createElement('div');
+    productsSection.className = 'bg-white shadow rounded p-6 mb-6';
+    productsSection.innerHTML = '<h3 class="font-bold text-gray-700 mb-4">Top Selling Products</h3>';
+
+    const productGrid = document.createElement('div');
+    productGrid.className = 'grid grid-cols-3 gap-4';
+
+    topProducts.forEach((product) => {
+        const productDiv = document.createElement('div');
+        productDiv.className = 'product text-center p-4 border rounded shadow';
+        productDiv.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="rounded mb-2">
+            <h4 class="font-bold">${product.name}</h4>
+            <p class="text-sm">${product.description} • ${product.price}</p>
+            <p>${'★'.repeat(product.rating)}</p>
+        `;
+        productGrid.appendChild(productDiv);
+    });
+
+    productsSection.appendChild(productGrid);
+    content.appendChild(productsSection);
+}
+
+/**
+ * Render activity and product carousel sections.
+ * @param {Array} activities - List of activities.
+ * @param {Array} recentProducts - List of recent products.
+ */
+ function renderActivityAndCarousel(activities, recentProducts) {
+    const content = document.getElementById('content');
+
+    const activitySection = document.createElement('div');
+    activitySection.className = 'grid grid-cols-2 gap-6';
+
+    // Order Activity with Mock Data
+    const orderActivity = document.createElement('div');
+    orderActivity.className = 'bg-white shadow rounded p-6';
+    orderActivity.innerHTML = `
+    <h3 class="font-bold text-gray-700 mb-4 text-lg sm:text-xl md:text-2xl lg:text-3xl">Recent Orders</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto">
+            <thead class="bg-gray-200">
+                <tr>
+                    <th class="border px-2 py-1 sm:px-4 sm:py-2">Order ID</th>
+                    <th class="border px-2 py-1 sm:px-4 sm:py-2">User ID</th>
+                    <th class="border px-2 py-1 sm:px-4 sm:py-2">Date & Time</th>
+                    <th class="border px-2 py-1 sm:px-4 sm:py-2">Status</th>
+                    <th class="border px-2 py-1 sm:px-4 sm:py-2">Total</th>
+                </tr>
+            </thead>
+            <tbody id="recent-orders-body">
+                ${getMockOrders()
+                    .map(
+                        (order) => `
+                        <tr>
+                            <td class="border px-2 py-1 sm:px-4 sm:py-2">${order.orderId}</td>
+                            <td class="border px-2 py-1 sm:px-4 sm:py-2">${order.userId}</td>
+                            <td class="border px-2 py-1 sm:px-4 sm:py-2">${order.dateTime}</td>
+                            <td class="border px-2 py-1 sm:px-4 sm:py-2">
+                                <span class="px-2 py-1 rounded ${
+                                    order.status === 'pending' ? 'bg-yellow-500' :
+                                    order.status === 'processing' ? 'bg-blue-500' :
+                                    order.status === 'completed' ? 'bg-green-500' :
+                                    'bg-red-500'
+                                }">${order.status}</span>
+                            </td>
+                            <td class="border px-2 py-1 sm:px-4 sm:py-2">KSh ${order.total}</td>
+                        </tr>`
+                    )
+                    .join('')}
+            </tbody>
+        </table>
+    </div>
+`;
+
+    // Product Carousel Section
+    const productCarousel = document.createElement('div');
+    productCarousel.className = 'bg-white shadow rounded p-6';
+    productCarousel.innerHTML = `<h3 class="font-bold text-gray-700 mb-4">Recent Products</h3>`;
+    const carouselDiv = document.createElement('div');
+    carouselDiv.className = 'carousel flex gap-4 overflow-x-scroll';
+
+    recentProducts.forEach((product) => {
+        const carouselItem = document.createElement('div');
+        carouselItem.className = 'p-2 border rounded shadow';
+        carouselItem.innerHTML = `
+            <img src="${product.image}" alt="${product.name}" class="rounded mb-2">
+            <p class="font-bold">${product.name}</p>
+        `;
+        carouselDiv.appendChild(carouselItem);
+    });
+
+    productCarousel.appendChild(carouselDiv);
+
+    // Append sections
+    activitySection.appendChild(orderActivity);
+    activitySection.appendChild(productCarousel);
+    content.appendChild(activitySection);
+}
+
+// Function to provide mock order data
+function getMockOrders() {
+    return [
+        { orderId: 'O883798', userId: 'U78362te', dateTime: '2024-11-28 12:00', status: 'completed', total: 5000 },
+        { orderId: 'O902700', userId: 'U22456fh', dateTime: '2024-11-28 14:30', status: 'processing', total: 3000 },
+        { orderId: 'O834856', userId: 'U40830ot', dateTime: '2024-11-28 16:45', status: 'pending', total: 1200 },
+        { orderId: 'O018735', userId: 'U88981gh', dateTime: '2024-11-29 09:15', status: 'completed', total: 7200 },
+        { orderId: 'O766341', userId: 'U35730ff',        dateTime: '2024-11-29 10:10', status: 'cancelled', total: 0 },
+    ];
+}
+
+
+// ✅ Fetch and Display All Orders in Order Overview
+async function openOrderOverview() {
+    const content = document.getElementById('content');
+    content.innerHTML = `<h2 class="text-xl font-bold">Order Overview</h2><p>Loading all orders...</p>`;
+
+    try {
+        const response = await fetch('http://localhost:3000/admin/orders', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // ✅ Fixed Authorization Typo
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const orders = await response.json();
+
+        // ✅ Fix: Use Correct `orderStatus` Field
+        const summary = {
+            pending: orders.filter(order => order.orderStatus === 'pending').length,
+            processing: orders.filter(order => order.orderStatus === 'processing').length,
+            completed: orders.filter(order => order.orderStatus === 'completed').length,
+            cancelled: orders.filter(order => order.orderStatus === 'cancelled').length,
+        };
+
+        // ✅ Keeping Your Design, Just Fixing Data Issues
+        content.innerHTML = `
+    <!-- Grid for Order Status Cards -->
+    <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
+        <!-- Pending Orders -->
+        <div onclick="fetchOrdersByStatus('pending')" class="order-status-card bg-gradient-to-r from-purple-700 to-purple-500 text-white p-8 rounded-lg shadow-xl cursor-pointer hover:scale-105 hover:shadow-2xl">
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">Pending Orders</h3>
+            <p class="text-4xl sm:text-5xl font-bold">${summary.pending}</p>
+        </div>
+        <!-- Processing Orders -->
+        <div onclick="fetchOrdersByStatus('processing')" class="order-status-card bg-gradient-to-r from-blue-700 to-blue-500 text-white p-8 rounded-lg shadow-xl cursor-pointer hover:scale-105 hover:shadow-2xl">
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">Processing Orders</h3>
+            <p class="text-4xl sm:text-5xl font-bold">${summary.processing}</p>
+        </div>
+        <!-- Completed Orders -->
+        <div onclick="fetchOrdersByStatus('completed')" class="order-status-card bg-gradient-to-r from-green-700 to-green-500 text-white p-8 rounded-lg shadow-xl cursor-pointer hover:scale-105 hover:shadow-2xl">
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">Completed Orders</h3>
+            <p class="text-4xl sm:text-5xl font-bold">${summary.completed}</p>
+        </div>
+        <!-- Cancelled Orders -->
+        <div class="order-status-card bg-gradient-to-r from-red-700 to-red-500 text-white p-8 rounded-lg shadow-xl cursor-pointer hover:scale-105 hover:shadow-2xl">
+            <h3 class="text-lg sm:text-xl font-semibold mb-2">Cancelled Orders</h3>
+            <p class="text-4xl sm:text-5xl font-bold">${summary.cancelled}</p>
+        </div>
+    </div>
+    <!-- Recent Orders Table -->
+    <div class="bg-white shadow-lg rounded-xl p-6 md:p-8 transition-all duration-300 hover:shadow-xl">
+        <h3 class="text-2xl font-semibold text-indigo-700 mb-6">Recent Orders</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full table-auto border-collapse">
+                <thead class="bg-indigo-50">
+                    <tr>
+                        <th class="border-b px-6 py-4 text-left text-sm font-medium text-gray-700">Order ID</th>
+                        <th class="border-b px-6 py-4 text-left text-sm font-medium text-gray-700">User ID</th>
+                        <th class="border-b px-6 py-4 text-left text-sm font-medium text-gray-700">Date & Time</th>
+                        <th class="border-b px-6 py-4 text-left text-sm font-medium text-gray-700">Status</th>
+                        <th class="border-b px-6 py-4 text-left text-sm font-medium text-gray-700">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orders
+                        .map(order => `
+                            <tr class="hover:bg-indigo-100 transition-all duration-300 cursor-pointer" onclick="openOrderPopup('${order._id}')">
+                                <td class="border-b px-6 py-4 text-sm text-gray-700 font-medium">${order._id}</td>
+                                <td class="border-b px-6 py-4 text-sm text-gray-700">${order.userId || 'N/A'}</td>
+                                <td class="border-b px-6 py-4 text-sm text-gray-700">${new Date(order.createdAt).toLocaleString()}</td>
+                                <td class="border-b px-6 py-4 text-sm">
+                                    <span class="px-4 py-2 rounded-md text-sm font-medium ${
+                                        order.orderStatus === 'pending' ? 'bg-yellow-300 text-yellow-800' :
+                                        order.orderStatus === 'processing' ? 'bg-blue-300 text-blue-800' :
+                                        order.orderStatus === 'completed' ? 'bg-green-300 text-green-800' :
+                                        'bg-red-300 text-red-800'
+                                    }">${order.orderStatus}</span>
+                                </td>
+                                <td class="border-b px-6 py-4 text-sm text-gray-700">KSh ${order.total.toFixed(2)}</td>
+                            </tr>
+                        `).join('')}
+                </tbody>
+            </table>
+        </div>
+    </div>
+`;
+    } catch (error) {
+        console.error('❌ Error fetching orders:', error);
+        content.innerHTML = '<p class="text-red-500">Failed to load orders. Please try again.</p>';
+    }
+}
+
+
+// ✅ Fetch Orders Based on Status
+async function fetchOrdersByStatus(status) {
+    const content = document.getElementById('content');
+    content.innerHTML = `<h2 class="text-xl font-bold">${status.charAt(0).toUpperCase() + status.slice(1)} Orders</h2><p>Loading orders...</p>`;
+
+    try {
+        const response = await fetch(`http://localhost:3000/admin/orders?status=${status}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`, // ✅ Fixed Authorization Typo
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const orders = await response.json();
+
+        const ordersTableBody = orders.map(order => `
+    <tr data-order-id="${order._id}" class="order-row hover:bg-gray-100 transition-all duration-300 border-b cursor-pointer" onclick="openOrderPopup('${order._id}', '${order.orderStatus}')">
+        <td class="px-4 py-2 border-b text-sm sm:text-base font-medium">${order._id}</td>
+        <td class="px-4 py-2 border-b text-sm sm:text-base font-medium">${order.userId || 'N/A'}</td>
+        <td class="px-4 py-2 border-b text-sm sm:text-base font-medium hidden sm:table-cell">
+            ${
+                order.items && order.items.length > 0 
+                    ? order.items.length > 2
+                        ? `${order.items[0].itemId} (x${order.items[0].quantity}), ${order.items[1].itemId} (x${order.items[1].quantity})${order.items.length > 2 ? '... more' : ''}`
+                        : order.items.map(item => `${item.itemId} (x${item.quantity})`).join(', ')
+                    : 'No Items'
+            }
+        </td>
+        <td class="px-4 py-2 border-b text-sm sm:text-base font-medium">KSh ${order.total.toFixed(2)}</td>
+        <td class="px-4 py-2 border-b">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold ${order.orderStatus === 'pending' ? 'bg-yellow-300 text-yellow-800' :
+                order.orderStatus === 'processing' ? 'bg-blue-400 text-white' :
+                order.orderStatus === 'completed' ? 'bg-green-300 text-green-800' :
+                'bg-red-200 text-red-800'}">${order.orderStatus}</span>
+        </td>
+        <td class="px-4 py-2 border-b">
+            <button onclick="event.stopPropagation(); openOrderPopup('${order._id}', '${order.orderStatus}')" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-all duration-300">View</button>
+        </td>
+    </tr>
+`).join('');
+
+content.innerHTML = `
+    <div class="overflow-x-auto p-4">
+        <table class="min-w-full table-auto border-separate border-spacing-0 shadow-lg">
+            <thead class="bg-gradient-to-r from-purple-500 to-indigo-500 text-white">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold">Order ID</th>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold">Customer ID</th>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold hidden sm:table-cell">Items</th>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold">Total</th>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold">Status</th>
+                    <th class="px-6 py-3 text-left text-sm sm:text-base font-semibold">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="6" class="border-b-2 border-gray-300 mb-2"></td></tr> <!-- Divider Line -->
+                ${ordersTableBody}
+            </tbody>
+        </table>
+    </div>
+`;
+
+    } catch (error) {
+        console.error('❌ Error fetching orders:', error);
+        content.innerHTML = '<p class="text-red-500">Failed to load orders.</p>';
+    }
+}
+
+
+// ✅ Live Update Order Status Without Refresh
+async function updateOrderStatus(orderId, currentStatus) {
+    if (currentStatus === 'completed') {
+        console.log('✅ Order is already completed. No further updates allowed.');
+        return;
+    }
+
+    // ✅ Correct Order Status Flow: Pending → Processing → Completed
+    let newStatus;
+    if (currentStatus === 'pending') {
+        newStatus = 'processing';
+    } else if (currentStatus === 'processing') {
+        newStatus = 'completed';
+    } else {
+        console.warn('⚠️ Unknown status update request:', currentStatus);
+        return;
+    }
+
+    console.log(`🔄 Updating Order ID ${orderId}: ${currentStatus} → ${newStatus}`);
+
+    try {
+        const response = await fetch(`http://localhost:3000/admin/orders/${orderId}`, {
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ orderStatus: newStatus }), // ✅ Send newStatus
+        });
+
+        if (response.ok) {
+            console.log(`✅ Order ID ${orderId} updated to ${newStatus}`);
+
+            // ✅ Instantly Update Status in the Table
+            const row = document.querySelector(`[data-order-id="${orderId}"]`);
+            if (row) {
+                const statusCell = row.querySelector('.status-cell');
+                if (statusCell) {
+                    statusCell.innerHTML = newStatus === 'completed'
+                        ? `<span class="text-green-600 font-bold">✓ Completed</span>`
+                        : `<span class="text-blue-600 font-bold">🔄 Processing</span>`;
+                }
+
+                // ✅ Change Proceed Button Text & Disable on Completion
+                const proceedButton = row.querySelector('.proceed-btn');
+                if (proceedButton) {
+                    if (newStatus === 'completed') {
+                        proceedButton.innerText = "✔ Completed";
+                        proceedButton.disabled = true;
+                        proceedButton.classList.add("opacity-50", "cursor-not-allowed");
+                    } else {
+                        proceedButton.innerText = "🔄 Mark as Completed";
+                    }
+                }
+            }
+
+            // ✅ Instantly Update Status in Popup (if open)
+            const popup = document.getElementById('orderPopup');
+            if (popup) {
+                const popupStatus = popup.querySelector('.popup-status');
+                if (popupStatus) {
+                    popupStatus.innerHTML = newStatus === 'completed'
+                        ? `<span class="text-green-600 font-bold">✓ Completed</span>`
+                        : `<span class="text-blue-600 font-bold">🔄 Processing</span>`;
+                }
+
+                // ✅ Disable Proceed Button in Popup if Completed
+                const proceedButton = popup.querySelector('.proceed-btn');
+                if (proceedButton) {
+                    if (newStatus === 'completed') {
+                        proceedButton.innerText = "✔ Completed";
+                        proceedButton.disabled = true;
+                        proceedButton.classList.add("opacity-50", "cursor-not-allowed");
+                    } else {
+                        proceedButton.innerText = "🔄 Mark as Completed";
+                    }
+                }
+            }
+
+        } else {
+            const errorMessage = await response.text();
+            console.error('❌ Failed to update order status:', errorMessage);
+        }
+    } catch (error) {
+        console.error('❌ Error updating order status:', error);
+    }
+}
+
+/// ✅ Fetch & Display Order Details in Popup (Live Status Change)
+async function openOrderPopup(orderId, currentStatus) {
+    const modal = document.createElement('div');
+    modal.id = 'orderPopup';
+    modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50';
+
+    try {
+        const response = await fetch(`http://localhost:3000/admin/orders/${orderId}`, {
+            method: 'GET',
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            console.error('❌ Error fetching order details:', errorMessage);
+            alert('⚠️ Failed to fetch order details.');
+            return;
+        }
+
+        const order = await response.json();
+
+        // ✅ Generate Popup Content (Live Updates)
+        modal.innerHTML = `
+    <div class="bg-white p-8 rounded-lg shadow-2xl w-full sm:w-3/4 lg:w-2/3 max-w-4xl h-[90vh] overflow-hidden flex flex-col transition-all duration-300">
+        <h2 class="text-3xl font-semibold text-center mb-6 text-indigo-600">📜 Order Details</h2>
+
+        <!-- ✅ Scrollable content area -->
+        <div class="overflow-y-auto flex-grow pb-4">
+            <!-- ✅ Customer Information -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 bg-gray-50 p-4 rounded-lg">
+                <div class="space-y-4">
+                    <p><strong class="font-medium">👤 Customer Name:</strong> ${order.name || 'N/A'}</p>
+                    <p><strong class="font-medium">🆔 User ID:</strong> ${order.userId || 'N/A'}</p>
+                    <p><strong class="font-medium">📧 Email:</strong> ${order.email || 'N/A'}</p>
+                    <p><strong class="font-medium">📞 Phone:</strong> ${order.phone || 'N/A'}</p>
+                </div>
+                <div class="space-y-4">
+                    <p><strong class="font-medium">📦 Order ID:</strong> ${order._id || 'N/A'}</p>
+                    <p><strong class="font-medium">📅 Date:</strong> ${new Date(order.createdAt || Date.now()).toLocaleString()}</p>
+                    <p><strong class="font-medium">📌 Order Status:</strong>
+                        <span class="px-3 py-1 text-sm font-semibold rounded-lg shadow-md 
+                        ${order.orderStatus === 'pending' ? 'bg-yellow-400 text-white' : 
+                            order.orderStatus === 'processing' ? 'bg-blue-500 text-white' : 
+                            order.orderStatus === 'completed' ? 'bg-green-500 text-white' : 
+                            'bg-red-500 text-white'}">
+                            ${order.orderStatus || "Unknown"}
+                        </span>
+                    </p>
+                    <p><strong class="font-medium">💰 Payment Status:</strong> 
+                        <span class="px-3 py-1 text-sm font-semibold rounded-lg shadow-md 
+                        ${order.paymentStatus === 'paid' ? 'bg-green-500 text-white' : 
+                            order.paymentStatus === 'COD' ? 'bg-yellow-500 text-white' : 
+                            'bg-red-500 text-white'}">
+                            ${order.paymentStatus || "Unknown"}
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+            <!-- ✅ Delivery Address -->
+            <div class="mt-6 bg-gray-100 p-4 rounded-lg">
+                <h3 class="text-lg font-semibold text-indigo-600">📍 Shipping Information</h3>
+                <p><strong class="font-medium">🏠 Address:</strong> ${order.address || 'Not Provided'}</p>
+                <p><strong class="font-medium">🚚 Delivery Method:</strong> ${order.deliveryMethod || 'Standard'}</p>
+            </div>
+
+            <!-- ✅ Order Summary -->
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-indigo-600">🛒 Order Summary</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-300 rounded-lg mt-2">
+                        <thead class="bg-gray-200">
+                            <tr class="text-left">
+                                <th class="border px-4 py-2">Product</th>
+                                <th class="border px-4 py-2 text-center">Qty</th>
+                                <th class="border px-4 py-2 text-right">Price</th>
+                                <th class="border px-4 py-2 text-right">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${order.items.map(item => `
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="border px-4 py-2 text-gray-700">${item.itemId || "Unknown"}</td>
+                                    <td class="border px-4 py-2 text-center text-gray-800 font-semibold">${item.quantity || 1}</td>
+                                    <td class="border px-4 py-2 text-right text-gray-700">KSh ${(item.price || 0).toFixed(2)}</td>
+                                    <td class="border px-4 py-2 text-right text-gray-700">KSh ${(item.quantity * item.price || 0).toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ✅ Financial Summary -->
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                <p><strong class="font-medium">💲 Subtotal:</strong> KSh ${(order.subtotal || 0).toFixed(2)}</p>
+                <p><strong class="font-medium">💵 Tax:</strong> KSh ${(order.tax || 0).toFixed(2)}</p>
+                <p><strong class="font-medium">🚛 Shipping:</strong> KSh ${(order.shippingFee || 0).toFixed(2)}</p>
+                <p class="text-xl font-bold text-indigo-700"><strong>💰 Total:</strong> KSh ${(order.total || 0).toFixed(2)}</p>
+            </div>
+        </div>
+
+        <!-- ✅ Action Buttons -->
+        <div class="mt-6 flex justify-end space-x-6">
+            ${
+                order.orderStatus === 'completed'
+                    ? `<span class="text-green-600 font-bold mr-4">✓ Completed</span>`
+                    : `<button onclick="updateOrderStatus('${order._id}', '${order.orderStatus}')" 
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-all">
+                        Proceed
+                      </button>`
+            }
+            <button onclick="closePopup()" 
+                class="bg-red-500 text-white px-6 py-3 rounded-lg hover:bg-red-600 transition-all">
+                Close
+            </button>
+        </div>
+    </div>
+`;
+
+        document.body.appendChild(modal);
+    } catch (error) {
+        console.error('❌ Error fetching order details:', error);
+        alert('⚠️ Failed to load order details.');
+    }
+}
+
+
+// Close Popup
+function closePopup() {
+    const popup = document.getElementById('orderPopup');
+    if (popup) popup.remove();
+}
+
+    async function openUserDetailsTable(page = 1) {
+  const content = document.getElementById('content');
+  content.innerHTML = '<h2 class="text-xl font-bold">User Details</h2><p>Loading user details...</p>';
+
+  try {
+    const response = await fetch(`http://localhost:3000/admin/users?page=${page}&limit=10`, {
+      method: 'GET',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      const { users, totalPages, currentPage, hasNextPage, hasPreviousPage } = await response.json();
+
+      const userTableBody = users.map(user => `
+  <tr>
+    <td class="border px-4 py-2">
+      <!-- User Card Container -->
+      <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 flex flex-col md:flex-row items-center space-x-6 mb-6">
+
+        <!-- Left Section: User Info -->
+        <div class="flex flex-col mb-4 md:mb-0 md:w-2/3">
+          <p class="font-semibold text-xl text-gray-800">${user.name}</p>
+          <p class="text-sm text-gray-600 mb-2">
+            <strong>User ID:</strong> <span class="text-blue-500">${user.userId}</span>
+          </p>
+          <p class="text-sm text-gray-600">
+            <strong>Email:</strong> <span class="text-gray-700">${user.email}</span>
+          </p>
+        </div>
+
+        <!-- Right Section: Status & Buttons -->
+        <div class="flex flex-col items-center md:w-1/3">
+          <!-- Status Badge -->
+          <div class="mb-4">
+            <span class="px-4 py-2 rounded-full text-white ${
+              user.status === 'active' ? 'bg-green-500' :
+              user.status === 'suspended' ? 'bg-red-500' :
+              'bg-yellow-500'}">
+              ${user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+            </span>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex space-x-4">
+            <button onclick="toggleUserStatus('${user._id}', '${user.status}')" 
+                    class="bg-${user.status === 'active' ? 'blue' : 'gray'}-500 text-white px-4 py-2 rounded-md hover:bg-${user.status === 'active' ? 'blue' : 'gray'}-600">
+              ${user.status === 'active' ? 'Suspend' : 'Activate'}
+            </button>
+            <button onclick="deleteUser('${user._id}')" 
+                    class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">
+              Delete
+            </button>
+          </div>
+        </div>
+      </div>
+    </td>
+  </tr>
+`).join('');
+
+content.innerHTML = `
+  <div class="overflow-x-auto shadow-lg rounded-lg">
+    <table class="min-w-full table-auto bg-white border-collapse">
+      <thead class="bg-blue-200">
+        <tr>
+          <th class="border px-4 py-2 text-left font-semibold text-gray-700">User Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${userTableBody}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="mt-4 flex justify-between items-center">
+    <!-- Previous Button -->
+    <button 
+      ${!hasPreviousPage ? 'disabled' : ''} 
+      onclick="openUserDetailsTable(${currentPage - 1})" 
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ${!hasPreviousPage ? 'cursor-not-allowed opacity-50' : ''}">
+      Previous
+    </button>
+
+    <!-- Page Indicator (e.g. Page 1 of X) -->
+    <span class="text-gray-700 font-semibold">
+      Page ${currentPage} of ${totalPages}
+    </span>
+
+    <!-- Next Button -->
+    <button 
+      ${!hasNextPage ? 'disabled' : ''} 
+      onclick="openUserDetailsTable(${currentPage + 1})" 
+      class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md ${!hasNextPage ? 'cursor-not-allowed opacity-50' : ''}">
+      Next
+    </button>
+  </div>
+`;
+
+    } else {
+      throw new Error('Failed to fetch users.');
+    }
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+    content.innerHTML = '<p>Error loading users. Please try again later.</p>';
+  }
+}
+
+
+
+async function toggleUserStatus(userId, currentStatus) {
+  const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
+
+  try {
+    const response = await fetch(`http://localhost:3000/admin/users/${userId}/status`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify({ status: newStatus }),
+    });
+
+    if (response.ok) {
+      openUserDetailsTable(); // Refresh user list
+    } else {
+      const errorText = await response.text();
+      console.error('Error updating user status:', errorText);
+      alert('Error updating user status.');
+    }
+  } catch (error) {
+    console.error('Error updating user status:', error);
+    alert('An error occurred while updating user status.');
+  }
+}
+
+
+async function deleteUser(userId) {
+  if (!confirm('Are you sure you want to delete this user?')) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Bearer ${token}` },
+    });
+
+    if (response.ok) {
+      openUserDetailsTable(); // Refresh user list
+    } else {
+      const errorText = await response.text();
+      console.error('Error deleting user:', errorText);
+      alert('Error deleting user.');
+    }
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    alert('An error occurred while deleting user.');
+  }
+}
+
+
+        function openSalesReports() {
+    const content = document.getElementById('content');
+    content.innerHTML = '';
+    
+    // Create the container dynamically if it doesn't exist
+    let salesReportsContainer = document.getElementById('sales-reports');
+    if (!salesReportsContainer) {
+        salesReportsContainer = document.createElement('div');
+        salesReportsContainer.id = 'sales-reports';
+        content.appendChild(salesReportsContainer);
+    }
+
+    // Display loading message
+    salesReportsContainer.innerHTML = `
+        <p class="text-gray-500 text-center mt-4">Loading Sales Orders Reports...</p>
+    `;
+    // Fetch and render the Sales Reports content
+    fetchAndRenderSalesReports();
+}
+
+// Function to fetch and render the Sales Reports content
+async function fetchAndRenderSalesReports() {
+    const salesReportsContainer = document.getElementById('sales-reports');
+    salesReportsContainer.innerHTML = ''; // Clear previous content
+
+    try {
+        const response = await fetch('http://localhost:3000/admin/sales-reports');
+        if (!response.ok) throw new Error('Failed to fetch sales reports data');
+        const data = await response.json();
+
+        console.log('Fetched Sales Report:', data); // Debugging log
+        renderSalesReports(data);
+    } catch (error) {
+        console.error('Error fetching sales reports:', error);
+        salesReportsContainer.innerHTML = `
+            <div class="text-center text-red-500">
+                <h2 class="text-xl font-bold">Error Loading Sales Reports</h2>
+                <p>Check your network or try again later.</p>
+            </div>`;
+    }
+}
+
+// Render the Sales Reports content
+function renderSalesReports(data) {
+    const salesReportsContainer = document.getElementById('sales-reports');
+    salesReportsContainer.innerHTML = `
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <h3 class="text-lg font-bold">Conversion Rate</h3>
+                    <p>${data.conversionRate}%</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold">Unique Purchases</h3>
+                    <p>${data.uniquePurchases}</p>
+                </div>
+            </div>
+            <div class="mt-6">
+                <h2 class="text-2xl font-bold mb-4">MRR Growth</h2>
+                <canvas id="mrrChart"></canvas>
+            </div>
+            <div class="mt-6">
+                <h2 class="text-2xl font-bold mb-4">Retention and Cancellations</h2>
+                <canvas id="retentionChart"></canvas>
+            </div>
+        </div>
+    `;
+
+    renderMRRChart(data.mrrGrowthData); // Render MRR Chart
+    renderRetentionChart(data.retentionData); // Render Retention Chart
+}
+// Render MRR Growth Chart
+function renderMRRChart(data) {
+    const ctx = document.getElementById('mrrChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.labels,
+            datasets: [
+                {
+                    label: 'MRR Growth',
+                    data: data.values,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                },
+            ],
+        },
+        options: { responsive: true },
+    });
+}
+
+// Render Retention Chart
+function renderRetentionChart(data) {
+    const ctx = document.getElementById('retentionChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: data.labels,
+            datasets: [
+                {
+                    label: 'Expansions',
+                    data: data.expansions,
+                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                },
+                {
+                    label: 'Cancellations',
+                    data: data.cancellations,
+                    backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                },
+            ],
+        },
+        options: { responsive: true },
+    });
+}
+
+// Function to handle section switching
+function openSection(sectionId, fetchFunction = null) {
+    console.log(`Opening section: ${sectionId}`); // Debugging
+
+    // Hide all other sections
+    document.querySelectorAll('.dynamic-section').forEach((section) => {
+        section.classList.add('hidden'); // Hide all existing dynamic sections
+    });
+
+    // Check if the section already exists; if not, create it
+    let sectionContainer = document.getElementById(sectionId);
+    if (!sectionContainer) {
+        sectionContainer = document.createElement('div');
+        sectionContainer.id = sectionId;
+        sectionContainer.classList.add('dynamic-section');
+        document.getElementById('main-content').appendChild(sectionContainer);
+    }
+
+    // Show the selected section
+    sectionContainer.classList.remove('hidden'); // Make the section visible
+
+    // If a fetch function is provided, fetch and render the content
+    if (fetchFunction) {
+        sectionContainer.innerHTML = ''; // Clear previous content
+        fetchFunction(sectionContainer); // Call the fetch function to load data
+    }
+}
+
+
+function openCustomerReports() {
+    const container = document.getElementById('customer-reports');
+    container.innerHTML = '<p>Loading Customer Reports...</p>';
+    // Fetch and render customer reports here
+}
+
+async function openProductReports() {
+    const container = document.getElementById('product-reports');
+    container.innerHTML = '<p>Loading Product Reports...</p>';
+    // Fetch and render product reports here
+}
+
+
+    function openDiscounts() {
+        const content = document.getElementById('content');
+        content.innerHTML = '<h2 class="text-xl font-bold">Discounts</h2><p>Create and manage discount codes here...</p>';
+    }
+
+    function openEmailCampaigns() {
+        const content = document.getElementById('content');
+        content.innerHTML = '<h2 class="text-xl font-bold">Email Campaigns</h2><p>Design and send email campaigns...</p>';
+    }
+
+
+// Logout function
+function logout() {
+            sessionStorage.removeItem('token');
+            window.location.href = 'login.html';
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+
+openDashboard();
+});
+
+async function openProducts() {
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = '<h2 class="text-2xl font-bold mb-6">All Products</h2>';
+
+    try {
+        const response = await fetch('http://localhost:3000/api/products');
+        const products = await response.json();
+
+        const productGrid = document.createElement('div');
+        productGrid.className = 'grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6';
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'bg-white shadow rounded-lg p-4 cursor-pointer hover:shadow-md';
+            productCard.innerHTML = `
+                <div class="flex flex-col items-center">
+                    ${
+                        product.images && product.images.length > 0
+                            ? `<img src="http://localhost:3000/${product.images[0]}" alt="${product.name}" class="w-20 h-20 object-cover rounded-md mb-2" />`
+                            : '<div class="w-20 h-20 bg-gray-300 rounded-md mb-2"></div>'
+                    }
+                    <h3 class="font-semibold text-center">${product.name}</h3>
+                </div>
+            `;
+
+            // Add click event to open the popup
+            productCard.addEventListener('click', () => openProductModal(product));
+            productGrid.appendChild(productCard);
+        });
+
+        contentArea.appendChild(productGrid);
+    } catch (error) {
+        console.error('Error fetching products:', error.message);
+        contentArea.innerHTML = `<p class="text-red-500">Error loading products: ${error.message}</p>`;
+    }
+}
+
+// Function to display the Add Product form and handle product creation
+async function openAddProduct() {
+    const contentArea = document.getElementById('content');
+    let currentImages = [];
+
+    contentArea.innerHTML = `
+    <div class="relative">
+            <button id="close-modal" class="absolute top-0 right-0 text-gray-500 p-2 hover:text-gray-800">
+                Back
+            </button>
+        </div>
+        <h2 class="text-xl font-bold mb-4">Add New Product</h2>
+        <form id="add-product-form">
+            <input type="text" id="product-name" placeholder="Product Name" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="text" id="product-sku" placeholder="SKU" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="text" id="product-brand" placeholder="Brand" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <textarea id="product-description" placeholder="Description" class="block w-full p-2 mb-2 border border-gray-300" required></textarea>
+            <input type="number" id="product-price" placeholder="Price" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="number" id="product-salePrice" placeholder="Sale Price" class="block w-full p-2 mb-2 border border-gray-300" />
+            <input type="number" id="product-stock" placeholder="Stock" class="block w-full p-2 mb-2 border border-gray-300" required />
+            
+            <!-- Dropdown for Category -->
+            <select id="product-category" class="block w-full p-2 mb-2 border border-gray-300" required>
+                <option value="">Select Category</option>
+                <!-- Dynamically populate categories -->
+            </select>
+
+            <!-- Dropdown for Subcategory -->
+            <select id="product-subcategory" class="block w-full p-2 mb-2 border border-gray-300">
+                <option value="">Select Subcategory</option>
+                <!-- Dynamically populate subcategories -->
+            </select>
+
+            <!-- Input for Features (array) -->
+            <textarea id="product-features" placeholder="Features (comma-separated)" class="block w-full p-2 mb-2 border border-gray-300"></textarea>
+
+            <!-- Input for Specifications (array) -->
+            <textarea id="product-specifications" placeholder="Specifications (comma-separated)" class="block w-full p-2 mb-2 border border-gray-300"></textarea>
+
+            <input type="text" id="product-warranty" placeholder="Warranty" class="block w-full p-2 mb-2 border border-gray-300" />
+            <textarea id="product-shippingDetails" placeholder="Shipping Details" class="block w-full p-2 mb-2 border border-gray-300"></textarea>
+
+            <!-- Dropdown for Promotional Tags -->
+            <select id="product-tags" class="block w-full p-2 mb-2 border border-gray-300" required>
+                <option value="">Select Promotional Tag</option>
+                <!-- Dynamically populate promotional tags -->
+            </select>
+
+            <!-- Existing Images Section -->
+            <div id="existing-images" class="flex flex-wrap gap-4 mb-4">
+                <!-- Dynamically display selected images -->
+            </div>
+
+            <!-- Add New Images -->
+            <label for="product-images" class="block mb-2">Add Images (Max 10)</label>
+            <input type="file" id="product-images" class="block w-full p-2 mb-2 border border-gray-300" multiple />
+
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Add Product</button>
+        </form>
+    `;
+
+    // Close modal functionality
+    document.getElementById('close-modal').addEventListener('click', openProducts);
+
+    // Fetch and populate categories, subcategories, and promotional tags
+    await fetchAndPopulateCategories();       // Fetch categories
+    await fetchAndPopulateSubcategories();    // Fetch subcategories
+    await fetchAndPopulatePromotionalTags([]);  // Fetch promotional tags
+
+    // Manage Image Display and Removal
+    const existingImagesContainer = document.getElementById('existing-images');
+    const productImagesInput = document.getElementById('product-images');
+
+    // Update the display of selected images
+    function updateImageDisplay() {
+        existingImagesContainer.innerHTML = currentImages.map((img, index) => `
+            <div class="relative w-24 h-24">
+                <img src="${URL.createObjectURL(img)}" alt="Image ${index}" class="w-full h-full object-cover rounded" />
+                <button class="absolute top-1 right-1 bg-red-500 text-white text-sm p-1 rounded-full remove-image" data-index="${index}">✖</button>
+            </div>
+        `).join('');
+
+        // Add event listeners for removing images
+        document.querySelectorAll('.remove-image').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const index = parseInt(btn.getAttribute('data-index'));
+                currentImages.splice(index, 1);
+                updateImageDisplay(); // Refresh the image display
+            });
+        });
+    }
+
+    // Handle new image selection
+    productImagesInput.addEventListener('change', () => {
+        const selectedFiles = Array.from(productImagesInput.files);
+        if (currentImages.length + selectedFiles.length > 10) {
+            alert('You can only upload up to 10 images.');
+        } else {
+            currentImages = currentImages.concat(selectedFiles);
+            updateImageDisplay();
+        }
+
+        // Clear the file input to allow selecting the same file again if needed
+        productImagesInput.value = '';
+    });
+
+    // Handle form submission
+    document.getElementById('add-product-form').onsubmit = async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('name', document.getElementById('product-name').value);
+        formData.append('slug', generateSlug(document.getElementById('product-name').value));      
+        formData.append('sku', document.getElementById('product-sku').value);
+        formData.append('brand', document.getElementById('product-brand').value);
+        formData.append('description', document.getElementById('product-description').value);
+        formData.append('price', parseFloat(document.getElementById('product-price').value));
+        formData.append('salePrice', parseFloat(document.getElementById('product-salePrice').value || 0));
+        formData.append('stock', parseInt(document.getElementById('product-stock').value, 10));
+        formData.append('categoryId', document.getElementById('product-category').value);
+        formData.append('subcategoryId', document.getElementById('product-subcategory').value || null);
+        formData.append('features', document.getElementById('product-features').value.split(',').map(f => f.trim()));
+        formData.append('specifications', document.getElementById('product-specifications').value.split(',').map(s => s.trim()));
+        formData.append('warranty', document.getElementById('product-warranty').value);
+        formData.append('shippingDetails', document.getElementById('product-shippingDetails').value);
+
+        // Collect selected promotional tags
+        const selectedTags = Array.from(document.getElementById('product-tags').selectedOptions)
+            .map(option => option.value); // Get all selected tag IDs
+        selectedTags.forEach(tagId => formData.append('promotionalTags[]', tagId));
+
+        // Handle image uploads (multiple files)
+        const images = document.getElementById('product-images').files;
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
+
+        try {
+            const response = await fetch('http://localhost:3000/api/products', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('Product added successfully');
+                openProducts(); // Reload the product list after adding
+            } else {
+                const errorData = await response.json();
+                alert('Error adding product: ' + errorData.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error adding product');
+        }
+    };
+}
+
+// Helper function to generate a slug
+function generateSlug(name) {
+    return name
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-') // Replace non-alphanumeric chars with hyphens
+        .replace(/(^-|-$)/g, '') + '-' + Date.now(); // Append timestamp for uniqueness
+}
+
+
+// Fetch and populate promotional tags
+async function fetchAndPopulatePromotionalTags() {
+    try {
+        const response = await fetch('http://localhost:3000/api/promotional-tags');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch promotional tags: ${response.statusText}`);
+        }
+
+        const tags = await response.json();
+        const tagDropdown = document.getElementById('product-tags');
+
+        // Clear any existing options
+        tagDropdown.innerHTML = `<option value="">Select Promotional Tag</option>`;
+
+        // Populate promotional tags dropdown
+        tags.forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag._id;  // Assuming tag._id is the unique identifier for each tag
+            option.textContent = tag.name;  // Display tag name in the dropdown
+            tagDropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Error fetching promotional tags:', error.message);
+    }
+}
+
+
+async function fetchAndPopulateCategories() {
+    try {
+        const response = await fetch('http://localhost:3000/api/categories'); // Adjust endpoint
+        if (!response.ok) {
+            throw new Error(`Failed to fetch categories: ${response.statusText}`);
+        }
+
+        const categories = await response.json();
+        const categoryDropdown = document.getElementById('product-category');
+
+        // Populate category dropdown
+        categoryDropdown.innerHTML = `<option value="">Select Category</option>`;
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category._id;
+            option.textContent = category.name;
+            categoryDropdown.appendChild(option);
+        });
+
+        // Add event listener to load subcategories dynamically
+        categoryDropdown.addEventListener('change', async function () {
+            const categoryId = categoryDropdown.value;
+            await fetchAndPopulateSubcategories(categoryId);
+        });
+    } catch (error) {
+        console.error('Error fetching categories:', error.message);
+    }
+}
+
+async function fetchAndPopulateSubcategories(categoryId) {
+    const subcategoryDropdown = document.getElementById('product-subcategory');
+
+    // Clear existing options
+    subcategoryDropdown.innerHTML = `<option value="">Select Subcategory</option>`;
+
+    if (!categoryId) {
+        // If no category is selected, do not fetch subcategories
+        return;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/subcategories?categoryId=${categoryId}`);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch subcategories: ${response.statusText}`);
+        }
+
+        const subcategories = await response.json();
+
+        if (subcategories.length === 0) {
+            // If no subcategories are found, add a disabled option
+            const option = document.createElement('option');
+            option.value = "";
+            option.textContent = "No Subcategories Available";
+            option.disabled = true;
+            subcategoryDropdown.appendChild(option);
+        } else {
+            // Populate subcategory dropdown
+            subcategories.forEach(subcategory => {
+                const option = document.createElement('option');
+                option.value = subcategory._id;
+                option.textContent = subcategory.name;
+                subcategoryDropdown.appendChild(option);
+            });
+        }
+    } catch (error) {
+        console.error('Error fetching subcategories:', error.message);
+    }
+}
+
+
+async function openCategories() {
+    const contentArea = document.getElementById('content');
+contentArea.innerHTML = `
+    <div class="flex flex-col space-y-6">
+        <!-- Add Category Button and Form -->
+        <div class="">
+            <button id="toggle-category-form" class="text-blue-500 font-semibold border border-blue-500 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
+                + Add New Category
+            </button>
+            <div id="add-category-section" class="top-14 left-0 bg-white border border-gray-300 rounded-lg p-4 shadow-lg hidden">
+                <form id="add-category-form" class="space-y-4">
+                    <input type="text" id="category-name" placeholder="Category Name" class="block w-full p-2 border border-gray-300 rounded-lg" required />
+                    <textarea id="category-description" placeholder="Category Description (Optional)" class="block w-full p-2 border border-gray-300 rounded-lg"></textarea>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full">Save</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Categories Section -->
+        <div class="w-full lg:w-3/4">
+            <h2 class="text-2xl font-bold mb-4">Categories</h2>
+            <div id="categories-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Categories will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+`;
+
+
+    // Toggle Add Category Form
+    const toggleCategoryFormBtn = document.getElementById('toggle-category-form');
+    const addCategorySection = document.getElementById('add-category-section');
+    toggleCategoryFormBtn.addEventListener('click', () => {
+        addCategorySection.classList.toggle('hidden');
+    });
+
+    // Fetch and display categories
+    try {
+        const response = await fetch('http://localhost:3000/api/categories');
+        const categories = await response.json();
+
+        const categoriesList = document.getElementById('categories-list');
+        categoriesList.innerHTML = categories.map(category => `
+    <div class="bg-white shadow-lg rounded-lg p-6 transition duration-300" data-id="${category._id}">
+        <h3 class="font-semibold text-lg mb-2">${category.name}</h3>
+        <p class="text-gray-500 text-sm mb-4">${category.description || 'No description available'}</p>
+        <div class="text-blue-500 font-bold cursor-pointer hover:text-blue-700">View Products</div>
+        <button class="text-red-500 font-semibold border border-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition delete-category-btn" data-id="${category._id}">
+            Delete
+        </button>
+    </div>
+`).join('');
+
+document.querySelectorAll('.delete-category-btn').forEach(deleteBtn => {
+    deleteBtn.addEventListener('click', async (e) => {
+        const categoryId = deleteBtn.getAttribute('data-id');
+
+        const confirmDelete = confirm('Are you sure you want to delete this category? Products will be disassociated.');
+        if (!confirmDelete) return;
+
+        try {
+            const productResponse = await fetch(`http://localhost:3000/api/categories/${categoryId}/products`);
+            const products = await productResponse.json();
+
+            if (products.length > 0) {
+                const confirmDisassociate = confirm(`There are ${products.length} products in this category. Do you want to delete the category and disassociate the products?`);
+                if (!confirmDisassociate) return;
+            }
+
+            // Disassociate products before deleting the category
+            for (const product of products) {
+                await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ categoryId: null }) // Disassociate products from the category
+                });
+            }
+
+            // Proceed to delete the category
+            const response = await fetch(`http://localhost:3000/api/categories/${categoryId}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                alert('Category deleted successfully and products disassociated.');
+                openCategories(); // Reload categories after deletion
+            } else {
+                alert('Error deleting category.');
+            }
+        } catch (error) {
+            alert(`Error deleting category: ${error.message}`);
+        }
+    });
+});
+        // Add click functionality to display products in a category
+        document.querySelectorAll('#categories-list > div').forEach(categoryDiv => {
+    categoryDiv.addEventListener('click', async () => {
+        const categoryId = categoryDiv.getAttribute('data-id'); // Debugging
+        console.log(`Category ID: ${categoryId}`); // Check the output in the console
+        if (categoryId) {
+            await displayProductsByCategory(categoryId);
+        } else {
+            console.error('Category ID is null or undefined.');
+        }
+    });
+});
+        // Handle form submission to add a new category
+        document.getElementById('add-category-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const name = document.getElementById('category-name').value;
+            const description = document.getElementById('category-description').value;
+
+            if (!name) {
+                alert('Please provide a category name');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/api/categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, description })
+            });
+
+            if (response.ok) {
+                alert('Category added successfully');
+                addCategorySection.classList.add('hidden'); // Hide the form after submission
+                openCategories(); // Reload the categories
+            } else {
+                alert('Error adding category');
+            }
+        };
+    } catch (error) {
+        contentArea.innerHTML = `<p>Error fetching categories: ${error.message}</p>`;
+    }
+}
+
+
+async function displayProductsByCategory(categoryId) {
+    if (!categoryId) {
+        console.error('Category ID is null or undefined');
+        return; // Prevent API call if no valid category ID
+    }
+
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = `<h2 class="text-2xl font-bold mb-4">Products</h2>`;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/categories/${categoryId}/products`);
+        const products = await response.json();
+
+        if (!Array.isArray(products) || products.length === 0) {
+            contentArea.innerHTML += `<p class="text-gray-500">No products found in this category.</p>`;
+            return;
+        }
+
+        const productGrid = document.createElement('div');
+        productGrid.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6';
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'bg-white shadow-md rounded-lg p-4';
+
+            productCard.innerHTML = `
+                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <h3 class="font-semibold">${product.name}</h3>
+                <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
+                <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
+            `;
+
+            productCard.addEventListener('click', () => {
+                openProductModal(product);
+            });
+
+            productGrid.appendChild(productCard);
+        });
+
+        contentArea.appendChild(productGrid);
+    } catch (error) {
+        contentArea.innerHTML += `<p class="text-red-500">Error fetching products: ${error.message}</p>`;
+    }
+}
+
+
+// Fetch and display subcategories
+async function openSubCategories() {
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = `
+        <div class="flex flex-col space-y-6">
+            <!-- Add Subcategory Button and Form -->
+            <div class="">
+                <button id="toggle-subcategory-form" class="text-blue-500 font-semibold border border-blue-500 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
+                    + Add New Subcategory
+                </button>
+                <div id="add-subcategory-section" class="top-14 left-0 bg-white border border-gray-300 rounded-lg p-4 shadow-lg hidden">
+                    <form id="add-subcategory-form" class="space-y-4">
+                        <input type="text" id="subcategory-name" placeholder="Subcategory Name" class="block w-full p-2 border border-gray-300 rounded-lg" required />
+                        <select id="subcategory-category" class="block w-full p-2 border border-gray-300 rounded-lg" required>
+                            <option value="">Select Category</option>
+                        </select>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full">Save</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Subcategories Section -->
+            <div class="w-full p-4">
+                <h2 class="text-2xl font-bold mb-4">Subcategories</h2>
+                <div id="subcategories-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Subcategories will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Toggle Add Subcategory Form
+    const toggleSubcategoryFormBtn = document.getElementById('toggle-subcategory-form');
+    const addSubcategorySection = document.getElementById('add-subcategory-section');
+    toggleSubcategoryFormBtn.addEventListener('click', () => {
+        addSubcategorySection.classList.toggle('hidden');
+    });
+
+    try {
+        // Fetch and display subcategories
+        const subcategoryResponse = await fetch('http://localhost:3000/api/subcategories');
+        const subcategories = await subcategoryResponse.json();
+
+        const subcategoriesList = document.getElementById('subcategories-list');
+        subcategoriesList.innerHTML = subcategories.map(subcategory => `
+            <div class="bg-white shadow-lg rounded-lg p-6 transition duration-300" data-id="${subcategory._id}">
+                <h3 class="font-semibold text-lg mb-2">${subcategory.name}</h3>
+                <p class="text-gray-500 text-sm mb-4">Category: ${subcategory.categoryId.name}</p>
+                <div class="text-blue-500 font-bold cursor-pointer hover:text-blue-700">View Products</div>
+                <button class="text-red-500 font-semibold border border-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition delete-subcategory-btn" data-id="${subcategory._id}">
+                    Delete
+                </button>
+            </div>
+        `).join('');
+
+        // Add click functionality to delete a subcategory
+        document.querySelectorAll('.delete-subcategory-btn').forEach(deleteBtn => {
+            deleteBtn.addEventListener('click', async (e) => {
+                const subcategoryId = deleteBtn.getAttribute('data-id');
+
+                // Confirm before deleting
+                const confirmDelete = confirm('Are you sure you want to delete this subcategory? This action cannot be undone.');
+                if (!confirmDelete) return;
+
+                try {
+                    // Fetch the products in this subcategory first
+                    const productResponse = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}/products`);
+                    const products = await productResponse.json();
+
+                    if (products.length > 0) {
+                        const confirmDisassociate = confirm(`There are ${products.length} products in this subcategory. Do you want to delete the subcategory and disassociate the products?`);
+                        if (!confirmDisassociate) return;
+                    }
+
+                    // Disassociate products from the subcategory by updating them
+                    for (const product of products) {
+                        await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ subcategoryId: null }) // Remove subcategory association
+                        });
+                    }
+
+                    // Proceed to delete the subcategory
+                    const response = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}`, {
+                        method: 'DELETE',
+                    });
+
+                    if (response.ok) {
+                        alert('Subcategory deleted and products disassociated successfully.');
+                        openSubCategories(); // Reload subcategories after deletion
+                    } else {
+                        alert('Error deleting subcategory');
+                    }
+                } catch (error) {
+                    console.error('Error deleting subcategory:', error);
+                    alert('An error occurred while trying to delete the subcategory.');
+                }
+            });
+        });
+
+        // Add click functionality to display products in a subcategory
+        document.querySelectorAll('#subcategories-list > div').forEach(subcategoryDiv => {
+            subcategoryDiv.addEventListener('click', async () => {
+                const subcategoryId = subcategoryDiv.getAttribute('data-id');
+                await displayProductsBySubcategory(subcategoryId);
+            });
+        });
+
+        // Fetch categories to populate the category dropdown
+        const categoryResponse = await fetch('http://localhost:3000/api/categories');
+        const categories = await categoryResponse.json();
+        const categorySelect = document.getElementById('subcategory-category');
+
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category._id;
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+        });
+
+        // Handle form submission to add a new subcategory
+        document.getElementById('add-subcategory-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const name = document.getElementById('subcategory-name').value;
+            const categoryId = document.getElementById('subcategory-category').value;
+
+            if (!name || !categoryId) {
+                alert('Please provide both subcategory name and category');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/api/subcategories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, categoryId })
+            });
+
+            if (response.ok) {
+                alert('Subcategory added successfully');
+                addSubcategorySection.classList.add('hidden'); // Hide the form after submission
+                openSubCategories(); // Reload the subcategories
+            } else {
+                alert('Error adding subcategory');
+            }
+        };
+    } catch (error) {
+        contentArea.innerHTML = `<p>Error fetching subcategories: ${error.message}</p>`;
+    }
+}
+
+// Display products by subcategory (replaces the subcategory list)
+async function displayProductsBySubcategory(subcategoryId) {
+    if (!subcategoryId) {
+        console.error('Subcategory ID is null or undefined');
+        return;
+    }
+
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = `<h2 class="text-2xl font-bold mb-4">Products</h2>`;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}/products`);
+        const products = await response.json();
+
+        if (!Array.isArray(products) || products.length === 0) {
+            contentArea.innerHTML += `<p class="text-gray-500">No products found in this subcategory.</p>`;
+            return;
+        }
+
+        const productGrid = document.createElement('div');
+        productGrid.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6';
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'bg-white shadow-md rounded-lg p-4 cursor-pointer';
+
+            productCard.innerHTML = `
+                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <h3 class="font-semibold">${product.name}</h3>
+                <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
+                <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
+            `;
+
+            productCard.addEventListener('click', () => {
+                openProductModal(product);
+            });
+
+            productGrid.appendChild(productCard);
+        });
+
+        contentArea.appendChild(productGrid);
+    } catch (error) {
+        contentArea.innerHTML += `<p class="text-red-500">Error fetching products: ${error.message}</p>`;
+    }
+}
+
+
+// Fetch and display promotional tags
+async function openPromotionalTags() {
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = `
+        <div class="flex flex-col space-y-6">
+            <!-- Add Promotional Tag Button and Form -->
+            <div class="">
+                <button id="toggle-promotional-tag-form" class="text-blue-500 font-semibold border border-blue-500 px-4 py-2 rounded-lg hover:bg-blue-100 transition">
+                    + Add New Promotional Tag
+                </button>
+                <div id="add-promotional-tag-section" class="top-14 left-0 bg-white border border-gray-300 rounded-lg p-4 shadow-lg hidden">
+                    <form id="add-promotional-tag-form" class="space-y-4">
+                        <input type="text" id="promotional-tag-name" placeholder="Promotional Tag Name" class="block w-full p-2 border border-gray-300 rounded-lg" required />
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg w-full">Save</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Promotional Tags Section -->
+            <div class="w-full p-4">
+                <h2 class="text-2xl font-bold mb-4">Promotional Tags</h2>
+                <div id="promotional-tags-list" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Promotional tags will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+    `;
+
+    // Toggle Add Promotional Tag Form
+    const togglePromotionalTagFormBtn = document.getElementById('toggle-promotional-tag-form');
+    const addPromotionalTagSection = document.getElementById('add-promotional-tag-section');
+    togglePromotionalTagFormBtn.addEventListener('click', () => {
+        addPromotionalTagSection.classList.toggle('hidden');
+    });
+
+    try {
+        // Fetch and display promotional tags
+        const response = await fetch('http://localhost:3000/api/promotional-tags');
+        const promotionalTags = await response.json();
+
+        const promotionalTagsList = document.getElementById('promotional-tags-list');
+        promotionalTagsList.innerHTML = promotionalTags.map(tag => `
+            <div class="bg-white shadow-lg rounded-lg p-6 transition duration-300" data-id="${tag._id}">
+                <h3 class="font-semibold text-lg mb-2">${tag.name}</h3>
+                <div class="flex justify-between items-center">
+                    <div class="text-blue-500 font-bold cursor-pointer hover:text-blue-700" data-id="${tag._id}">View Products</div>
+                    <button class="text-red-500 font-semibold border border-red-500 px-2 py-1 rounded-lg hover:bg-red-100 transition delete-promotional-tag-btn" data-id="${tag._id}">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        `).join('');
+
+        // Rebind delete buttons and view buttons after the tags are rendered
+        document.querySelectorAll('.delete-promotional-tag-btn').forEach(deleteBtn => {
+            deleteBtn.addEventListener('click', async (e) => {
+                const tagId = deleteBtn.getAttribute('data-id');
+                // Handle tag deletion here
+            });
+        });
+
+        document.querySelectorAll('#promotional-tags-list > div').forEach(tagDiv => {
+            tagDiv.addEventListener('click', async () => {
+                const tagId = tagDiv.getAttribute('data-id');
+                if (tagId) {
+                    await displayProductsByPromotionalTag(tagId);
+                }
+            });
+        });
+
+        // Handle form submission to add a new promotional tag
+        document.getElementById('add-promotional-tag-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const name = document.getElementById('promotional-tag-name').value;
+
+            if (!name) {
+                alert('Please provide a promotional tag name');
+                return;
+            }
+
+            const response = await fetch('http://localhost:3000/api/promotional-tags', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+
+            if (response.ok) {
+                alert('Promotional tag added successfully');
+                addPromotionalTagSection.classList.add('hidden'); // Hide the form after submission
+                openPromotionalTags(); // Reload the promotional tags
+            } else {
+                alert('Error adding promotional tag');
+            }
+        };
+    } catch (error) {
+        contentArea.innerHTML = `<p>Error fetching promotional tags: ${error.message}</p>`;
+    }
+}
+
+
+// Display products by promotional tag
+async function displayProductsByPromotionalTag(tagId) {
+    if (!tagId) {
+        console.error('Promotional tag ID is null or undefined');
+        return;
+    }
+
+    const contentArea = document.getElementById('content');
+    contentArea.innerHTML = `<h2 class="text-2xl font-bold mb-4">Products with Promotional Tag</h2>`;
+
+    try {
+        // Fetch products associated with the promotional tag
+        const response = await fetch(`http://localhost:3000/api/promotional-tags/${tagId}/products`);
+        const products = await response.json();
+
+        console.log('Products fetched:', products);  // Log fetched products
+
+        if (!products || products.length === 0) {
+            contentArea.innerHTML += `<p class="text-gray-500">No products found in this promotional tag.</p>`;
+            return;
+        }
+
+        // Dynamically create product cards
+        const productGrid = document.createElement('div');
+        productGrid.className = 'grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-6';
+
+        products.forEach(product => {
+            const productCard = document.createElement('div');
+            productCard.className = 'bg-white shadow-md rounded-lg p-4 cursor-pointer';
+
+            productCard.innerHTML = `
+                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <h3 class="font-semibold">${product.name}</h3>
+                <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
+                <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
+            `;
+
+            productCard.addEventListener('click', () => {
+                openProductModal(product); // Optional: add functionality to view or edit the product
+            });
+
+            productGrid.appendChild(productCard);
+        });
+
+        contentArea.appendChild(productGrid);
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        contentArea.innerHTML += `<p class="text-red-500">Error fetching products: ${error.message}</p>`;
+    }
+}
+
+
+async function openProductModal(product) {
+    const contentArea = document.getElementById('content');
+    let currentImages = [...(product.images || [])]; // Clone existing images for manipulation
+
+    contentArea.innerHTML = `
+    <div class="relative">
+            <button id="close-modal" class="absolute top-0 right-0 text-gray-500 p-2 hover:text-gray-800">
+                Back
+            </button>
+        </div>
+        <h2 class="text-xl font-bold mb-4">Update Product</h2>
+        <form id="update-product-form">
+            <input type="text" id="product-name" value="${product.name}" placeholder="Product Name" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="text" id="product-sku" value="${product.sku}" placeholder="SKU" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="text" id="product-brand" value="${product.brand}" placeholder="Brand" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <textarea id="product-description" placeholder="Description" class="block w-full p-2 mb-2 border border-gray-300" required>${product.description}</textarea>
+            <input type="number" id="product-price" value="${product.price}" placeholder="Price" class="block w-full p-2 mb-2 border border-gray-300" required />
+            <input type="number" id="product-salePrice" value="${product.salePrice || ''}" placeholder="Sale Price" class="block w-full p-2 mb-2 border border-gray-300" />
+            <input type="number" id="product-stock" value="${product.stock}" placeholder="Stock" class="block w-full p-2 mb-2 border border-gray-300" required />
+
+            <!-- Dropdown for Category -->
+            <select id="product-category" class="block w-full p-2 mb-2 border border-gray-300" required>
+                <option value="">Select Category</option>
+                <!-- Dynamically populate categories -->
+            </select>
+
+            <!-- Dropdown for Subcategory -->
+            <select id="product-subcategory" class="block w-full p-2 mb-2 border border-gray-300">
+                <option value="">Select Subcategory</option>
+                <!-- Dynamically populate subcategories -->
+            </select>
+
+            <!-- Input for Features (array) -->
+            <textarea id="product-features" placeholder="Features (comma-separated)" class="block w-full p-2 mb-2 border border-gray-300">${product.features ? product.features.join(', ') : ''}</textarea>
+
+            <!-- Input for Specifications (array) -->
+            <textarea id="product-specifications" placeholder="Specifications (comma-separated)" class="block w-full p-2 mb-2 border border-gray-300">${product.specifications ? product.specifications.join(', ') : ''}</textarea>
+
+            <input type="text" id="product-warranty" value="${product.warranty || ''}" placeholder="Warranty" class="block w-full p-2 mb-2 border border-gray-300" />
+            <textarea id="product-shippingDetails" placeholder="Shipping Details" class="block w-full p-2 mb-2 border border-gray-300">${product.shippingDetails || ''}</textarea>
+
+            <!-- Dropdown for Promotional Tags -->
+            <select id="product-tags" class="block w-full p-2 mb-2 border border-gray-300" required>
+                <option value="">Select Promotional Tag</option>
+                <!-- Dynamically populate promotional tags -->
+            </select>
+
+            <!-- Existing Images Section -->
+            <div id="existing-images" class="flex flex-wrap gap-4 mb-4">
+                ${currentImages.map((img, index) => `
+                    <div class="relative w-24 h-24">
+                        <img src="http://localhost:3000/${img}" alt="Image ${index}" class="w-full h-full object-cover rounded" />
+                        <button class="absolute top-1 right-1 bg-blue-500 text-white text-xs p-1 rounded-full remove-image" data-index="${index}">✖</button>
+                    </div>
+                `).join('')}
+            </div>
+
+            <!-- Add New Images -->
+            <label for="product-images" class="block mb-2">Add Images (Max 10)</label>
+            <input type="file" id="product-images" class="block w-full p-2 mb-2 border border-gray-300" multiple />
+
+            <div class="flex justify-between mt-4">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Update Product</button>
+                <button type="button" id="reset-product" class="bg-gray-500 text-white px-4 py-2 rounded">Reset</button>
+                <button type="button" id="delete-product" class="bg-red-500 text-white px-4 py-2 rounded">Delete Product</button>
+            </div>
+        </form>
+    `;
+
+    // Close modal functionality
+    document.getElementById('close-modal').addEventListener('click', openProducts);
+
+    // Populate categories, subcategories, and promotional tags
+    await fetchAndPopulateCategories(product.categoryId);       // Preselect product category
+    await fetchAndPopulateSubcategories(product.subcategoryId); // Preselect product subcategory
+    await fetchAndPopulatePromotionalTags(product.promotionalTags);  // Preselect promotional tags
+
+    // Handle existing image removal
+    document.querySelectorAll('.remove-image').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const index = parseInt(btn.getAttribute('data-index'));
+            currentImages.splice(index, 1);
+            openProductModal({ ...product, images: currentImages }); // Reload modal with updated images
+        });
+    });
+
+    // Handle form submission for updating product
+    document.getElementById('update-product-form').onsubmit = async function (e) {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append('name', document.getElementById('product-name').value);
+        formData.append('sku', document.getElementById('product-sku').value);
+        formData.append('brand', document.getElementById('product-brand').value);
+        formData.append('description', document.getElementById('product-description').value);
+        formData.append('price', parseFloat(document.getElementById('product-price').value));
+        formData.append('salePrice', parseFloat(document.getElementById('product-salePrice').value || 0));
+        formData.append('stock', parseInt(document.getElementById('product-stock').value, 10));
+        formData.append('categoryId', document.getElementById('product-category').value);
+        formData.append('subcategoryId', document.getElementById('product-subcategory').value || null);
+        formData.append('features', document.getElementById('product-features').value.split(',').map(f => f.trim()));
+        formData.append('specifications', document.getElementById('product-specifications').value.split(',').map(s => s.trim()));
+        formData.append('warranty', document.getElementById('product-warranty').value);
+        formData.append('shippingDetails', document.getElementById('product-shippingDetails').value);
+
+        // Append current images
+        currentImages.forEach(img => formData.append('existingImages[]', img));
+        const selectedTags = Array.from(document.getElementById('product-tags').selectedOptions)
+    .map(option => option.value);
+
+console.log('Selected promotional tags:', selectedTags); // Debugging
+
+selectedTags.forEach(tagId => formData.append('promotionalTags[]', tagId));
+
+        // Handle image uploads (multiple files)
+        const images = document.getElementById('product-images').files;
+        for (let i = 0; i < images.length; i++) {
+            formData.append('images', images[i]);
+        }
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                method: 'PUT',
+                body: formData,
+            });
+
+            if (response.ok) {
+                alert('Product updated successfully');
+                openProducts(); // Reload product list after updating
+            } else {
+                const errorData = await response.json();
+                alert('Error updating product: ' + errorData.error);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error updating product');
+        }
+    };
+
+    // Handle reset functionality
+    document.getElementById('reset-product').addEventListener('click', () => {
+        openProductModal(product); // Reload the modal with the original product data
+    });
+
+    // Handle delete functionality
+    document.getElementById('delete-product').addEventListener('click', async () => {
+        if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+            try {
+                const response = await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                    method: 'DELETE',
+                });
+
+                if (response.ok) {
+                    alert('Product deleted successfully');
+                    openProducts(); // Reload the product list after deletion
+                } else {
+                    const errorData = await response.json();
+                    alert('Error deleting product: ' + errorData.error);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error deleting product');
+            }
+        }
+    });
+}
+
+
+async function fetchAndPopulateCategories(selectedCategoryId) {
+    // Fetch categories from API
+    const response = await fetch('http://localhost:3000/api/categories');
+    const categories = await response.json();
+    const categorySelect = document.getElementById('product-category');
+
+    categories.forEach(category => {
+        const option = document.createElement('option');
+        option.value = category._id;
+        option.textContent = category.name;
+        if (category._id === selectedCategoryId) {
+            option.selected = true;
+        }
+        categorySelect.appendChild(option);
+    });
+}
+
+async function fetchAndPopulateSubcategories(selectedSubcategoryId) {
+    // Fetch subcategories from API
+    const response = await fetch('http://localhost:3000/api/subcategories');
+    const subcategories = await response.json();
+    const subcategorySelect = document.getElementById('product-subcategory');
+
+    subcategories.forEach(subcategory => {
+        const option = document.createElement('option');
+        option.value = subcategory._id;
+        option.textContent = subcategory.name;
+        if (subcategory._id === selectedSubcategoryId) {
+            option.selected = true;
+        }
+        subcategorySelect.appendChild(option);
+    });
+}
+
+async function fetchAndPopulatePromotionalTags(selectedTags = []) {
+    // Fetch promotional tags from API
+    const response = await fetch('http://localhost:3000/api/promotional-tags');
+    const tags = await response.json();
+    const tagsSelect = document.getElementById('product-tags');
+
+    tags.forEach(tag => {
+        const option = document.createElement('option');
+        option.value = tag._id;
+        option.textContent = tag.name;
+        if (selectedTags.includes(tag._id)) {
+            option.selected = true;
+        }
+        tagsSelect.appendChild(option);
+    });
+}
+
+    </script>
+    <!-- Modal container that will hold the modal content -->
+<div id="modal-container" style="display:none;"></div>
+</body>
+</html>

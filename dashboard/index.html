@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+     /* Ensure each order appears as a separate card with padding, border, and shadow */
+  .order-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #e2e8f0; /* Tailwind's border-gray-300 */
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffff; /* Ensure the card has a white background */
+  }
+
+    /* Status label styles */
+    .status {
+      font-weight: bold;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
+
+    .status.pending {
+      color: #fffbeb ;
+      background-color: #f59e0b;
+    }
+
+    .status.processing {
+      color: #eff6ff ;
+      background-color: #3b82f6;
+    }
+
+    .status.completed {
+      color: #ecfdf5 ;
+      background-color: #10b981;
+    }
+    
+    /* Toggle switch styles */
+.toggle-input {
+    appearance: none;
+    width: 40px;
+    height: 20px;
+    background: #d1d5db;
+    border-radius: 9999px;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+}
+
+.toggle-input:checked {
+    background: #4ade80;
+}
+
+.toggle-input:checked::before {
+    transform: translateX(20px);
+}
+
+.toggle-input::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 9999px;
+    transition: transform 0.3s ease;
+}
+  </style>
+  <body class="bg-blue-100 overflow-hidden">
+ 
+    
+ <!-- Header -->
+<header class="bg-blue-100 fixed top-0 w-full z-50 shadow-lg">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between py-4">
+      
+      <!-- Greeting -->
+      <p class="font-semibold text-lg text-blue-700">
+        Hi, <span id="userName" class="font-bold">Customer</span>
+      </p>
+
+      <!-- Mobile Menu Button (Hidden on Larger Screens) -->
+      <button 
+        id="hamburgerBtn" 
+        class="text-blue-600 text-2xl rounded-lg sm:hidden focus:outline-none" 
+        onclick="toggleSidebar()" 
+        aria-label="Toggle Menu">
+        ☰
+      </button>
+      <!-- Home Button -->
+      <a href="../index.html" 
+        class="bg-blue-200 text-sm sm:text-xs px-4 py-2 rounded-lg hover:bg-blue-400 focus:outline-none">
+        Home
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Sidebar Menu (Initially Hidden) -->
+<div id="mobileSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg transform -translate-x-full transition-transform duration-300 sm:hidden">
+  <div class="p-4">
+    <p class="text-lg font-semibold text-blue-700">Menu</p>
+    <hr class="my-2">
+    
+    <a href="index.html" class="block py-2 text-blue-600 hover:bg-blue-200 rounded-lg">Home</a>
+    <button class="block w-full text-left py-2 text-red-600 hover:bg-red-100 rounded-lg" onclick="toggleSidebar()">Close</button>
+  </div>
+</div>
+  </header>
+  
+  <main class="flex pt-16 h-screen bg-gray-50">
+
+    <div id="loading-spinner" class="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 z-50 hidden">
+      <div class="spinner"></div>
+    </div>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 bg-white shadow-lg pt-20 w-64 h-screen z-40 transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+      <div class="px-4">
+        <ul class="space-y-4">
+          <li>
+            <a href="#accountSection" onclick="navigateToSection('accountSection', this)" class="flex items-center text-blue-600 py-3 px-4 rounded-md hover:bg-blue-100 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 18.364A9 9 0 1018.364 5.121M12 7v5l3 3" />
+              </svg>
+              <span class="text-sm sm:text-base">My Account</span>
+            </a>
+          </li>
+          <li>
+            <a href="#ordersSection" onclick="navigateToSection('ordersSection')" class="flex items-center text-blue-600 py-3 px-4 rounded-md hover:bg-blue-100 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V10M9 21h3a9 9 0 009-9 9 9 0 00-9-9h-3" />
+              </svg>
+              <span class="text-sm sm:text-base">Orders</span>
+            </a>
+          </li>
+          <li>
+            <a href="#addressBookSection" onclick="navigateToSection('addressBookSection')" class="flex items-center text-blue-600 py-3 px-4 rounded-md hover:bg-blue-100 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v2a4 4 0 104 0v-2m-6-4h8" />
+              </svg>
+              <span class="text-sm sm:text-base">Address Book</span>
+            </a>
+          </li>
+          <li>
+            <a href="#accountManagementSection" onclick="navigateToSection('accountManagementSection')" class="flex items-center text-blue-600 py-3 px-4 rounded-md hover:bg-blue-100 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              <span class="text-sm sm:text-base">Account Management</span>
+            </a>
+          </li>
+          <li>
+            <a href="#inboxSection" onclick="navigateToSection('inboxSection')" class="flex items-center text-blue-600 py-3 px-4 rounded-md hover:bg-blue-100 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h11M9 21V10M9 21h3a9 9 0 009-9 9 9 0 00-9-9h-3" />
+              </svg>
+              <span class="text-sm sm:text-base">Inbox</span>
+            </a>
+          </li>
+          <li>
+            <button onclick="logout()" class="flex items-center text-white bg-red-600 py-3 px-4 rounded-md w-full hover:bg-red-700 transition duration-200 ease-in-out">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15l9-9m0 0l-9-9m9 9H3" />
+              </svg>
+              <span class="text-sm sm:text-base">Logout</span>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </aside>
+    
+  </main>  
+
+  <!-- Main Content -->
+<section class="flex-1 h-screen bg-blue-100 pt-20 px-4 overflow-auto max-h-screen">
+  <div class="lg:ml-64 lg:h-full lg:overflow-y-auto">
+    <!-- Account Section -->
+    <div id="accountSection" class="hidden-section mb-6">
+      <h2 class="text-2xl font-semibold text-blue-700 mb-6">Account Overview</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div class="card border border-gray-300 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">Account Details</h3>
+          <p class="text-sm text-gray-600"><strong>Name:</strong> <span id="userNameFull" class="font-medium text-gray-800"></span></p>
+          <p class="text-sm text-gray-600"><strong>Id:</strong> <span id="userId" class="font-medium text-gray-800"></span></p>
+          <p class="text-sm text-gray-600"><strong>Email:</strong> <span id="userEmail" class="font-medium text-gray-800"></span></p>
+          
+        </div>
+        <div class="card border border-gray-300 rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow duration-300">
+          <h3 class="text-lg font-semibold text-gray-800 mb-4">Address Book</h3>
+          <p id="userAddress" class="text-sm text-gray-600">No Address Available</p>
+        </div>
+      </div>
+    </div>
+
+
+     <!-- Orders Section -->
+      <div id="ordersSection" class="hidden-section mb-6">
+        <div id="ordersContainer" class="container mx-auto p-2">
+        </div>
+        <a href="shopright.html" class="text-black font=semibold bg-blue-300 py-3 px-3 rounded-lg hover:underline inline-block mt-4">CONTINUE SHOPPING</a>
+      </div>
+
+
+      <!-- Address Book Section -->
+<div id="addressBookSection" class="hidden-section mb-6">
+  <h2 id="sectionTitle" class="text-2xl font-semibold text-blue-700 mb-6">Address Book</h2>
+
+  <div id="addressListContainer" class="mb-4">
+    <div id="addressList" class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <!-- Dynamic Address Cards -->
+    </div>
+  </div>
+
+  <button id="addNewAddressButton" onclick="showAddAddressForm()" class="bg-orange-500 text-white py-2 px-4 rounded-lg hover:bg-orange-600 transition-all duration-300">Add New Address</button>
+
+  <div id="addEditAddressForm" class="hidden mt-6 bg-white p-6 rounded-lg shadow-lg">
+    <form id="addressForm" onsubmit="saveAddress(); return false;">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label for="firstName" class="block text-sm font-semibold text-gray-700">First Name</label>
+          <input type="text" id="firstName" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your First Name" required />
+        </div>
+        <div>
+          <label for="lastName" class="block text-sm font-semibold text-gray-700">Last Name</label>
+          <input type="text" id="lastName" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Last Name" required />
+        </div>
+        <div>
+          <label for="phone" class="block text-sm font-semibold text-gray-700">Phone Number</label>
+          <input type="text" id="phone" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Phone Number" required />
+        </div>
+        <div>
+          <label for="additionalPhone" class="block text-sm font-semibold text-gray-700">Additional Phone Number</label>
+          <input type="text" id="additionalPhone" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Additional Phone Number" />
+        </div>
+        <div class="col-span-2">
+          <label for="address" class="block text-sm font-semibold text-gray-700">Address</label>
+          <textarea id="address" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Address" required></textarea>
+        </div>
+        <div class="col-span-2">
+          <label for="additionalInfo" class="block text-sm font-semibold text-gray-700">Additional Information</label>
+          <textarea id="additionalInfo" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Additional Information Here"></textarea>
+        </div>
+        <div>
+          <label for="region" class="block text-sm font-semibold text-gray-700">Region</label>
+          <input type="text" id="region" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your Region" required />
+        </div>
+        <div>
+          <label for="city" class="block text-sm font-semibold text-gray-700">City</label>
+          <input type="text" id="city" class="form-input border border-gray-300 rounded-md p-3 w-full focus:ring-2 focus:ring-blue-500" placeholder="Enter your City" required />
+        </div>
+        <div class="col-span-2 flex items-center">
+          <input type="checkbox" id="defaultAddressCheckbox" class="mr-2" />
+          <label class="text-sm font-semibold text-gray-700">Set as Default Address</label>
+        </div>
+        <div class="col-span-2 flex gap-4 mt-4">
+          <button type="submit" class="bg-green-500 text-white py-2 px-6 rounded-md hover:bg-green-600 transition-all duration-300">Save</button>
+          <button type="button" onclick="cancelAddressForm()" class="bg-gray-500 text-white py-2 px-6 rounded-md hover:bg-gray-600 transition-all duration-300">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- Account Management Section -->
+<div id="accountManagementSection" class="hidden-section mb-6">
+  <h2 id="sectionTitle" class="text-xl font-semibold mb-6">Manage Your Account Here</h2>
+
+  <div class="container mx-auto px-4 py-2">
+    <!-- Personal Information Section -->
+    <div class="bg-white border border-gray-300 rounded-lg shadow-md p-4 mb-8">
+      <h2 class="text-lg font-semibold text-gray-700 mb-6">Personal Information</h2>
+  
+      <!-- Full Name (Split into two input fields) -->
+      <div class="grid grid-cols-3 items-center gap-4 mb-4">
+          <span class="col-span-1 text-sm font-medium text-gray-700">Full Name</span>
+          <div class="col-span-2 grid grid-cols-2 gap-4">
+              <input 
+                  id="first-name" 
+                  type="text" 
+                  placeholder="First Name" 
+                  aria-label="First Name" 
+                  class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <input 
+                  id="last-name" 
+                  type="text" 
+                  placeholder="Last Name" 
+                  aria-label="Last Name" 
+                  class="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+          </div>
+      </div>
+  
+      <!-- Email Field -->
+      <div class="grid grid-cols-3 items-center gap-4 mb-4">
+          <span class="col-span-1 text-sm font-medium text-gray-700">Email</span>
+          <input 
+              id="email" 
+              type="email" 
+              placeholder="Enter Email" 
+              aria-label="Email Address" 
+              class="col-span-2 w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+      </div>
+  
+      <!-- Phone Number Field -->
+      <div class="grid grid-cols-3 items-center gap-4">
+          <span class="col-span-1 text-sm font-medium text-gray-700">Phone Number</span>
+          <input 
+              id="phone-number" 
+              type="text" 
+              placeholder="Enter Phone Number" 
+              aria-label="Phone Number" 
+              class="col-span-2 w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+      </div>
+  
+      <!-- Save Changes Button -->
+      <div class="flex justify-end mt-6">
+          <button 
+              type="button" 
+              class="bg-blue-600 text-white py-2 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              aria-label="Save Changes"
+              onclick="saveChanges()"
+          >
+              Save Changes
+          </button>
+      </div>
+  </div>
+
+  <!-- Account Deletion Section -->
+  <div class="bg-red-100 p-6 rounded-lg shadow-sm mb-6">
+    <h3 class="text-xl font-semibold mb-4 text-red-600">Deactivate Account</h3>
+    <p>If you want to deactivate your account, please fill out the form below. Your request will be processed, and you will receive an email confirmation.</p>
+    
+    <!-- Form for Account Deletion -->
+    <form id="delete-account-form">
+        <label for="email" class="block text-sm font-medium text-gray-700">Your Email</label>
+        <input type="email" id="email" name="email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Your email">
+
+        <button id="submit-btn" type="submit" class="bg-red-600 text-white py-2 px-4 rounded-md mt-4">Submit Deletion Request</button>
+        
+        <!-- Spinner, hidden initially -->
+        <div id="loading-spinner" class="hidden mt-4">
+            <svg class="animate-spin h-5 w-5 text-red-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+            </svg>
+        </div>
+
+        <!-- Confirmation message, hidden initially -->
+        <p id="confirmation-message" class="hidden mt-4 text-green-600">Your request has been submitted successfully. You will be contacted shortly.</p>
+    </form>
+  </div>
+
+  </div>
+</div>
+  <!-- Inbox Section -->
+  <div id="inboxSection" class="hidden-section mb-6">
+    <h2 id="sectionTitle" class="text-xl font-semibold mb-6">Manage Your Messages</h2>
+    
+    <!-- Message List -->
+    <div class="bg-white p-6 rounded-lg shadow-sm">
+      <!-- Message Item 1 -->
+      <div class="message-item border-b border-gray-200 py-4">
+        <div class="flex justify-between">
+          <div class="flex items-center">
+            <span class="font-semibold text-blue-600">Sender Name</span>
+            <span class="text-sm text-gray-500 ml-4">[Email]</span>
+          </div>
+          <div class="text-sm text-gray-500">
+            <span>02/14/2024 10:32 AM</span>
+          </div>
+        </div>
+        <div class="mt-2">
+          <p class="text-gray-700">Subject: Order Update</p>
+          <p class="text-gray-600">Message preview goes here. This is a preview of the content of the message. Click to read more...</p>
+        </div>
+        <div class="mt-2">
+          <button class="text-blue-600 hover:underline text-sm">Read More</button>
+          <button class="ml-4 text-red-600 hover:underline text-sm">Delete</button>
+        </div>
+      </div>
+  
+      <!-- Message Item 2 -->
+      <div class="message-item border-b border-gray-200 py-4">
+        <div class="flex justify-between">
+          <div class="flex items-center">
+            <span class="font-semibold text-blue-600">Sender Name</span>
+            <span class="text-sm text-gray-500 ml-4">[Email]</span>
+          </div>
+          <div class="text-sm text-gray-500">
+            <span>02/13/2024 3:18 PM</span>
+          </div>
+        </div>
+        <div class="mt-2">
+          <p class="text-gray-700">Subject: Shipping Confirmation</p>
+          <p class="text-gray-600">Message preview goes here. This is a preview of the content of the message. Click to read more...</p>
+        </div>
+        <div class="mt-2">
+          <button class="text-blue-600 hover:underline text-sm">Read More</button>
+          <button class="ml-4 text-red-600 hover:underline text-sm">Delete</button>
+        </div>
+      </div>
+  
+      <!-- Message Item 3 -->
+      <div class="message-item py-4">
+        <div class="flex justify-between">
+          <div class="flex items-center">
+            <span class="font-semibold text-blue-600">Sender Name</span>
+            <span class="text-sm text-gray-500 ml-4">[Email]</span>
+          </div>
+          <div class="text-sm text-gray-500">
+            <span>02/12/2024 9:05 AM</span>
+          </div>
+        </div>
+        <div class="mt-2">
+          <p class="text-gray-700">Subject: Account Verification</p>
+          <p class="text-gray-600">Message preview goes here. This is a preview of the content of the message. Click to read more...</p>
+        </div>
+        <div class="mt-2">
+          <button class="text-blue-600 hover:underline text-sm">Read More</button>
+          <button class="ml-4 text-red-600 hover:underline text-sm">Delete</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Pagination or Load More Button -->
+    <div class="mt-6 flex justify-center">
+      <button class="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Load More</button>
+    </div>
+  </div>
+</div>
+</section>
+</main>
+
+<script>
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+
+    // Toggle the sidebar visibility
+    if (sidebar.classList.contains('-translate-x-full')) {
+        sidebar.classList.remove('-translate-x-full'); // Slide in
+    } else {
+        sidebar.classList.add('-translate-x-full'); // Slide out
+    }
+}
+
+function showSection(sectionId) {
+    // Hide all sections
+    document.querySelectorAll('.hidden-section').forEach(section => {
+        section.style.display = 'none';
+    });
+
+    // Show the selected section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+    }
+}
+
+function navigateToSection(sectionId) {
+    // Save the selected section to localStorage
+    localStorage.setItem('selectedSection', sectionId);
+
+    // Show the target section
+    showSection(sectionId);
+
+    // Hide the sidebar (slide out)
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.add('-translate-x-full');
+}
+
+document.getElementById('delete-account-form').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+    const submitButton = document.getElementById('submit-btn');
+    const spinner = document.getElementById('loading-spinner');
+    const confirmationMessage = document.getElementById('confirmation-message');
+
+    // Hide submit button and show the spinner
+    submitButton.classList.add('hidden');
+    spinner.classList.remove('hidden');
+
+    try {
+        const response = await fetch('http://localhost:3000/api/users/delete-account-request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+
+        if (response.ok) {
+            // Hide spinner and show confirmation message
+            spinner.classList.add('hidden');
+            confirmationMessage.classList.remove('hidden');
+        } else {
+            // Handle error and re-enable the submit button
+            const errorData = await response.json();
+            spinner.classList.add('hidden');
+            submitButton.classList.remove('hidden');
+            alert(errorData.message || 'An error occurred while submitting your request.');
+        }
+    } catch (error) {
+        console.error('Error submitting deletion request:', error.message);
+        // Handle error and re-enable the submit button
+        spinner.classList.add('hidden');
+        submitButton.classList.remove('hidden');
+        alert('An error occurred while submitting your request.');
+    }
+});
+
+
+
+function saveChanges() {
+    const token = sessionStorage.getItem('token'); // Use sessionStorage
+
+    console.log('Token being sent:', token); // Log the token for debugging
+
+    if (!token) {
+        alert('You are not logged in. Please log in and try again.');
+        return;
+    }
+
+    const userData = {
+        firstName: document.getElementById('first-name').value.trim(),
+        lastName: document.getElementById('last-name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phoneNumber: document.getElementById('phone-number').value.trim(),
+    };
+
+    fetch('http://localhost:3000/api/users/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Include the token here
+        },
+        body: JSON.stringify(userData),
+    })
+        .then((response) => {
+            if (!response.ok) {
+                return response.json().then((data) => {
+                    throw new Error(data.message || 'Error updating details');
+                });
+            }
+            return response.json();
+        })
+        .then((data) => {
+            alert('User details updated successfully!');
+        })
+        .catch((error) => {
+            console.error('Error updating user details:', error.message);
+            alert(error.message);
+        });
+}
+
+
+// Function to show password change form
+function openPasswordChangePopup() {
+    const passwordModal = document.getElementById('password-modal');
+    passwordModal.classList.remove('hidden');
+}
+
+// Function to close the password change form
+function closePasswordChangePopup() {
+    const passwordModal = document.getElementById('password-modal');
+    passwordModal.classList.add('hidden');
+}
+
+// Open the password change popup
+function openPasswordChangePopup() {
+    document.getElementById('password-modal').classList.remove('hidden');
+}
+
+// Close the password change popup
+function closePasswordChangePopup() {
+    document.getElementById('password-modal').classList.add('hidden');
+}
+
+async function changePassword() {
+    const currentPassword = document.getElementById('current-password').value.trim();
+    const newPassword = document.getElementById('new-password').value.trim();
+    const confirmPassword = document.getElementById('confirm-password').value.trim();
+
+    // Validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+        alert('All fields are required.');
+        return;
+    }
+    if (newPassword !== confirmPassword) {
+        alert('New passwords do not match.');
+        return;
+    }
+    if (newPassword.length < 6) {
+        alert('New password must be at least 6 characters long.');
+        return;
+    }
+
+    // Send the password change request to the backend
+    try {
+        const response = await fetch('http://localhost:3000/api/users/change-password', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${sessionStorage.getItem('token')}`, // Ensure token is stored in sessionStorage
+            },
+            body: JSON.stringify({ currentPassword, newPassword })
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to change password.');
+        }
+
+        const data = await response.json();
+        alert('Password changed successfully!');
+
+        sessionStorage.setItem('token', data.token);
+
+        closePasswordChangePopup(); // Close the modal after success
+    } catch (error) {
+        console.error('Error changing password:', error.message);
+        alert(error.message); // Show the error to the user
+    }
+}
+
+
+let addresses = []; // Holds all addresses
+let editMode = false;
+let editId = null;
+
+// Save an address to the backend (create or update)
+async function saveToBackend(address) {
+    try {
+        const method = editMode ? 'PUT' : 'POST';
+        const endpoint = editMode ? `/api/addresses/${editId}` : '/api/addresses';
+
+        const response = await fetch(endpoint, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(address),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save address');
+        }
+
+        fetchAddresses(); // Refresh address list after save
+    } catch (error) {
+        console.error('Error saving address to backend:', error);
+    }
+}
+
+// Validate required fields
+function validateFields() {
+    const requiredFields = ["firstName", "lastName", "phone", "region", "city", "address"];
+    let valid = true;
+
+    requiredFields.forEach((field) => {
+        const input = document.getElementById(field);
+        if (!input.value.trim()) {
+            input.classList.add("border-red-500");
+            valid = false;
+        } else {
+            input.classList.remove("border-red-500");
+        }
+    });
+
+    return valid;
+}
+
+// Show the Add/Edit address form
+function showAddAddressForm() {
+    addEditAddressForm.classList.remove("hidden");
+    addNewAddressButton.classList.add("hidden");
+    addressListContainer.classList.add("hidden");
+    sectionTitle.textContent = "Add New Address";
+}
+
+// Cancel and reset the Add/Edit address form
+function cancelAddressForm() {
+    addEditAddressForm.classList.add("hidden");
+    addNewAddressButton.classList.remove("hidden");
+    addressListContainer.classList.remove("hidden");
+    sectionTitle.textContent = "Address Book";
+    document.getElementById("addressForm").reset();
+    editMode = false;
+    editId = null;
+}
+
+async function saveAddress() {
+    if (!validateFields()) return;
+
+    const newAddress = {
+        firstName: document.getElementById("firstName").value.trim(),
+        lastName: document.getElementById("lastName").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        additionalPhone: document.getElementById("additionalPhone").value.trim(),
+        address: document.getElementById("address").value.trim(),
+        region: document.getElementById("region").value.trim(),
+        city: document.getElementById("city").value.trim(),
+        isDefault: document.getElementById("defaultAddressCheckbox").checked,
+    };
+
+    try {
+        // Use PUT if in edit mode, otherwise POST
+        const method = editMode ? 'PUT' : 'POST';
+        const endpoint = editMode
+            ? `http://localhost:3000/api/addresses/${editId}` // Update specific address
+            : 'http://localhost:3000/api/addresses'; // Create new address
+
+        const response = await fetch(endpoint, {
+            method,
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+            body: JSON.stringify(newAddress),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Backend error:', errorData);
+            throw new Error(errorData.message || 'Failed to save address');
+        }
+
+        const savedAddress = await response.json();
+        console.log(editMode ? 'Address updated successfully:' : 'Address saved successfully:', savedAddress);
+
+        fetchAddresses(); // Reload addresses after saving or updating
+        cancelAddressForm(); // Reset the form
+    } catch (error) {
+        console.error('Error saving address:', error.message);
+        alert(error.message); // Show user-friendly error message
+    }
+}
+
+// Render the default address in the "Address Book" section
+function renderDefaultAddress() {
+    const userAddressElement = document.getElementById("userAddress");
+
+    // Find the default address
+    const defaultAddress = addresses.find((address) => address.isDefault);
+
+    if (defaultAddress) {
+        userAddressElement.innerHTML = `
+            <p>${defaultAddress.firstName} ${defaultAddress.lastName}</p>
+            <p>${defaultAddress.address}, ${defaultAddress.city}, ${defaultAddress.region}</p>
+            <p>${defaultAddress.phone}</p>
+        `;
+    } else {
+        userAddressElement.textContent = "No Address Available";
+    }
+}
+
+// Render all addresses in the address list container
+function renderAddressList() {
+    const addressList = document.getElementById("addressList");
+    addressList.innerHTML = ""; // Clear the current address list
+
+    if (addresses.length === 0) {
+        addressList.innerHTML = `
+            <p class="text-center text-gray-500">
+                No addresses found. Add a new address to get started.
+            </p>
+        `;
+        return;
+    }
+
+    addresses.forEach((address) => {
+        const card = document.createElement("div");
+        
+
+        card.innerHTML = `
+    <div class="bg-white border border-gray-300 rounded-lg p-4 shadow-md hover:shadow-lg transition-shadow duration-300">
+        <h4 class="text-lg font-semibold text-blue-700">${address.firstName} ${address.lastName}</h4>
+        <p class="text-gray-700">${address.address}, ${address.city}, ${address.region}</p>
+        <p class="text-gray-600">${address.phone}</p>
+        ${
+            address.isDefault
+                ? '<p class="text-green-600 font-semibold mt-2">Default Address</p>'
+                : ""
+        }
+        <div class="flex justify-between mt-4">
+            <button onclick="editAddress('${address._id}')" class="text-blue-600 hover:text-blue-800 transition-all duration-300">Edit</button>
+            ${
+                addresses.length > 1 && !address.isDefault
+                    ? `<button onclick="deleteAddress('${address._id}')" class="text-red-600 hover:text-red-800 transition-all duration-300">Delete</button>`
+                    : ""
+            }
+            ${
+                !address.isDefault
+                    ? `<button onclick="setDefault('${address._id}')" class="text-green-600 hover:text-green-800 transition-all duration-300">Set as Default</button>`
+                    : ""
+            }
+        </div>
+    </div>
+`;
+        addressList.appendChild(card);
+    });
+}
+
+// Fetch all addresses from the backend
+async function fetchAddresses() {
+    const token = sessionStorage.getItem('token');
+
+    if (!token) {
+        console.error('No token found. User might not be logged in.');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/addresses', {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(`Failed to fetch addresses: ${errorMessage}`);
+        }
+
+        const data = await response.json();
+
+        addresses = data; // Update the global addresses array
+        renderDefaultAddress(); // Re-render the default address
+        renderAddressList(); // Re-render all addresses
+    } catch (error) {
+        console.error('Error fetching addresses:', error);
+        alert('Failed to load addresses. Please refresh the page.');
+    }
+}
+
+
+async function deleteAddress(id) {
+    try {
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            console.error('No token found');
+            return;
+        }
+
+        console.log(`Attempting to delete address with ObjectID: ${id}`); // Verify the ObjectID is correct
+
+        const response = await fetch(`http://localhost:3000/api/addresses/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`, // Ensure the token is sent correctly
+            },
+        });
+
+        if (!response.ok) {
+            const errorDetails = await response.json();
+            console.error('Backend error:', errorDetails);
+            throw new Error(errorDetails.message || 'Failed to delete address');
+        }
+
+        const result = await response.json();
+        console.log('Address deleted successfully:', result);
+
+        await fetchAddresses(); // Fetch updated addresses after deletion
+    } catch (error) {
+        console.error('Error deleting address:', error.message);
+        alert('Failed to delete address. Please try again.');
+    }
+}
+
+// Set an address as the default
+async function setDefault(id) {
+    try {
+        const response = await fetch(`http://localhost:3000/api/addresses/${id}/set-default`, {
+            method: 'PATCH',
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+            },
+        });
+        if (!response.ok) throw new Error('Failed to set default address');
+        fetchAddresses();
+    } catch (error) {
+        console.error('Error setting default address:', error);
+        alert('Failed to set default address. Please try again.');
+    }
+}
+
+// Edit an address
+function editAddress(id) {
+    const address = addresses.find((addr) => addr._id === id);
+    if (!address) return;
+
+    editMode = true;
+    editId = id;
+
+    document.getElementById("firstName").value = address.firstName;
+    document.getElementById("lastName").value = address.lastName;
+    document.getElementById("phone").value = address.phone;
+    document.getElementById("additionalPhone").value = address.additionalPhone;
+    document.getElementById("address").value = address.address;
+    document.getElementById("region").value = address.region;
+    document.getElementById("city").value = address.city;
+    document.getElementById("defaultAddressCheckbox").checked = address.isDefault;
+
+    addEditAddressForm.classList.remove("hidden");
+    addNewAddressButton.classList.add("hidden");
+    addressListContainer.classList.add("hidden");
+    sectionTitle.textContent = "Edit Address";
+}
+ 
+document.addEventListener('DOMContentLoaded', () => {
+      const savedSection = sessionStorage.getItem('selectedSection') || 'accountSection';
+    showSection(savedSection);
+
+    windowonload = () => {
+      const savedSection = sessionStorage.getItem('selectedSection') || 'accountSection';        
+    };
+
+ // Fetch user data and orders
+ fetchUserData();
+    fetchOrders();
+    fetchAddresses();
+  });
+
+// Fetch user data and populate the page and form
+async function fetchUserData() {
+    const token = sessionStorage.getItem('token');
+    
+    try {
+        const response = await fetch('http://localhost:3000/api/users/me', {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await response.json();
+        
+
+        if (response.ok) {
+
+          const [firstName, lastName] = (data.name || '').split(' ');
+            // Display user data in a different section of the page
+            document.getElementById('userName').textContent = firstName || 'Customer';
+            
+            // Pre-fill the Personal Information form fields
+            document.getElementById('first-name').value = firstName || '';
+            document.getElementById('last-name').value = lastName || ''; // Set last name if available
+            document.getElementById('email').value = data.email || '';
+            document.getElementById('phone-number').value = data.phoneNumber || ''; // Assuming phoneNumber exists
+
+            // Account details section: Display full name, user ID, email, and address
+            document.getElementById('userId').textContent = data.userId || 'N/A';
+            document.getElementById('userNameFull').textContent = data.name || 'Customer'; // Full name for account details
+            document.getElementById('userEmail').textContent = data.email || 'N/A'; // Email display in account details
+            document.getElementById('userAddress').textContent = data.address || 'No Address Available';
+        } else {
+            console.error('Error fetching user data:', data.message);    
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+async function fetchOrders() {
+    const userId = sessionStorage.getItem('userId');
+    if (!userId) return;
+
+    try {
+        const response = await fetch(`http://localhost:3000/api/orders?userId=${userId}`);
+        
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${await response.text()}`);
+        }
+
+        const orders = await response.json();
+
+        displayOrders(orders);
+    } catch (error) {
+        console.error("❌ Error fetching orders:", error);
+        document.getElementById("ordersContainer").innerHTML = `<p>No orders found.</p>`;
+    }
+}
+
+
+function displayOrders(orders) {
+    const ordersContainer = document.getElementById("ordersContainer");
+
+    if (!ordersContainer) {
+        console.error("❌ Error: ordersContainer element not found!");
+        return;
+    }
+
+    ordersContainer.innerHTML = ""; // ✅ Clear previous content
+
+    orders.forEach(order => {
+        const orderDiv = document.createElement("div");
+        orderDiv.classList.add(
+            "bg-white", "p-6", "rounded-xl", "shadow-md", "mb-6", "transition-all", 
+            "duration-300", "hover:shadow-2xl", "border", "border-gray-200", 
+            "w-full", "max-w-4xl", "mx-auto"
+        );
+
+        orderDiv.innerHTML = `
+            <!-- Order ID and Date -->
+            <div class="border-l-4 border-indigo-600 pl-4 mb-4">
+                <h3 class="text-lg sm:text-2xl font-bold text-gray-800 flex items-center">
+                    <span class="mr-2">📦</span> Order ID: ${order._id}
+                </h3>
+                <p class="text-gray-500 text-sm flex items-center">
+                    <span class="mr-2">📅</span> ${new Date(order.createdAt).toLocaleString()}
+                </p>
+                <p class="text-gray-700 text-base sm:text-lg font-semibold mt-2 flex items-center">
+                    <span class="mr-2">💰</span> Total: 
+                    <span class="text-indigo-600 ml-1">Ksh ${order.total.toFixed(2)}</span>
+                </p>
+            </div>
+
+            <!-- Payment & Order Status -->
+            <div class="flex flex-wrap items-center gap-2 mb-4">
+                <span class="px-3 py-1 text-sm font-semibold rounded-lg shadow-md 
+                    ${order.paymentStatus === 'paid' ? 'bg-green-500 text-white' : 
+                        order.paymentStatus === 'COD' ? 'bg-yellow-500 text-white' : 
+                        'bg-red-500 text-white'}">
+                    ${order.paymentStatus || "Unknown"}
+                </span>
+
+                <span class="px-3 py-1 text-sm font-semibold rounded-lg shadow-md 
+                    ${order.orderStatus === 'pending' ? 'bg-yellow-400 text-white' : 
+                        order.orderStatus === 'processing' ? 'bg-blue-500 text-white' : 
+                        order.orderStatus === 'completed' ? 'bg-green-500 text-white' : 
+                        'bg-red-500 text-white'}">
+                    ${order.orderStatus || "Unknown"}
+                </span>
+            </div>
+
+            <!-- Delivery Address -->
+            <div class="p-4 bg-gray-100 rounded-lg">
+                <p class="text-gray-700 text-base font-semibold flex items-center">
+                    <span class="mr-2">📍</span> Delivery Address
+                </p>
+                <p class="text-gray-600">${order.address || "Not Provided"}</p>
+            </div>
+
+            <!-- Order Items -->
+            <div class="mt-4">
+                <h4 class="text-base sm:text-lg font-semibold text-gray-800 flex items-center">
+                    <span class="mr-2">🛒</span> Order Items
+                </h4>
+                <div class="overflow-x-auto mt-2">
+                    <table class="w-full border-collapse border border-gray-300 rounded-lg min-w-[300px]">
+                        <thead class="bg-gray-200">
+                            <tr class="text-left">
+                                <th class="border px-4 py-2">Product</th>
+                                <th class="border px-4 py-2 text-center">Qty</th>
+                                <th class="border px-4 py-2 text-right">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            ${order.items.map(item => `
+                                <tr class="hover:bg-gray-50 transition">
+                                    <td class="border px-4 py-2 text-gray-700">${item.itemId || "Unknown"}</td>
+                                    <td class="border px-4 py-2 text-center text-gray-800 font-semibold">${item.quantity || 1}</td>
+                                    <td class="border px-4 py-2 text-right text-gray-700">Ksh ${item.price.toFixed(2)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
+        ordersContainer.appendChild(orderDiv);
+    });
+}
+
+  // Logout
+  function logout() {
+    sessionStorage.removeItem('token');
+    window.location.href = 'login.html';
+  }
+</script>
+</body>
+</html>

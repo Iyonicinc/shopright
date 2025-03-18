@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-blue-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+
+        <div class="flex justify-center mb-4">
+            <img src="/img/Logo.png" alt="Logo" class="w-30 h-20"> <!-- Change the src attribute to your logo's path -->
+        </div>
+        <h2 class="text-xl font-semibold text-left text-gray-700">Login To Your Account</h2>
+        <form id="loginForm" class="space-y-4 mt-4">
+            <!-- Email Input -->
+            <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700">Email</label>
+                <input type="email" id="email" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <!-- Password Input -->
+            <div>
+                <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
+                <input type="password" id="password" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+
+            <a href="../forgot-password" class="text-blue-600 hover:underline pb-4 font-semibold">Forgot Password?</a>
+
+            <!-- Submit Button -->
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-semibold">Log In</button>
+
+            </p>
+        </form>
+
+        <p id="errorMessage" class="text-center text-red-500 mt-4 hidden"></p>
+        <p class="text-left mt-4">Don't have an account? <a href="../signup" class="text-blue-600 underline">Sign up for free</a></p>
+    </div>
+
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+    
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+    
+            try {
+                const response = await fetch('http://localhost:3000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionStorage.getItem('token')}` },
+                    body: JSON.stringify({ email, password })
+                });
+    
+                const data = await response.json();
+    
+                if (response.ok) {
+            console.log("✅ Token received:", data.token);  // Debugging
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('userId', data.userId);
+    
+                    console.log('Role received from server:', data.role);
+                    if (data.role === 'admin') {
+                        window.location.href = "../admin";
+                    } else {
+                        window.location.href = "../index.html";
+                    }
+                } else {
+                    console.error("❌ Login error:", data.message);
+            document.getElementById("errorMessage").innerText = data.message;
+            document.getElementById("errorMessage").classList.remove("hidden");
+        }
+            } catch (error) {
+                // Handle any network or unexpected errors
+                console.error('Login error:', error);
+                document.getElementById("errorMessage").innerText = "An error occurred, please try again.";
+                document.getElementById("errorMessage").classList.remove("hidden");
+            }
+        });
+    </script>    
+                
+</body>
+</html>

@@ -1,0 +1,1561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopRight Kenya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Swiper CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+
+  <script src="products.js"></script>
+  <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100 overflow-x-hidden">
+  <style>
+    /* Add transition for smooth background color change and transform */
+    .product-link {
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    
+    /* Change background color and slightly enlarge on hover */
+    .product-link:hover {
+      background-color: #bfdbfe; /* Lighter blue background on hover */
+      transform: scale(1.05); /* Slightly enlarge the element */
+    }
+    }
+
+    #search-results, #mobile-search-results {
+    max-height: 350px; /* Set max height */
+    overflow-y: auto; /* Enable scrolling */
+    width: 100%; /* Ensure full width */
+    position: absolute;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 50; /* Keep it above other elements */
+    border: 1px solid #ddd; /* Light border for better visibility */
+    padding: 10px; /* Add some spacing */
+}
+
+/* 🔹 Each search result item */
+.search-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #f1f1f1;
+    transition: background 0.3s ease-in-out;
+}
+
+/* 🔹 Last item shouldn't have a bottom border */
+.search-item:last-child {
+    border-bottom: none;
+}
+
+/* 🔹 Product image */
+.search-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+/* 🔹 Product details */
+.search-item .details {
+    flex-grow: 1;
+}
+
+/* 🔹 Product name */
+.search-item .details h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 2px;
+}
+
+/* 🔹 Product price */
+.search-item .details p {
+    font-size: 13px;
+    color: #ff6600;
+    font-weight: bold;
+}
+
+/* 🔹 Hover effect */
+.search-item:hover {
+    background: #f9f9f9;
+    cursor: pointer;
+}
+
+
+    </style>
+
+<!-- HEADER -->
+<header id="main-header" class="fixed bg-white w-full top-0 z-50 shadow-md">
+  <div class="container mx-auto flex items-center justify-between px-4 py-3">
+    
+    <!-- Logo -->
+    <a href="index.html" class="flex items-center">
+      <img src="/img/Logo.png" alt="Logo" class="h-10">
+    </a>
+
+<!-- Middle Section: Search Bar -->
+<div class="hidden md:flex flex-grow justify-center relative">
+  <div class="flex border border-gray-300 rounded-lg w-2/3 lg:w-1/2 relative">
+      <input id="search-input" type="text" placeholder="Search products..." 
+             class="w-full p-3 rounded-l-lg focus:outline-none">
+      <button id="search-btn" class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
+          <i class="fas fa-search"></i>
+      </button>
+  </div>
+  <!-- Search Results Dropdown -->
+  <div id="search-results" class="absolute top-full left-0 w-full bg-white shadow-md rounded-lg p-3 hidden"></div>
+</div>
+
+
+    <!-- Right Section: Icons -->
+    <div class="flex items-center space-x-4">
+      <!-- Search Icon (Only for Small Screens) -->
+      <button id="searchToggle" class="md:hidden text-xl">
+        <i class="fas fa-search"></i>
+      </button>
+
+<!-- 🛒 Cart Icon in Header -->
+<div class="relative">
+  <a href="#" id="cart-icon" class="text-xl"> 
+    <i class="fas fa-shopping-cart"></i>
+  </a>
+  <span id="cartCount" class="absolute -top-2 -right-2 bg-red-500 text-xs text-white px-2 py-0.5 rounded-full hidden">0</span>
+</div>
+
+
+<div class="relative inline-block">
+  <!-- Dropdown Toggle Button -->
+  <button id="dropdownBtn" class="px-4 py-2 bg-blue-600 text-white rounded-md focus:outline-none">
+      <i class="fas fa-user"></i>
+  </button>
+  <!-- Dropdown Menu (Fix Position) -->
+  <ul id="dropdownMenu" class="absolute right-0 mt-2 w-40 bg-white border border-gray-200 rounded-md shadow-md hidden">
+      <!-- Items will be inserted dynamically -->
+  </ul>
+</div>  
+
+  <!-- Mobile Search Bar (Initially Hidden) -->
+  <div id="mobileSearch" class="hidden bg-white p-3 w-full fixed top-16 left-0 shadow-md">
+    <div class="flex border border-gray-300 rounded-lg">
+      <input id="mobile-search-input" type="text" placeholder="Search products..." 
+      class="w-full p-3 rounded-l-lg focus:outline-none">
+      <button id="mobile-search-btn" class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
+        <i class="fas fa-search"></i>
+      </button>
+    </div>
+     <!-- 🔽 Mobile Search Results Dropdown -->
+    <div id="mobile-search-results" class="absolute bg-white shadow-md rounded-lg p-3 w-full hidden"></div>
+  </div>
+
+</header>
+
+
+<!-- Sidebar and Floating Button Wrapper -->
+<div class="relative z-50">
+  <!-- Sidebar Floating Indicator -->
+  <div id="sidebarBar" class="hidden md:block w-2 bg-red-800 fixed top-16 left-0 h-full shadow-lg rounded-lg transition-all duration-300"></div>
+
+<!-- 📌 Categories Sidebar (Updated with Links and Subcategories) -->
+<aside id="categoriesSidebar" class="hidden w-64 bg-white p-4 h-screen fixed left-0 top-16 shadow-lg overflow-y-auto transition-all duration-300">
+  <ul class="mt-3 space-y-2">
+
+      
+      <!-- 💻 Laptops & Computers -->
+      <li class="group relative" data-category="laptops-computers">
+          <a href="./product/?category=laptops" class="product-link block py-2 text-gray-700 bg-blue-100 shadow-lg rounded-lg hover:text-blue-600 font-bold">💻 Laptops</a>
+      </li>
+
+      <!-- 📱 Mobile Phones & Tablets -->
+      <li class="group relative" data-category="mobiles-tablets">
+          <a href="./product/?category=smartphones" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">📱 Smartphones</a>
+      </li>
+
+      <li class="group relative" data-category="audio-headphones">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">🎧Headphones</a>
+      </li>
+
+      <!-- 📺 Televisions & Video -->
+      <li class="group relative" data-category="televisions-video">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">📺 Televisions</a>
+      </li>
+
+      <!-- 🔋 Power & Batteries -->
+      <li class="group relative" data-category="power-batteries">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">🔋 Power & Batteries</a>
+      </li>
+
+      <!-- 📷 Cameras & Accessories -->
+      <li class="group relative" data-category="cameras-accessories">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">📷 Cameras & Accessories</a>
+      </li>
+
+      <!-- 🖥️ Computer Accessories -->
+      <li class="group relative" data-category="computer-accessories">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">🖥️ Desktops & Accessories</a>
+      </li>
+
+      <!-- 🖴 Storage Devices -->
+      <li class="group relative" data-category="storage-devices">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">🖴 Storage Devices</a>
+      </li>
+
+      <!-- 🌐 Networking Devices -->
+      <li class="group relative" data-category="networking-devices">
+          <a href="" class="product-link block py-2 text-gray-700 bg-blue-100 rounded-lg hover:text-blue-600 font-bold">🌐 Networking Devices</a>
+      </li>
+  </ul>
+</aside>
+
+<!-- Subcategories Section (Dynamic) -->
+<div id="subcategoriesContainer" class="hidden fixed left-[270px] top-16 w-56 bg-white shadow-lg rounded-lg p-3 transition-all duration-300">
+    <ul id="subcategoryList" class="space-y-2"></ul>
+</div>
+
+
+  <!-- Floating Button for Categories -->
+  <button id="toggleCategories" class="fixed top-14 left-8 bg-blue-600 text-white px-4 py-2 rounded-full shadow-md transition-all duration-300 z-50">
+    <i class="fas fa-list"></i>
+  </button>
+</div>
+
+<!-- JavaScript for Sidebar Interactions -->
+<script>
+  let hideTimeout = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    const searchToggle = document.getElementById("searchToggle");
+    const mobileSearch = document.getElementById("mobileSearch");
+    const toggleCategories = document.getElementById("toggleCategories");
+    const categoriesSidebar = document.getElementById("categoriesSidebar");
+    const sidebarBar = document.getElementById("sidebarBar");
+    const subcategoriesContainer = document.getElementById("subcategoriesContainer");
+    const subcategoryList = document.getElementById("subcategoryList");
+
+    // ✅ Search Bar Toggle for Small Screens
+    searchToggle.addEventListener("click", function () {
+        mobileSearch.classList.toggle("hidden");
+        categoriesSidebar.classList.add("hidden"); // Hide categories when search is open
+        sidebarBar.classList.remove("hidden");
+    });
+
+    // ✅ Close search bar when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!mobileSearch.contains(event.target) && !searchToggle.contains(event.target)) {
+            mobileSearch.classList.add("hidden");
+        }
+    });
+
+    // ✅ Subcategory Data
+    const subcategories = {
+        "laptops": ["Dell Laptops", "HP Laptops", "MacBooks", "Gaming Laptops", "Business Laptops", "All-in-One PCs"],
+        "smartphones": ["Smartphones", "Feature Phones", "Tablets", "Tablet Accessories", "Mobile Accessories"],
+        "audio-headphones": ["Wireless Earbuds", "Over-Ear Headphones", "Bluetooth Speakers", "Home Theater Systems", "Soundbars"],
+        "televisions-video": ["Smart TVs", "4K Ultra HD TVs", "LED TVs", "Projectors", "TV Accessories"],
+        "power-batteries": ["Power Banks", "UPS & Surge Protectors", "Laptop Batteries", "Rechargeable Batteries", "Solar Chargers"],
+        "cameras-accessories": ["DSLR Cameras", "Mirrorless Cameras", "Camera Lenses", "Tripods & Mounts", "Memory Cards"],
+        "computer-accessories": ["Keyboards & Mice", "Webcams", "Laptop Bags", "Cooling Pads", "Docking Stations"],
+        "storage-devices": ["External Hard Drives", "Internal SSDs", "USB Flash Drives", "Memory Cards", "NAS (Network Storage)"],
+        "networking-devices": ["Routers", "Wi-Fi Range Extenders", "Ethernet Cables", "Wi-Fi Adapters"]
+    };
+
+    // ✅ Floating Button Toggles Sidebar
+    toggleCategories.addEventListener("click", function () {
+        categoriesSidebar.classList.toggle("hidden");
+
+        if (categoriesSidebar.classList.contains("hidden")) {
+            sidebarBar.classList.remove("hidden");
+            toggleCategories.style.left = "10px";
+            subcategoriesContainer.classList.add("hidden");
+        } else {
+            sidebarBar.classList.add("hidden");
+            toggleCategories.style.left = "270px";
+        }
+    });
+
+    // ✅ Show subcategories on hover
+    document.querySelectorAll(".group").forEach(item => {
+        const category = item.getAttribute("data-category");
+
+        item.addEventListener("mouseenter", function () {
+            if (!category || !subcategories[category]) return;
+
+            // Populate subcategories dynamically
+            subcategoryList.innerHTML = subcategories[category]
+                .map(sub => `<li><a href="./product?category=${category}&subcategory=${sub.toLowerCase().replace(/ /g, "-")}" class="product-link block py-2 text-gray-600 rounded-lg hover:text-blue-600">${sub}</a></li>`)
+                .join("");
+
+            // Get vertical position of hovered category
+            const rect = item.getBoundingClientRect();
+            subcategoriesContainer.style.top = `${rect.top}px`;
+            subcategoriesContainer.style.left = "270px";
+
+            // Show subcategories instantly
+            clearTimeout(hideTimeout);
+            subcategoriesContainer.classList.remove("hidden");
+        });
+
+        item.addEventListener("mouseleave", function () {
+            hideTimeout = setTimeout(() => {
+                if (!subcategoriesContainer.matches(":hover")) {
+                    subcategoriesContainer.classList.add("hidden");
+                }
+            }, 100);
+        });
+    });
+
+    // ✅ Keep subcategories open when hovering over them
+    subcategoriesContainer.addEventListener("mouseenter", function () {
+        clearTimeout(hideTimeout);
+    });
+
+    subcategoriesContainer.addEventListener("mouseleave", function () {
+        hideTimeout = setTimeout(() => {
+            subcategoriesContainer.classList.add("hidden");
+        }, 100);
+    });
+
+    // ✅ Redirect when clicking categories or subcategories
+    document.querySelectorAll(".product-link").forEach(link => {
+        link.addEventListener("click", function (event) {
+            event.preventDefault();
+            window.location.href = this.getAttribute("href");
+        });
+    });
+});
+
+</script>
+
+<!-- Hero Section (Pushed Below the Header) -->
+<section class=" bg-white w-full pt-20 md:pt-20">
+  <img src="img/Laptops Arrivals.png" class="w-full h-auto">
+</section>
+
+<div class="bg-green-500 text-white flex justify-between items-center">
+  <!--  Top Deals Section -->
+  <div class="bg-green-500 text-center py-0 rounded">
+    <h1 class="hidden lg:flex md:flex text-xl font-bold mr-10 p-2 text-white">Top Deals on Phones | UpTo 40% Off</h1> 
+  <h1 class="md:hidden flex font-bold text-md bg-green-500 text-white">Top Deals on Phones</h1>
+    <h2 class="md:hidden flex font-semibold text-sm text-white">UpTo 40% Off</h2>
+  </div>
+<!-- See All Link -->
+<a href="#" class="hidden text-white hover:underline text-sm flex items-center pb-2 mr-4 font-semibold ml-2">
+  SEE ALL &gt;</a> 
+  <a href="#" class="hidden text-white hover:underline text-sm flex items-center pb-0 mr-4 font-semibold">
+ SEE ALL &gt;</a>
+</div>
+
+
+<section class="mt-10">
+  <div class="swiper-container relative">
+      <div id="smartphones-list" class="swiper-wrapper"></div>
+      <div class="swiper-pagination"></div>
+  </div>
+</section>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const products = JSON.parse(localStorage.getItem("productData")) || {};
+      const smartphonesList = document.getElementById("smartphones-list");
+      
+      // ✅ Possible labels for variety
+      const labels = ["Best Seller", "Limited Stock", "New Arrival", "Hot Deal", "Trending Now", "Exclusive"];
+  
+      function getRandomLabel() {
+          return labels[Math.floor(Math.random() * labels.length)];
+      }
+  
+      function getRandomColor() {
+          const colors = ["red", "yellow", "blue", "green", "purple", "pink"];
+          return colors[Math.floor(Math.random() * colors.length)];
+      }
+  
+      if (!products.smartphones || products.smartphones.length === 0) {
+          smartphonesList.innerHTML = "<p class='text-gray-500 text-center'>No smartphones available.</p>";
+          return;
+      }
+  
+      smartphonesList.innerHTML = products.smartphones
+          .map(product => `
+              <div class="swiper-slide bg-white shadow-lg rounded-lg p-4 flex flex-col justify-between relative">
+                  <!-- ✅ Dynamic Labels -->
+                  <span class="absolute top-2 left-2 bg-${getRandomColor()}-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                      ${getRandomLabel()}
+                  </span>
+  
+                  <!-- ✅ Clickable Product (Image, Name, Price) -->
+                  <div class="cursor-pointer product-clickable flex flex-col items-center" data-id="${product.id}">
+                      <img src="${product.image}" alt="${product.name}" class="w-3/4 max-h-40 object-contain transition-transform duration-300 hover:scale-105">
+                      <h3 class="font-bold text-lg mt-2 text-gray-800">${product.name}</h3>
+                       <div class="text-red-500 text-2xl font-bold">    
+                      <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
+                        ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+                    </div>
+                  </div>
+  
+                  <!-- ✅ Buttons Section (WhatsApp & Order Now) -->
+                  <div class="p-4 bg-gray-100 flex flex-col sm:flex-row justify-between gap-3 mt-3">
+                      <!-- WhatsApp Button -->
+                      <a href="https://wa.me/?text=I'm%20interested%20in%20${product.name}"
+                         class="bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto">
+                          <i class="fab fa-whatsapp text-lg"></i> 
+                          <span class="ml-2">Buy on WhatsApp</span>
+                      </a>
+  
+                      <!-- Order Now Button -->
+                      <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto"
+                              data-name="${product.name}" data-price="${product.price}">
+                          <i class="fas fa-shopping-bag text-lg"></i>
+                          <span class="ml-2">Order Now</span>
+                      </button>
+                  </div>
+              </div>
+          `)
+          .join('');
+  
+      // ✅ Make only the image, title, or price clickable for product details
+      document.querySelectorAll(".product-clickable").forEach(element => {
+          element.addEventListener("click", function () {
+              const productId = this.getAttribute("data-id");
+              localStorage.setItem("selectedProduct", JSON.stringify({ id: productId, category: "smartphones" }));
+              window.location.href = `./product/?product=${productId}`;
+          });
+      });
+  
+  });
+  </script>
+  
+
+<!-- flash sale section -->
+<div class="bg-red-500 text-white flex justify-between items-center px-2 py-2">
+  <!-- Flash Sales Section -->
+  <div class="flex items-center">
+    <img src="" alt="" class="h-5 mr-2">
+    <span class="font-bold text-lg mr-10">Flash Sales</span>
+  </div>
+
+  <!-- Countdown Timer -->
+  <div class="text-center">
+    <span>Time Left: </span>
+    <span id="countdown" class="font-bold text-xm">01d : 09h : 40m</span>
+  </div>
+
+  <!-- See All Link -->
+  <a href="#" class=" hidden text-white hover:underline text-md flex items-center mr-4">
+    SEE ALL &gt;
+  </a>
+</div>
+
+<!-- Swiper Container for Accessories -->
+<div class="swiper-container relative">
+  <div class="swiper-wrapper" id="accessories-list">
+    <!-- Accessories will be dynamically inserted here via JavaScript -->
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const products = JSON.parse(localStorage.getItem("productData")) || {};
+    const accessoriesList = document.getElementById("accessories-list");
+
+    if (!accessoriesList) {
+        console.error("❌ 'accessories-list' not found in HTML!");
+        return;
+    }
+
+    if (!products.accessories || products.accessories.length === 0) {
+        accessoriesList.innerHTML = "<p class='text-gray-500 text-center'>No accessories available.</p>";
+        return;
+    }
+
+    // ✅ Dynamic Labels & Colors
+    const labels = [
+        { text: "Best Seller", color: "bg-red-500" },
+        { text: "Limited Stock", color: "bg-yellow-500" },
+        { text: "Hot Deal", color: "bg-blue-500" },
+        { text: "New Arrival", color: "bg-green-500" },
+        { text: "Trending Now", color: "bg-purple-500" },
+        { text: "Exclusive", color: "bg-pink-500" }
+    ];
+
+    function getRandomLabel() {
+        return labels[Math.floor(Math.random() * labels.length)];
+    }
+
+    accessoriesList.innerHTML = products.accessories
+        .map(product => {
+            const { text: labelText, color: labelColor } = getRandomLabel(); // Get a random label & color
+
+            return `
+                <div class="swiper-slide bg-white shadow-lg rounded-lg p-4 flex flex-col justify-between relative">
+                    <!-- ✅ Dynamic Label with Random Color -->
+                    <span class="${labelColor} text-white text-xs font-bold px-3 py-1 rounded-full absolute top-2 left-2">
+                        ${labelText}
+                    </span>
+
+                    <!-- ✅ Clickable Product (Image, Name, Price) -->
+                    <div class="cursor-pointer product-clickable flex flex-col items-center" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}" class="w-3/4 max-h-40 object-contain transition-transform duration-300 hover:scale-105">
+                        <h3 class="font-bold text-lg mt-2 text-gray-800">${product.name}</h3>
+                        <div class="text-green-500 text-xl font-bold">
+                            <span class="underline">Ksh ${product.price.toLocaleString()}</span>
+                            ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+                        </div>
+                    </div>
+
+                    <!-- ✅ Buttons Section (WhatsApp & Add to Cart) -->
+                    <div class="p-4 bg-gray-100 flex flex-col sm:flex-row justify-between gap-3 mt-3">
+                        <!-- WhatsApp Button -->
+                        <a href="https://wa.me/?text=I'm%20interested%20in%20${product.name}"
+                           class="bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto">
+                            <i class="fab fa-whatsapp text-lg"></i> 
+                            <span class="ml-2">Buy on WhatsApp</span>
+                        </a>
+
+                        <!-- Add to Cart Button -->
+                        <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto"
+                                data-name="${product.name}" data-price="${product.price}">
+                            <i class="fas fa-shopping-cart text-lg"></i>
+                            <span class="ml-2">Add to Cart</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        })
+        .join('');
+
+    // ✅ Clicking a product redirects to its details page
+    document.querySelectorAll(".product-clickable").forEach(product => {
+        product.addEventListener("click", function () {
+            const productId = this.getAttribute("data-id");
+            window.location.href = `./product/?product=${productId}`;
+        });
+    });
+});
+
+</script>
+
+<!-- Swiper.js & JavaScript for Responsiveness -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper(".swiper-container", {
+      slidesPerView: 2,
+      spaceBetween: 10,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2,
+          spaceBetween: 20,
+        },
+        768: {
+          slidesPerView: 3,
+          spaceBetween: 30,
+        },
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 40,
+        },
+      },
+    });
+  });
+</script>
+  
+<section>
+  <h2 class="text-md sm:text-2xl md:text-2xl lg:text-2xl font-bold p-2 bg-blue-500 text-white sm:text-center">
+      New Arrivals | On Laptops
+  </h2>
+
+  <div id="laptops-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <!-- Laptops will be inserted here dynamically using JavaScript -->
+  </div>
+</section>
+
+<script>
+  // ✅ Render Laptops in HTML
+function renderLaptops() {
+    const laptopContainer = document.getElementById("laptops-list");
+
+    if (!products.laptops || products.laptops.length === 0) {
+        laptopContainer.innerHTML = "<p class='text-gray-500 text-center'>No laptops available.</p>";
+        return;
+    }
+
+    laptopContainer.innerHTML = products.laptops
+        .map((product, index) => `
+            <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer laptop-clickable"
+                 data-id="${product.id}">
+                <div class="relative">
+                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-contain p-4">
+                </div>
+
+                <div class="p-5 text-center">
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">${product.name}</h3>
+                    <div class="text-red-500 text-2xl font-bold">
+                        <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
+                        ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+                    </div>
+                    <div class="mt-3 text-gray-600 text-sm">
+                        Offer Ends in <span id="hour-product${index}"></span>:<span id="minute-product${index}"></span>:<span id="second-product${index}"></span>
+                    </div>
+                </div>
+
+                <div class="p-5 bg-gray-100 flex sm:justify-between sm:items-center flex-col sm:flex-row">
+                    <a href="https://wa.me/?text=I'm%20interested%20in%20${product.name}" class="whatsapp-btn bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center">
+                        <i class="fab fa-whatsapp mr-2"></i> Buy on WhatsApp
+                    </a>
+
+                    <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-600 text-white text-sm px-5 py-2 rounded-lg flex items-center"
+                            data-name="${product.name}" data-price="${product.price}">
+                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+                    </button>
+                </div>
+            </div>
+        `)
+        .join('');
+
+    // ✅ Attach Click Events for Laptops
+    attachLaptopClickEvents();
+}
+
+function attachLaptopClickEvents() {
+    document.querySelectorAll(".laptop-clickable").forEach(element => {
+        element.addEventListener("click", function (event) {
+            // ✅ Prevent clicking inside buttons from opening product details
+            if (event.target.closest("a") || event.target.closest("button")) {
+                return; // Ignore clicks on buttons and links
+            }
+
+            const productId = this.getAttribute("data-id");
+            localStorage.setItem("selectedProduct", JSON.stringify({ id: productId, category: "laptops" }));
+            window.location.href = `./product/?product=${productId}`; // Redirect to product details page
+        });
+    });
+}
+
+// ✅ Render Laptops on Page Load
+renderLaptops();
+</script>
+
+
+<!-- 🛒 Fixed Slide-in Cart Section -->
+<section id="cart-section" class="fixed top-0 right-0 w-full sm:w-96 h-full bg-white shadow-lg p-6 transform translate-x-full transition-transform duration-300 overflow-y-auto z-50">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-bold">My Cart</h2>
+    <button id="close-cart" class="text-red-500 text-xl">&times;</button>
+  </div>
+
+  <div id="cart-items" class="space-y-4">
+    <!-- Cart items will be dynamically added here -->
+  </div>
+
+  <div class="flex justify-between mt-4 border-t pt-4">
+    <h3 class="text-lg font-semibold">Total:</h3>
+    <p id="checkouttotal" class="text-lg font-bold">Ksh 0.00</p>
+  </div>
+
+  <div class="mt-4 flex flex-col space-y-2">
+    <button id="checkout-btn" class="bg-blue-600 text-white py-2 rounded-lg">Proceed to Checkout</button>
+    <button id="clear-cart" class="bg-red-500 text-white py-2 rounded-lg">Clear Cart</button>
+  </div>
+</section>
+
+<!-- Cart Overlay (Prevents Overlapping) -->
+<div id="cart-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+
+<!-- 🛍️ CHECKOUT SECTION -->
+<section id="checkout-section" class="fixed top-0 right-0 w-full sm:w-96 h-full bg-white shadow-lg p-6 transform translate-x-full transition-transform duration-300 overflow-y-auto z-50">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold">Checkout</h1>
+    <button id="close-checkout" class="text-red-500 text-xl">&times;</button>
+  </div>
+
+  <!-- Address & Contact -->
+  <div class="grid gap-4 grid-cols-1 md:grid-cols-2">
+    <div>
+      <label class="text-black">Full Name</label>
+      <input type="text" id="o_name" class="w-full p-3 border rounded-lg" placeholder="John Doe" required>
+    </div>
+    <div>
+      <label class="text-black">Email Address</label>
+      <input type="email" id="email" class="w-full p-3 border rounded-lg" placeholder="johndoe@gmail.com" required>
+    </div>
+    <div>
+      <label class="text-black">Phone Number</label>
+      <input type="tel" id="phone" class="w-full p-3 border rounded-lg" placeholder="2547123456789" required>
+    </div>
+  </div>
+
+  <!-- Address Selection -->
+<div class="mt-6">
+  <h2 class="text-lg font-semibold mb-2">Select Address</h2>
+
+  <!-- Saved Addresses Dropdown -->
+  <select id="savedAddresses" class="w-full p-3 border rounded-lg">
+    <option value="">Select a saved address</option>
+  </select>
+
+  <!-- OR Enter a New Address -->
+  <div class="mt-4">
+    <label class="text-black">New Address</label>
+    <textarea id="newAddress" class="w-full p-3 border rounded-lg" placeholder="Enter new delivery address"></textarea>
+  </div>
+</div>
+
+  <div id="checkout-items" class="space-y-4">
+    <!-- Checkout items will be displayed here -->
+</div>
+
+  <!-- Order Summary -->
+  <div class="mt-6 p-4 bg-gray-100 rounded-lg">
+    <h2 class="font-semibold text-xl">Order Summary</h2>
+    <p class="text-gray-700">Total: <span id="total-checkout" class="font-bold">Ksh 0.00</span></p>
+  </div>
+
+  <!-- Payment Buttons -->
+  <div class="flex space-x-4 mt-6">
+    <button onclick="payWithPaystack(event)" class="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700">Pay Now</button>
+<button onclick="saveOrderToBackend('COD')" class="w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600">Cash On Delivery</button>
+
+  </div>
+</section>
+
+<!-- Overlay to Prevent Interaction with Background -->
+<div id="checkout-overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40"></div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const cartButtons = document.querySelectorAll(".add-to-cart-btn");
+
+      // Attach event listeners to all "Add to Cart" buttons
+      cartButtons.forEach(button => {
+          button.addEventListener("click", function () {
+              const name = this.getAttribute("data-name");
+              const price = parseFloat(this.getAttribute("data-price"));
+
+              addToCart({ name, price, quantity: 1 });
+          });
+      });
+
+      // 🛒 Function to Add Product to Cart
+      function addToCart(item) {
+          const cartKey = getCartKey(); // Get the correct cart for the user
+          let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+
+          // Check if item exists; if yes, update quantity
+          const existingItem = cartItems.find(cartItem => cartItem.name === item.name);
+          if (existingItem) {
+              existingItem.quantity += 1;
+          } else {
+              cartItems.push(item);
+          }
+
+          localStorage.setItem(cartKey, JSON.stringify(cartItems));
+          updateCartCount(); // Update cart icon count
+          displayCartItems(); // Refresh cart section
+      }
+
+      // 🛒 Update Cart Count in Header
+      function updateCartCount() {
+          const cartKey = getCartKey();
+          const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+          const cartCountElement = document.getElementById("cartCount");
+
+          let totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+          cartCountElement.textContent = totalItems;
+
+          // Show/hide cart count badge
+          if (totalItems > 0) {
+              cartCountElement.classList.remove("hidden");
+          } else {
+              cartCountElement.classList.add("hidden");
+          }
+      }
+
+      // 🔄 Display Cart Items in Cart Section
+      function displayCartItems() {
+          const cartKey = getCartKey();
+          const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+          const cartItemsContainer = document.getElementById("cart-items");
+          cartItemsContainer.innerHTML = '';
+
+          let subtotal = 0;
+
+          cartItems.forEach((item, index) => {
+              const itemTotal = item.price * item.quantity;
+              subtotal += itemTotal;
+
+              const itemDiv = document.createElement("div");
+              itemDiv.classList.add("flex", "items-center", "justify-between", "border-b", "pb-4");
+
+              itemDiv.innerHTML = `
+                  <div class="flex-1 ml-4">
+                      <h2 class="text-xl font-semibold">${item.name}</h2>
+                      <p class="text-gray-600">Ksh ${item.price.toFixed(2)} x 
+                          <input type="number" min="1" value="${item.quantity}" 
+                                 onchange="updateQuantity(${index}, this.value)" 
+                                 class="w-16 text-center border rounded" />
+                      </p>
+                      <p class="text-gray-600">Total: Ksh ${itemTotal.toFixed(2)}</p>
+                  </div>
+                  <button class="text-red-600 hover:underline" onclick="removeFromCart(${index})">Remove</button>
+              `;
+
+              cartItemsContainer.appendChild(itemDiv);
+          });
+
+          document.getElementById("checkouttotal").textContent = `Ksh ${subtotal.toFixed(2)}`;
+      }
+
+      // 🛒 Function to Update Item Quantity
+      function updateQuantity(index, quantity) {
+          const cartKey = getCartKey();
+          let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+          if (index > -1 && index < cartItems.length) {
+              cartItems[index].quantity = parseInt(quantity);
+              localStorage.setItem(cartKey, JSON.stringify(cartItems));
+          }
+          displayCartItems();
+      }
+
+      // 🗑️ Remove Item from Cart
+      function removeFromCart(index) {
+          const cartKey = getCartKey();
+          let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+          if (index > -1 && index < cartItems.length) {
+              cartItems.splice(index, 1);
+              localStorage.setItem(cartKey, JSON.stringify(cartItems));
+          }
+          displayCartItems();
+          updateCartCount();
+      }
+
+      // 🔄 Refresh Cart Display on Storage Change
+      window.addEventListener("storage", function (event) {
+          if (event.key && event.key.startsWith("cart_")) {
+              displayCartItems();
+          }
+      });
+
+      // 🛒 Get Unique Cart Key for Each User
+      function getCartKey() {
+          const userId = sessionStorage.getItem("userId");
+          return userId ? `cart_${userId}` : "cart_guest";
+      }
+
+      // 🔄 Initialize Cart Display
+      updateCartCount();
+      displayCartItems();
+  });
+</script>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const cartSection = document.getElementById("cart-section");
+      const cartIcon = document.getElementById("cart-icon");
+      const closeCart = document.getElementById("close-cart");
+      const clearCart = document.getElementById("clear-cart");
+
+      // 🛒 Open Cart Section
+      cartIcon.addEventListener("click", function (e) {
+          e.preventDefault();
+          cartSection.classList.toggle("translate-x-full");
+      });
+
+      // ❌ Close Cart Section
+      closeCart.addEventListener("click", function () {
+          cartSection.classList.add("translate-x-full");
+      });
+
+      // 🗑️ Clear Cart Function
+      clearCart.addEventListener("click", function () {
+          localStorage.removeItem(getCartKey()); // Remove cart items
+          displayCartItems();
+          updateCartCount();
+      });
+
+      // 🔄 Update Cart Display on Page Load
+      updateCartCount();
+      displayCartItems();
+  });
+
+  // 🛒 Update Cart Count in Header
+  function updateCartCount() {
+      const cartKey = getCartKey();
+      const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+      const cartCountElement = document.getElementById("cartCount");
+
+      let totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+      cartCountElement.textContent = totalItems;
+
+      // Hide count if cart is empty
+      if (totalItems > 0) {
+          cartCountElement.classList.remove("hidden");
+      } else {
+          cartCountElement.classList.add("hidden");
+      }
+  }
+
+  // 🛒 Display Cart Items in Sidebar
+  function displayCartItems() {
+      const cartKey = getCartKey();
+      const cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+      const cartItemsContainer = document.getElementById("cart-items");
+      cartItemsContainer.innerHTML = '';
+
+      let subtotal = 0;
+
+      cartItems.forEach((item, index) => {
+          const itemTotal = item.price * (item.quantity || 1);
+          subtotal += itemTotal;
+
+          const itemDiv = document.createElement("div");
+          itemDiv.classList.add("flex", "justify-between", "items-center", "border-b", "pb-2");
+
+          itemDiv.innerHTML = `
+              <div>
+                  <h3 class="text-md font-semibold">${item.name}</h3>
+                  <p class="text-gray-600">Ksh ${item.price} x 
+                      <input type="number" min="1" value="${item.quantity || 1}" 
+                             onchange="updateQuantity(${index}, this.value)" 
+                             class="w-12 text-center border rounded" />
+                  </p>
+                  <p class="text-gray-600">Total: Ksh ${itemTotal}</p>
+              </div>
+              <button class="text-red-500 hover:underline" onclick="removeFromCart(${index})">Remove</button>
+          `;
+
+          cartItemsContainer.appendChild(itemDiv);
+      });
+
+      document.getElementById("checkouttotal").textContent = `Ksh ${subtotal.toFixed(2)}`;
+  }
+
+  // 🛒 Update Item Quantity
+  function updateQuantity(index, quantity) {
+      const cartKey = getCartKey();
+      let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+      if (index > -1 && index < cartItems.length) {
+          cartItems[index].quantity = parseInt(quantity) || 1;
+          localStorage.setItem(cartKey, JSON.stringify(cartItems));
+      }
+      displayCartItems();
+      updateCartCount();
+  }
+
+  // ❌ Remove Item from Cart
+  function removeFromCart(index) {
+      const cartKey = getCartKey();
+      let cartItems = JSON.parse(localStorage.getItem(cartKey)) || [];
+      if (index > -1 && index < cartItems.length) {
+          cartItems.splice(index, 1);
+          localStorage.setItem(cartKey, JSON.stringify(cartItems));
+      }
+      displayCartItems();
+      updateCartCount();
+  }
+
+// ✅ Get Cart Key (Unique for Each User)
+function getCartKey() {
+    const userId = sessionStorage.getItem("userId");
+    return userId ? `cart_${userId}` : "cart_guest";
+}
+
+// ✅ Get Cart Items
+function getCartItems() {
+    const cartKey = getCartKey();
+    console.log("📦 Retrieving cart items from:", cartKey);
+    return JSON.parse(localStorage.getItem(cartKey)) || [];
+}
+
+
+  // ✅ Calculate the Total Price of Items in Cart
+function calculateTotal() {
+    const cartItems = getCartItems();
+    let total = cartItems.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+    return total;
+}
+
+// ✅ Update Checkout Total
+function updateCheckoutTotal() {
+    const total = calculateTotal(); // Get total price
+    const totalElement = document.getElementById("total-checkout");
+
+    if (!totalElement) {
+        console.error("❌ Error: total-checkout element not found.");
+        return;
+    }
+
+    totalElement.textContent = `Ksh ${total.toFixed(2)}`;
+}
+
+// ✅ Display Checkout Items
+function displayCheckoutItems() {
+    const cartItems = getCartItems();
+    const checkoutItemsContainer = document.getElementById("checkout-items");
+
+    if (!checkoutItemsContainer) {
+        console.error("❌ Error: checkout-items container not found.");
+        return;
+    }
+
+    checkoutItemsContainer.innerHTML = ""; // Clear previous items
+
+    cartItems.forEach((item) => {
+        const itemTotal = item.price * (item.quantity || 1);
+        const itemDiv = document.createElement("div");
+        itemDiv.classList.add("flex", "justify-between", "items-center", "border-b", "pb-2");
+
+        itemDiv.innerHTML = `
+            <div>
+                <h3 class="text-md font-semibold">${item.name}</h3>
+                <p class="text-gray-600">Ksh ${item.price} x ${item.quantity || 1}</p>
+                <p class="text-gray-600">Total: Ksh ${itemTotal.toFixed(2)}</p>
+            </div>
+        `;
+        checkoutItemsContainer.appendChild(itemDiv);
+    });
+
+    updateCheckoutTotal(); // Update the total after displaying items
+}
+
+// ✅ Validate Checkout Form
+function getInputValues() {
+    const inputs = {
+        name: document.getElementById("o_name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim()
+    };
+
+    for (const key in inputs) {
+        if (inputs[key] === "") {
+            alert(`Please fill in your ${key}.`);
+            return null;
+        }
+    }
+    return inputs;
+}
+
+// ✅ Open Checkout & Update Total
+document.getElementById("checkout-btn").addEventListener("click", function (e) {
+    e.preventDefault();
+    const cartItems = getCartItems();
+
+    if (cartItems.length === 0) {
+        alert("Your cart is empty! Please add items before proceeding to checkout.");
+        return;
+    }
+
+    displayCheckoutItems(); // Show checkout items
+    updateCheckoutTotal(); // Update total
+    document.getElementById("checkout-section").classList.remove("hidden");
+    document.getElementById("checkout-overlay").classList.remove("hidden");
+});
+
+// ✅ Close Checkout
+document.getElementById("close-checkout").addEventListener("click", function () {
+    document.getElementById("checkout-section").classList.add("hidden");
+    document.getElementById("checkout-overlay").classList.add("hidden");
+});
+
+// ✅ Ensure Checkout is Updated When Cart is Modified
+window.addEventListener("storage", function () {
+    updateCheckoutTotal();
+});
+
+  document.addEventListener("DOMContentLoaded", function () {
+      const checkoutSection = document.getElementById("checkout-section");
+      const checkoutOverlay = document.getElementById("checkout-overlay");
+      const openCheckoutBtn = document.getElementById("checkout-btn");
+      const closeCheckoutBtn = document.getElementById("close-checkout");
+      
+      // Open Checkout
+      function openCheckout() {
+          checkoutSection.classList.remove("translate-x-full");
+          checkoutOverlay.classList.remove("hidden");
+          updateCheckoutTotal();
+      }
+
+      // Close Checkout
+      function closeCheckout() {
+          checkoutSection.classList.add("translate-x-full");
+          checkoutOverlay.classList.add("hidden");
+      }
+
+      // Event Listeners
+      openCheckoutBtn.addEventListener("click", openCheckout);
+      closeCheckoutBtn.addEventListener("click", closeCheckout);
+      checkoutOverlay.addEventListener("click", closeCheckout);
+  });
+
+
+  async function saveOrderToBackend(paymentMethod, transactionId = null) {
+    console.log("📢 Sending order with paymentMethod:", paymentMethod);
+
+    const userId = sessionStorage.getItem("userId") || "guest";
+    const cartItems = getCartItems(); // ✅ Fetch cart items
+
+    if (cartItems.length === 0) {
+        alert("Your cart is empty!");
+        return;
+    }
+
+    // ✅ Get user details (including address)
+    const userDetails = getInputValues();
+    if (!userDetails) return; // Stop if fields are missing
+
+    // ✅ Set Payment Status
+    let paymentStatus = paymentMethod === "COD" ? "COD" : transactionId ? "paid" : "failed";
+
+    const orderData = {
+        userId,
+        name: userDetails.name,
+        email: userDetails.email,
+        phone: userDetails.phone,
+        address: userDetails.address,
+        items: cartItems.map(item => ({
+            itemId: item.name,
+            quantity: item.quantity,
+            price: item.price
+        })),
+        total: calculateTotal(),
+        paymentMethod,
+        transactionId: transactionId || null,
+        paymentStatus,
+        orderStatus: "pending" // Default status
+    };
+
+    try {
+        const response = await fetch("http://localhost:3000/api/orders", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+        });
+
+        const result = await response.json();
+        console.log("📢 Server Response:", result);
+
+        if (response.ok) {
+            alert("🎉 Order placed successfully!");
+
+            // ✅ Clear the cart after a successful order
+            localStorage.removeItem(getCartKey());
+            updateCartCount();
+            displayCartItems();
+
+            // ✅ Redirect to Thank You page
+            window.location.href = "thank-you.html";
+        } else {
+            alert(`❌ Order failed: ${result.message}`);
+        }
+    } catch (error) {
+        console.error("❌ Error placing order:", error);
+        alert("An error occurred while placing the order.");
+    }
+}
+
+
+
+function payWithPaystack(e) {
+    e.preventDefault();
+    const userDetails = getInputValues();
+    if (!userDetails) return;
+
+    const amount = calculateTotal();
+
+    if (typeof PaystackPop === "undefined") {
+        alert("Error: Paystack SDK not loaded. Please check your internet connection.");
+        return;
+    }
+
+    const handler = PaystackPop.setup({
+        key: "pk_test_232531a5c927ef2cc67ed1b85af3f26e3b8ed2f2",
+        email: userDetails.email,
+        amount: amount * 100,
+        currency: "KES",
+        ref: `ORD-${Math.floor(Math.random() * 1000000)}`,
+        callback: function (response) {  // ✅ Use a normal function, not async
+            alert("Payment successful! Reference: " + response.reference);
+
+            // ✅ Call saveOrderToBackend() separately without async
+            saveOrderToBackend("Paystack", response.reference)
+                .then(() => {
+                    window.location.href = "thank-you.html"; // Redirect user after order is saved
+                })
+                .catch(error => {
+                    console.error("❌ Error saving order:", error);
+                    alert("An error occurred while saving your order.");
+                });
+        },
+        onClose: function () {
+            alert("Transaction was not completed, please try again.");
+        },
+    });
+
+    handler.openIframe();
+}
+
+</script>
+
+<script>
+// ✅ Fetch & Display Full Address Details (Address, Region, City)
+async function fetchSavedAddresses() {
+    const token = sessionStorage.getItem('token');
+    if (!token) return; // No need to fetch for guests
+
+    try {
+        const response = await fetch("http://localhost:3000/api/addresses", {
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch addresses");
+
+        const data = await response.json();
+
+        const savedAddressesDropdown = document.getElementById("savedAddresses");
+        savedAddressesDropdown.innerHTML = `<option value="">Select a saved address</option>`; // Reset dropdown
+
+        data.forEach(addressObj => {
+            const option = document.createElement("option");
+
+            // ✅ Combine Address, City, and Region
+            option.value = `${addressObj.address}, ${addressObj.city}, ${addressObj.region}`;
+            option.textContent = `${addressObj.address}, ${addressObj.city}, ${addressObj.region}`;
+
+            savedAddressesDropdown.appendChild(option);
+        });
+    } catch (error) {
+        console.error("❌ Error fetching addresses:", error);
+    }
+}
+
+
+// ✅ Get Selected Address (New or Saved)
+function getSelectedAddress() {
+    const savedAddress = document.getElementById("savedAddresses").value;
+    const newAddress = document.getElementById("newAddress").value.trim();
+
+    if (newAddress) return newAddress;
+    if (savedAddress) return savedAddress;
+
+    alert("Please select or enter an address.");
+    return null;
+}
+
+// ✅ Modify `getInputValues()` to Include Address
+function getInputValues() {
+    const inputs = {
+        name: document.getElementById("o_name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        address: getSelectedAddress() // Include address
+    };
+
+    for (const key in inputs) {
+        if (inputs[key] === "") {
+            alert(`Please fill in your ${key}.`);
+            return null;
+        }
+    }
+    return inputs;
+}
+
+// ✅ Fetch Addresses on Checkout Load
+document.addEventListener("DOMContentLoaded", fetchSavedAddresses);
+
+</script>
+
+  <!-- Footer: Stays static -->
+  <footer class="bg-gray-100 py-2 mb-2">
+    <div class="container mx-auto flex flex-wrap lg:flex-nowrap justify-between">
+      <!-- Logo on the Top (remains same across all screens) -->
+      <div class="w-full lg:w-1/4 mb-6 lg:mb-0">
+        <a href="index.html" class="flex items-center">
+          <img src="/img/logo.png" alt="Logo" class="h-10">
+          <span class="ml-2 text-xl font-bold text-gray-700"></span>
+        </a>
+      </div>
+  
+      <!-- Quick Access and Working Hours in a row on small and large screens -->
+      <div class="w-full flex flex-row mb-2 lg:mb-0 lg:w-1/2">
+        <!-- Quick Access -->
+        <div class="w-1/2 mb-6 lg:mb-0 ml-4">
+          <h4 class="font-bold text-lg mb-2">Quick Access</h4>
+          <ul class="text-gray-700">
+            <li><a href="#" class="hover:underline">Home</a></li>
+            <li><a href="#" class="hover:underline">Shop All Products</a></li>
+          </ul>
+        </div>
+        <!-- Working Hours -->
+        <div class="w-1/2 ml-4">
+          <h4 class="font-bold text-lg mb-4">Working Hours</h4>
+          <p class="text-gray-700 font-semibold">Monday – Saturday</p>
+          <p class="text-gray-700 font-semibold">8:30am – 8:00pm</p>
+        </div>
+      </div>
+  
+      <!-- Location (Full width on mobile) -->
+      <div class="w-full lg:w-1/4 mb-6 lg:mb-2 ml-4">
+        <h4 class="font-bold text-lg mb-4">Location</h4>
+        <p class="text-gray-700 font-bold">Got Questions?</p>
+        <p class="text-yellow-500 font-semibold text-lg">254742606408 | 254110296158</p>
+        <p class="text-gray-700 mt-4">
+          Shop F3, First Floor, Dominion Expo Centre, <br>
+          Tom Mboya Street, Nairobi, Kenya.
+        </p>
+      </div>
+    </div>
+  
+    <!-- Footer Bottom Section (Company Name on Bottom Left, Social Media Icons on Bottom Right) -->
+    <div class="container mx-auto flex justify-between items-center mt-2 border-t border-gray-200 pt-6">
+      <p class="text-gray-700 text-sm">&copy; 2025 ShopRight Kenya. All Rights Reserved</p>
+  
+      <!-- Social Media Icons on the Bottom Right -->
+      <div class="flex space-x-4 mr-8">
+        <a href="#" class="text-gray-600 hover:text-blue-900"><i class="fab fa-facebook"></i></a>
+        <a href="#" class="text-orange-600 hover:text-orange-900"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="text-green-600 hover:text-green-900"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="text-gray-600 hover:text-black-900"><i class="fab fa-twitter"></i></a>
+      </div>
+    </div>
+  </footer> 
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("search-input"); // Desktop Search Input
+    const searchButton = document.getElementById("search-btn");
+    const resultsContainer = document.getElementById("search-results"); // Desktop Search Results
+
+    const mobileSearchInput = document.getElementById("mobile-search-input"); // Mobile Search Input
+    const mobileSearchButton = document.getElementById("mobile-search-btn");
+    const mobileResultsContainer = document.getElementById("mobile-search-results"); // Mobile Search Results
+
+    // ✅ Fetch Products from LocalStorage
+    function getProducts() {
+        return JSON.parse(localStorage.getItem("productData")) || {};
+    }
+
+    // ✅ Convert products into a searchable array
+    function getAllProducts() {
+        const products = getProducts();
+        let allItems = [];
+        for (const category in products) {
+            allItems = allItems.concat(products[category]); // Merge all category items
+        }
+        return allItems;
+    }
+
+    // ✅ Universal Search Function (Now Includes Images)
+    function displayResults(inputElement, resultsContainer) {
+        const input = inputElement.value.trim().toLowerCase();
+        resultsContainer.innerHTML = ""; // Clear previous results
+
+        if (!input) {
+            resultsContainer.innerHTML = `<p class="text-gray-500 p-2">Start typing to search...</p>`;
+            resultsContainer.classList.remove("hidden");
+            return;
+        }
+
+        const allItems = getAllProducts();
+        const filteredItems = allItems.filter(item => 
+            item.name.toLowerCase().includes(input) || 
+            item.category.toLowerCase().includes(input)
+        );
+
+        if (filteredItems.length > 0) {
+            filteredItems.forEach(item => {
+                const itemElement = document.createElement("a");
+                itemElement.href = `./product?product=${item.id}`;
+                itemElement.classList.add("search-item", "flex", "items-center", "p-2", "hover:bg-gray-100", "cursor-pointer");
+
+                itemElement.innerHTML = `
+                    <img src="${item.image}" class="w-12 h-12 object-cover rounded mr-3" alt="${item.name}">
+                    <div>
+                        <h4 class="text-sm font-semibold">${item.name}</h4>
+                        <p class="text-red-500 font-bold">KSh ${item.price.toLocaleString()}</p>
+                    </div>
+                `;
+
+                resultsContainer.appendChild(itemElement);
+            });
+        } else {
+            resultsContainer.innerHTML = `<p class="text-red-500 p-2">No matches found.</p>`;
+        }
+
+        resultsContainer.classList.remove("hidden");
+    }
+
+    // ✅ Event Listeners for Desktop
+    searchButton.addEventListener("click", function () {
+        displayResults(searchInput, resultsContainer);
+    });
+
+    searchInput.addEventListener("input", function () {
+        displayResults(searchInput, resultsContainer);
+    });
+
+    // ✅ Event Listeners for Mobile
+    mobileSearchButton.addEventListener("click", function () {
+        displayResults(mobileSearchInput, mobileResultsContainer);
+    });
+
+    mobileSearchInput.addEventListener("input", function () {
+        displayResults(mobileSearchInput, mobileResultsContainer);
+    });
+
+    // ✅ Hide results when clicking outside (For Both Desktop & Mobile)
+    document.addEventListener("click", function (event) {
+        if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+            resultsContainer.classList.add("hidden");
+        }
+        if (!mobileSearchInput.contains(event.target) && !mobileResultsContainer.contains(event.target)) {
+            mobileResultsContainer.classList.add("hidden");
+        }
+    });
+});
+
+
+
+</script>
+
+  <script>
+    // Set the end date for the countdown
+    const endDate = new Date("Mar 25, 2025 20:00:00").getTime();
+  
+    // Update the countdown every second
+    const countdownInterval = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = endDate - now;
+  
+      // Calculate days, hours, minutes, and seconds
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+  
+      // Display the result
+      document.getElementById("countdown").innerHTML = days + "d : " + hours + "h : " + minutes + "m ";
+  
+      // If the countdown is over, display a message
+      if (distance < 0) {
+        clearInterval(countdownInterval);
+        document.getElementById("countdown").innerHTML = "Expired";
+      }
+    }, 1000);
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const dropdownBtn = document.getElementById("dropdownBtn");
+    const dropdownMenu = document.getElementById("dropdownMenu");
+
+    function isLoggedIn() {
+        return sessionStorage.getItem("token") !== null;
+    }
+
+    function updateDropdown() {
+        dropdownMenu.innerHTML = ""; // Clear previous items
+
+        if (isLoggedIn()) {
+            // ✅ Show "My Account" & "Logout" when logged in
+            dropdownMenu.innerHTML = `
+                <li><a href="./dashboard" class="block px-4 py-2 hover:bg-gray-100">My Account</a></li>
+                <li><a href="#" id="logoutBtn" class="block px-4 py-2 hover:bg-gray-100 text-red-500">Logout</a></li>
+            `;
+        } else {
+            // ✅ Show "Login" & "Sign Up" when logged out
+            dropdownMenu.innerHTML = `
+                <li><a href="./login" class="block px-4 py-2 hover:bg-gray-100">Login</a></li>
+                <li><a href="./signup" class="block px-4 py-2 hover:bg-gray-100">Sign Up</a></li>
+            `;
+        }
+    }
+
+    // ✅ Toggle dropdown visibility
+    dropdownBtn.addEventListener("click", function (event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle("hidden");
+    });
+
+    // ✅ Close dropdown when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!dropdownMenu.contains(event.target) && event.target !== dropdownBtn) {
+            dropdownMenu.classList.add("hidden");
+        }
+    });
+
+    // ✅ Handle logout action
+    document.addEventListener("click", function (event) {
+        if (event.target.id === "logoutBtn") {
+            event.preventDefault();
+            sessionStorage.removeItem("token"); // Remove authentication token
+            sessionStorage.removeItem("userId"); // Remove user ID
+            updateDropdown(); // Update dropdown
+            dropdownMenu.classList.add("hidden");
+            alert("Logged out successfully!");
+            window.location.reload(); // Reload page to reflect changes
+        }
+    });
+
+    updateDropdown(); // ✅ Initialize dropdown on page load
+});
+
+</script>
+  <style>
+
+    /* Ensure the Swiper Carousel is scrollable */
+    .swiper-container {
+      overflow: auto; /* Allow only the carousel section to scroll */
+    } /* Make the arrows sticky on both sides */
+    .swiper-button-next,
+    .swiper-button-prev {
+      position: fixed; /* Fix the position */
+      top: 50%;        /* Vertically center */
+      transform: translateY(-50%); /* Adjust for centering */
+      z-index: 10; /* Ensure they are above content */
+      width: 40px;
+      height: 40px;
+      background-color: rgba(0, 0, 0, 0.5); /* Optional: Add a background to make arrows visible */
+      border-radius: 50%; /* Optional: Make them circular */
+      color: white; /* Make arrows white */
+    }
+  
+    /* Swiper scrollbar customization */
+    .swiper-scrollbar {
+      height: 8px; /* Height of the scrollbar */
+      background-color: #e0e0e0; /* Background of the scrollbar */
+    }
+  
+    .swiper-scrollbar-drag {
+      background-color: #00a651; /* Color of the draggable scrollbar */
+    }
+  
+    /* Positioning the navigation arrows correctly */
+    .swiper-button-next {
+      right: 3px;
+    }
+  
+    .swiper-button-prev {
+      left: 3px;
+    }
+  </style>
+
+</body>
+</html>

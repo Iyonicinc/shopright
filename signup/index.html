@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+
+        <div class="flex justify-center mb-4">
+            <img src="/img/Logo.png" alt="Logo" class="w-30 h-20"> <!-- Change the src attribute to your logo's path -->
+        </div>
+        <h2 class="text-xl font-semibold text-left text-gray-700">Create An Account</h2>
+        <form id="signupForm" class="space-y-4 mt-4">
+            <div>
+                <label for="name" class="block text-sm font-semibold text-gray-700">Name</label>
+                <input type="text" id="name" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-semibold text-gray-700">Email</label>
+                <input type="email" id="email" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-semibold text-gray-700">Password</label>
+                <input type="password" id="password" class="w-full mt-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-md font-semibold">Sign Up</button>
+        </form>
+
+        <p id="errorMessage" class="text-center text-red-500 mt-4 hidden"></p>
+        <p class="text-center mt-4">Already have an account? <a href="../login" class="text-blue-600">Login here</a></p>
+    </div>
+
+    <script>
+      document.getElementById("signupForm").addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById("name").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    console.log({ name, email, password }); // Debugging
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Email validation regex
+        if (!emailPattern.test(email)) {
+            document.getElementById("errorMessage").innerText = "Invalid email format";
+            document.getElementById("errorMessage").classList.remove("hidden");
+            return;
+        }
+
+        if (password.length < 6) {
+            document.getElementById("errorMessage").innerText = "Password must be at least 6 characters long";
+            document.getElementById("errorMessage").classList.remove("hidden");
+            return;
+        }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, email, password }),
+        });
+
+        const data = await response.json();
+        console.log('Response:', data); // Debugging
+
+        if (response.ok) {
+            sessionStorage.setItem('token', data.token);
+            sessionStorage.setItem('userId', data.userId);
+            window.location.href = "../index.html"; // Redirect to user dashboard
+
+            fetchUserDetails(data.token);
+        } else {
+            document.getElementById("errorMessage").innerText = data.message;
+            document.getElementById("errorMessage").classList.remove("hidden");
+        }
+    } catch (error) {
+        console.error('Registration error:', error);
+        document.getElementById("errorMessage").innerText = "An error occurred. Please try again.";
+        document.getElementById("errorMessage").classList.remove("hidden");
+    }
+});
+    </script>
+    
+</body>
+</html>
