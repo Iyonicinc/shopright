@@ -171,8 +171,11 @@ window.addEventListener('resize', () => {
 
 
         const token = sessionStorage.getItem('token');
+        if (!token) {
+        window.location.href = "../login";
+        }
 
-        // Simulated API call for mock data
+
 const mockDashboardData = {
     newOrders: 12,
     totalIncome: 8000,
@@ -1109,7 +1112,7 @@ async function openProductReports() {
 // Logout function
 function logout() {
             sessionStorage.removeItem('token');
-            window.location.href = 'login.html';
+            window.location.href = '../login';
         }
         
         document.addEventListener('DOMContentLoaded', () => {
