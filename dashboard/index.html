@@ -520,11 +520,8 @@ document.getElementById('delete-account-form').addEventListener('submit', async 
 function saveChanges() {
     const token = sessionStorage.getItem('token'); // Use sessionStorage
 
-    console.log('Token being sent:', token); // Log the token for debugging
-
     if (!token) {
-        alert('You are not logged in. Please log in and try again.');
-        return;
+        window.location.href = "../login";
     }
 
     const userData = {
@@ -1080,7 +1077,7 @@ function displayOrders(orders) {
   // Logout
   function logout() {
     sessionStorage.removeItem('token');
-    window.location.href = 'login.html';
+    window.location.href = '../login';
   }
 </script>
 </body>
