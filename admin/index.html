@@ -209,7 +209,7 @@ async function fetchDashboardData(useMock = true) {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/admin/dashboard');
+        const response = await fetch('https://shopright.onrender.com/admin/dashboard');
         if (!response.ok) throw new Error('Failed to fetch dashboard data');
         return await response.json();
     } catch (error) {
@@ -424,7 +424,7 @@ function getMockOrders() {
         { orderId: 'O902700', userId: 'U22456fh', dateTime: '2024-11-28 14:30', status: 'processing', total: 3000 },
         { orderId: 'O834856', userId: 'U40830ot', dateTime: '2024-11-28 16:45', status: 'pending', total: 1200 },
         { orderId: 'O018735', userId: 'U88981gh', dateTime: '2024-11-29 09:15', status: 'completed', total: 7200 },
-        { orderId: 'O766341', userId: 'U35730ff',        dateTime: '2024-11-29 10:10', status: 'cancelled', total: 0 },
+        { orderId: 'O766341', userId: 'U35730ff', dateTime: '2024-11-29 10:10', status: 'cancelled', total: 100 },
     ];
 }
 
@@ -435,25 +435,22 @@ async function openOrderOverview() {
     content.innerHTML = `<h2 class="text-xl font-bold">Order Overview</h2><p>Loading all orders...</p>`;
 
     try {
-        const response = await fetch('http://localhost:3000/admin/orders', {
+        const response = await fetch('https://shopright.onrender.com/admin/orders', {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // ✅ Fixed Authorization Typo
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
         });
 
         const orders = await response.json();
 
-        // ✅ Fix: Use Correct `orderStatus` Field
         const summary = {
             pending: orders.filter(order => order.orderStatus === 'pending').length,
             processing: orders.filter(order => order.orderStatus === 'processing').length,
             completed: orders.filter(order => order.orderStatus === 'completed').length,
             cancelled: orders.filter(order => order.orderStatus === 'cancelled').length,
         };
-
-        // ✅ Keeping Your Design, Just Fixing Data Issues
         content.innerHTML = `
     <!-- Grid for Order Status Cards -->
     <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-8">
@@ -516,22 +513,20 @@ async function openOrderOverview() {
     </div>
 `;
     } catch (error) {
-        console.error('❌ Error fetching orders:', error);
+        console.error('Error fetching orders:', error);
         content.innerHTML = '<p class="text-red-500">Failed to load orders. Please try again.</p>';
     }
 }
 
-
-// ✅ Fetch Orders Based on Status
 async function fetchOrdersByStatus(status) {
     const content = document.getElementById('content');
     content.innerHTML = `<h2 class="text-xl font-bold">${status.charAt(0).toUpperCase() + status.slice(1)} Orders</h2><p>Loading orders...</p>`;
 
     try {
-        const response = await fetch(`http://localhost:3000/admin/orders?status=${status}`, {
+        const response = await fetch(`https://shopright.onrender.com/admin/orders?status=${status}`, {
             method: 'GET',
             headers: {
-                'Authorization': `Bearer ${token}`, // ✅ Fixed Authorization Typo
+                'Authorization': `Bearer ${token}`, 
                 'Content-Type': 'application/json',
             },
         });
@@ -586,46 +581,38 @@ content.innerHTML = `
 `;
 
     } catch (error) {
-        console.error('❌ Error fetching orders:', error);
+        console.error('Error fetching orders:', error);
         content.innerHTML = '<p class="text-red-500">Failed to load orders.</p>';
     }
 }
 
 
-// ✅ Live Update Order Status Without Refresh
 async function updateOrderStatus(orderId, currentStatus) {
     if (currentStatus === 'completed') {
-        console.log('✅ Order is already completed. No further updates allowed.');
         return;
     }
-
-    // ✅ Correct Order Status Flow: Pending → Processing → Completed
     let newStatus;
     if (currentStatus === 'pending') {
         newStatus = 'processing';
     } else if (currentStatus === 'processing') {
         newStatus = 'completed';
     } else {
-        console.warn('⚠️ Unknown status update request:', currentStatus);
+        console.warn('Unknown status update request:', currentStatus);
         return;
     }
 
-    console.log(`🔄 Updating Order ID ${orderId}: ${currentStatus} → ${newStatus}`);
 
     try {
-        const response = await fetch(`http://localhost:3000/admin/orders/${orderId}`, {
+        const response = await fetch(`https://shopright.onrender.com/admin/orders/${orderId}`, {
             method: 'PATCH',
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ orderStatus: newStatus }), // ✅ Send newStatus
+            body: JSON.stringify({ orderStatus: newStatus }),
         });
 
         if (response.ok) {
-            console.log(`✅ Order ID ${orderId} updated to ${newStatus}`);
-
-            // ✅ Instantly Update Status in the Table
             const row = document.querySelector(`[data-order-id="${orderId}"]`);
             if (row) {
                 const statusCell = row.querySelector('.status-cell');
@@ -635,7 +622,7 @@ async function updateOrderStatus(orderId, currentStatus) {
                         : `<span class="text-blue-600 font-bold">🔄 Processing</span>`;
                 }
 
-                // ✅ Change Proceed Button Text & Disable on Completion
+
                 const proceedButton = row.querySelector('.proceed-btn');
                 if (proceedButton) {
                     if (newStatus === 'completed') {
@@ -647,8 +634,6 @@ async function updateOrderStatus(orderId, currentStatus) {
                     }
                 }
             }
-
-            // ✅ Instantly Update Status in Popup (if open)
             const popup = document.getElementById('orderPopup');
             if (popup) {
                 const popupStatus = popup.querySelector('.popup-status');
@@ -658,7 +643,6 @@ async function updateOrderStatus(orderId, currentStatus) {
                         : `<span class="text-blue-600 font-bold">🔄 Processing</span>`;
                 }
 
-                // ✅ Disable Proceed Button in Popup if Completed
                 const proceedButton = popup.querySelector('.proceed-btn');
                 if (proceedButton) {
                     if (newStatus === 'completed') {
@@ -673,42 +657,38 @@ async function updateOrderStatus(orderId, currentStatus) {
 
         } else {
             const errorMessage = await response.text();
-            console.error('❌ Failed to update order status:', errorMessage);
+            console.error('Failed to update order status:', errorMessage);
         }
     } catch (error) {
-        console.error('❌ Error updating order status:', error);
+        console.error('Error updating order status:', error);
     }
 }
 
-/// ✅ Fetch & Display Order Details in Popup (Live Status Change)
+
 async function openOrderPopup(orderId, currentStatus) {
     const modal = document.createElement('div');
     modal.id = 'orderPopup';
     modal.className = 'fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50';
 
     try {
-        const response = await fetch(`http://localhost:3000/admin/orders/${orderId}`, {
+        const response = await fetch(`https://shopright.onrender.com/admin/orders/${orderId}`, {
             method: 'GET',
             headers: { 'Authorization': `Bearer ${token}` },
         });
 
         if (!response.ok) {
             const errorMessage = await response.text();
-            console.error('❌ Error fetching order details:', errorMessage);
-            alert('⚠️ Failed to fetch order details.');
+            console.error('Error fetching order details:', errorMessage);
+            alert('Failed to fetch order details.');
             return;
         }
 
         const order = await response.json();
-
-        // ✅ Generate Popup Content (Live Updates)
         modal.innerHTML = `
     <div class="bg-white p-8 rounded-lg shadow-2xl w-full sm:w-3/4 lg:w-2/3 max-w-4xl h-[90vh] overflow-hidden flex flex-col transition-all duration-300">
         <h2 class="text-3xl font-semibold text-center mb-6 text-indigo-600">📜 Order Details</h2>
 
-        <!-- ✅ Scrollable content area -->
         <div class="overflow-y-auto flex-grow pb-4">
-            <!-- ✅ Customer Information -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 bg-gray-50 p-4 rounded-lg">
                 <div class="space-y-4">
                     <p><strong class="font-medium">👤 Customer Name:</strong> ${order.name || 'N/A'}</p>
@@ -739,14 +719,11 @@ async function openOrderPopup(orderId, currentStatus) {
                 </div>
             </div>
 
-            <!-- ✅ Delivery Address -->
             <div class="mt-6 bg-gray-100 p-4 rounded-lg">
                 <h3 class="text-lg font-semibold text-indigo-600">📍 Shipping Information</h3>
                 <p><strong class="font-medium">🏠 Address:</strong> ${order.address || 'Not Provided'}</p>
                 <p><strong class="font-medium">🚚 Delivery Method:</strong> ${order.deliveryMethod || 'Standard'}</p>
             </div>
-
-            <!-- ✅ Order Summary -->
             <div class="mt-6">
                 <h3 class="text-lg font-semibold text-indigo-600">🛒 Order Summary</h3>
                 <div class="overflow-x-auto">
@@ -772,8 +749,6 @@ async function openOrderPopup(orderId, currentStatus) {
                     </table>
                 </div>
             </div>
-
-            <!-- ✅ Financial Summary -->
             <div class="mt-6 p-4 bg-gray-50 rounded-lg">
                 <p><strong class="font-medium">💲 Subtotal:</strong> KSh ${(order.subtotal || 0).toFixed(2)}</p>
                 <p><strong class="font-medium">💵 Tax:</strong> KSh ${(order.tax || 0).toFixed(2)}</p>
@@ -782,7 +757,6 @@ async function openOrderPopup(orderId, currentStatus) {
             </div>
         </div>
 
-        <!-- ✅ Action Buttons -->
         <div class="mt-6 flex justify-end space-x-6">
             ${
                 order.orderStatus === 'completed'
@@ -802,13 +776,11 @@ async function openOrderPopup(orderId, currentStatus) {
 
         document.body.appendChild(modal);
     } catch (error) {
-        console.error('❌ Error fetching order details:', error);
-        alert('⚠️ Failed to load order details.');
+        console.error('Error fetching order details:', error);
+        alert('Failed to load order details.');
     }
 }
 
-
-// Close Popup
 function closePopup() {
     const popup = document.getElementById('orderPopup');
     if (popup) popup.remove();
@@ -819,7 +791,7 @@ function closePopup() {
   content.innerHTML = '<h2 class="text-xl font-bold">User Details</h2><p>Loading user details...</p>';
 
   try {
-    const response = await fetch(`http://localhost:3000/admin/users?page=${page}&limit=10`, {
+    const response = await fetch(`https://shopright.onrender.com/admin/users?page=${page}&limit=10`, {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
     });
@@ -926,7 +898,7 @@ async function toggleUserStatus(userId, currentStatus) {
   const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
 
   try {
-    const response = await fetch(`http://localhost:3000/admin/users/${userId}/status`, {
+    const response = await fetch(`https://shopright.onrender.com/admin/users/${userId}/status`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -936,7 +908,7 @@ async function toggleUserStatus(userId, currentStatus) {
     });
 
     if (response.ok) {
-      openUserDetailsTable(); // Refresh user list
+      openUserDetailsTable();
     } else {
       const errorText = await response.text();
       console.error('Error updating user status:', errorText);
@@ -953,7 +925,7 @@ async function deleteUser(userId) {
   if (!confirm('Are you sure you want to delete this user?')) return;
 
   try {
-    const response = await fetch(`http://localhost:3000/admin/users/${userId}`, {
+    const response = await fetch(`https://shopright.onrender.com/admin/users/${userId}`, {
       method: 'DELETE',
       headers: { 'Authorization': `Bearer ${token}` },
     });
@@ -998,7 +970,7 @@ async function fetchAndRenderSalesReports() {
     salesReportsContainer.innerHTML = ''; // Clear previous content
 
     try {
-        const response = await fetch('http://localhost:3000/admin/sales-reports');
+        const response = await fetch('https://shopright.onrender.com/admin/sales-reports');
         if (!response.ok) throw new Error('Failed to fetch sales reports data');
         const data = await response.json();
 
@@ -1086,16 +1058,13 @@ function renderRetentionChart(data) {
     });
 }
 
-// Function to handle section switching
-function openSection(sectionId, fetchFunction = null) {
-    console.log(`Opening section: ${sectionId}`); // Debugging
 
-    // Hide all other sections
+function openSection(sectionId, fetchFunction = null) {
+
     document.querySelectorAll('.dynamic-section').forEach((section) => {
         section.classList.add('hidden'); // Hide all existing dynamic sections
     });
 
-    // Check if the section already exists; if not, create it
     let sectionContainer = document.getElementById(sectionId);
     if (!sectionContainer) {
         sectionContainer = document.createElement('div');
@@ -1104,13 +1073,11 @@ function openSection(sectionId, fetchFunction = null) {
         document.getElementById('main-content').appendChild(sectionContainer);
     }
 
-    // Show the selected section
-    sectionContainer.classList.remove('hidden'); // Make the section visible
+    sectionContainer.classList.remove('hidden');
 
-    // If a fetch function is provided, fetch and render the content
     if (fetchFunction) {
-        sectionContainer.innerHTML = ''; // Clear previous content
-        fetchFunction(sectionContainer); // Call the fetch function to load data
+        sectionContainer.innerHTML = '';
+        fetchFunction(sectionContainer);
     }
 }
 
@@ -1118,13 +1085,13 @@ function openSection(sectionId, fetchFunction = null) {
 function openCustomerReports() {
     const container = document.getElementById('customer-reports');
     container.innerHTML = '<p>Loading Customer Reports...</p>';
-    // Fetch and render customer reports here
+
 }
 
 async function openProductReports() {
     const container = document.getElementById('product-reports');
     container.innerHTML = '<p>Loading Product Reports...</p>';
-    // Fetch and render product reports here
+
 }
 
 
@@ -1155,7 +1122,7 @@ async function openProducts() {
     contentArea.innerHTML = '<h2 class="text-2xl font-bold mb-6">All Products</h2>';
 
     try {
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('https://shopright.onrender.com/api/products');
         const products = await response.json();
 
         const productGrid = document.createElement('div');
@@ -1168,7 +1135,7 @@ async function openProducts() {
                 <div class="flex flex-col items-center">
                     ${
                         product.images && product.images.length > 0
-                            ? `<img src="http://localhost:3000/${product.images[0]}" alt="${product.name}" class="w-20 h-20 object-cover rounded-md mb-2" />`
+                            ? `<img src="https://shopright.onrender.com/${product.images[0]}" alt="${product.name}" class="w-20 h-20 object-cover rounded-md mb-2" />`
                             : '<div class="w-20 h-20 bg-gray-300 rounded-md mb-2"></div>'
                     }
                     <h3 class="font-semibold text-center">${product.name}</h3>
@@ -1325,7 +1292,7 @@ async function openAddProduct() {
         }
 
         try {
-            const response = await fetch('http://localhost:3000/api/products', {
+            const response = await fetch('https://shopright.onrender.com/api/products', {
                 method: 'POST',
                 body: formData,
             });
@@ -1356,7 +1323,7 @@ function generateSlug(name) {
 // Fetch and populate promotional tags
 async function fetchAndPopulatePromotionalTags() {
     try {
-        const response = await fetch('http://localhost:3000/api/promotional-tags');
+        const response = await fetch('https://shopright.onrender.com/api/promotional-tags');
         if (!response.ok) {
             throw new Error(`Failed to fetch promotional tags: ${response.statusText}`);
         }
@@ -1382,7 +1349,7 @@ async function fetchAndPopulatePromotionalTags() {
 
 async function fetchAndPopulateCategories() {
     try {
-        const response = await fetch('http://localhost:3000/api/categories'); // Adjust endpoint
+        const response = await fetch('https://shopright.onrender.com/api/categories'); // Adjust endpoint
         if (!response.ok) {
             throw new Error(`Failed to fetch categories: ${response.statusText}`);
         }
@@ -1421,7 +1388,7 @@ async function fetchAndPopulateSubcategories(categoryId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:3000/api/subcategories?categoryId=${categoryId}`);
+        const response = await fetch(`https://shopright.onrender.com/api/subcategories?categoryId=${categoryId}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch subcategories: ${response.statusText}`);
         }
@@ -1597,7 +1564,7 @@ async function displayProductsByCategory(categoryId) {
     contentArea.innerHTML = `<h2 class="text-2xl font-bold mb-4">Products</h2>`;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/categories/${categoryId}/products`);
+        const response = await fetch(`https://shopright.onrender.com/api/categories/${categoryId}/products`);
         const products = await response.json();
 
         if (!Array.isArray(products) || products.length === 0) {
@@ -1613,7 +1580,7 @@ async function displayProductsByCategory(categoryId) {
             productCard.className = 'bg-white shadow-md rounded-lg p-4';
 
             productCard.innerHTML = `
-                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <img src="${product.images && product.images[0] ? `https://shopright.onrender.com/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
                 <h3 class="font-semibold">${product.name}</h3>
                 <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
                 <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
@@ -1673,7 +1640,7 @@ async function openSubCategories() {
 
     try {
         // Fetch and display subcategories
-        const subcategoryResponse = await fetch('http://localhost:3000/api/subcategories');
+        const subcategoryResponse = await fetch('https://shopright.onrender.com/api/subcategories');
         const subcategories = await subcategoryResponse.json();
 
         const subcategoriesList = document.getElementById('subcategories-list');
@@ -1699,7 +1666,7 @@ async function openSubCategories() {
 
                 try {
                     // Fetch the products in this subcategory first
-                    const productResponse = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}/products`);
+                    const productResponse = await fetch(`https://shopright.onrender.com/api/subcategories/${subcategoryId}/products`);
                     const products = await productResponse.json();
 
                     if (products.length > 0) {
@@ -1709,7 +1676,7 @@ async function openSubCategories() {
 
                     // Disassociate products from the subcategory by updating them
                     for (const product of products) {
-                        await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                        await fetch(`https://shopright.onrender.com/api/products/${product._id}`, {
                             method: 'PUT',
                             headers: { 'Content-Type': 'application/json' },
                             body: JSON.stringify({ subcategoryId: null }) // Remove subcategory association
@@ -1717,7 +1684,7 @@ async function openSubCategories() {
                     }
 
                     // Proceed to delete the subcategory
-                    const response = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}`, {
+                    const response = await fetch(`https://shopright.onrender.com/api/subcategories/${subcategoryId}`, {
                         method: 'DELETE',
                     });
 
@@ -1743,7 +1710,7 @@ async function openSubCategories() {
         });
 
         // Fetch categories to populate the category dropdown
-        const categoryResponse = await fetch('http://localhost:3000/api/categories');
+        const categoryResponse = await fetch('https://shopright.onrender.com/api/categories');
         const categories = await categoryResponse.json();
         const categorySelect = document.getElementById('subcategory-category');
 
@@ -1765,7 +1732,7 @@ async function openSubCategories() {
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/api/subcategories', {
+            const response = await fetch('https://shopright.onrender.com/api/subcategories', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, categoryId })
@@ -1795,7 +1762,7 @@ async function displayProductsBySubcategory(subcategoryId) {
     contentArea.innerHTML = `<h2 class="text-2xl font-bold mb-4">Products</h2>`;
 
     try {
-        const response = await fetch(`http://localhost:3000/api/subcategories/${subcategoryId}/products`);
+        const response = await fetch(`https://shopright.onrender.com/api/subcategories/${subcategoryId}/products`);
         const products = await response.json();
 
         if (!Array.isArray(products) || products.length === 0) {
@@ -1811,7 +1778,7 @@ async function displayProductsBySubcategory(subcategoryId) {
             productCard.className = 'bg-white shadow-md rounded-lg p-4 cursor-pointer';
 
             productCard.innerHTML = `
-                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <img src="${product.images && product.images[0] ? `https://shopright.onrender.com/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
                 <h3 class="font-semibold">${product.name}</h3>
                 <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
                 <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
@@ -1868,7 +1835,7 @@ async function openPromotionalTags() {
 
     try {
         // Fetch and display promotional tags
-        const response = await fetch('http://localhost:3000/api/promotional-tags');
+        const response = await fetch('https://shopright.onrender.com/api/promotional-tags');
         const promotionalTags = await response.json();
 
         const promotionalTagsList = document.getElementById('promotional-tags-list');
@@ -1911,7 +1878,7 @@ async function openPromotionalTags() {
                 return;
             }
 
-            const response = await fetch('http://localhost:3000/api/promotional-tags', {
+            const response = await fetch('https://shopright.onrender.com/api/promotional-tags', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name })
@@ -1943,7 +1910,7 @@ async function displayProductsByPromotionalTag(tagId) {
 
     try {
         // Fetch products associated with the promotional tag
-        const response = await fetch(`http://localhost:3000/api/promotional-tags/${tagId}/products`);
+        const response = await fetch(`https://shopright.onrender.com/api/promotional-tags/${tagId}/products`);
         const products = await response.json();
 
         console.log('Products fetched:', products);  // Log fetched products
@@ -1962,7 +1929,7 @@ async function displayProductsByPromotionalTag(tagId) {
             productCard.className = 'bg-white shadow-md rounded-lg p-4 cursor-pointer';
 
             productCard.innerHTML = `
-                <img src="${product.images && product.images[0] ? `http://localhost:3000/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
+                <img src="${product.images && product.images[0] ? `https://shopright.onrender.com/${product.images[0]}` : 'placeholder-image.jpg'}" alt="${product.name}" class="w-full h-40 object-cover rounded mb-4">
                 <h3 class="font-semibold">${product.name}</h3>
                 <p class="text-sm text-gray-500">${product.description ? product.description.substring(0, 50) : 'No description'}...</p>
                 <p class="text-sm text-blue-500 font-semibold">$${product.price ? product.price.toFixed(2) : 'N/A'}</p>
@@ -2104,7 +2071,7 @@ selectedTags.forEach(tagId => formData.append('promotionalTags[]', tagId));
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/api/products/${product._id}`, {
+            const response = await fetch(`https://shopright.onrender.com/api/products/${product._id}`, {
                 method: 'PUT',
                 body: formData,
             });
@@ -2131,7 +2098,7 @@ selectedTags.forEach(tagId => formData.append('promotionalTags[]', tagId));
     document.getElementById('delete-product').addEventListener('click', async () => {
         if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
             try {
-                const response = await fetch(`http://localhost:3000/api/products/${product._id}`, {
+                const response = await fetch(`https://shopright.onrender.com/api/products/${product._id}`, {
                     method: 'DELETE',
                 });
 
@@ -2153,7 +2120,7 @@ selectedTags.forEach(tagId => formData.append('promotionalTags[]', tagId));
 
 async function fetchAndPopulateCategories(selectedCategoryId) {
     // Fetch categories from API
-    const response = await fetch('http://localhost:3000/api/categories');
+    const response = await fetch('https://shopright.onrender.com/api/categories');
     const categories = await response.json();
     const categorySelect = document.getElementById('product-category');
 
@@ -2170,7 +2137,7 @@ async function fetchAndPopulateCategories(selectedCategoryId) {
 
 async function fetchAndPopulateSubcategories(selectedSubcategoryId) {
     // Fetch subcategories from API
-    const response = await fetch('http://localhost:3000/api/subcategories');
+    const response = await fetch('https://shopright.onrender.com/api/subcategories');
     const subcategories = await response.json();
     const subcategorySelect = document.getElementById('product-subcategory');
 
@@ -2187,7 +2154,7 @@ async function fetchAndPopulateSubcategories(selectedSubcategoryId) {
 
 async function fetchAndPopulatePromotionalTags(selectedTags = []) {
     // Fetch promotional tags from API
-    const response = await fetch('http://localhost:3000/api/promotional-tags');
+    const response = await fetch('https://shopright.onrender.com/api/promotional-tags');
     const tags = await response.json();
     const tagsSelect = document.getElementById('product-tags');
 

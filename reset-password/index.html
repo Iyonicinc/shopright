@@ -35,7 +35,6 @@
 </form>
 
 <script>
-  const BASE_API_URL = "http://localhost:3000";
 
   document.getElementById('resetPasswordForm').addEventListener('submit', async function (e) {
       e.preventDefault();
@@ -54,7 +53,7 @@
       }
 
       try {
-          const response = await fetch(`${BASE_API_URL}/api/reset-password/${token}`, {
+          const response = await fetch(`https://shopright.onrender.com/api/reset-password/${token}`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ password }),
