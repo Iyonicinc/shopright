@@ -497,11 +497,15 @@ app.get('/debug/admin', async (_req, res) => {
   res.json({ email: admin.email, role: admin.role, status: admin.status });
 });
 
-// MongoDB Connection
-mongoose.connect('mongodb://localhost:27017/Shopright').then(() => console.log('MongoDB connected'))
+const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/Shopright';
+
+mongoose.connect(dbURI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });
