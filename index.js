@@ -504,7 +504,8 @@ const dbURI = process.env.MONGODB_URI || 'mongodb+srv://iyoniccollections:Karani
 // Connect to MongoDB using Mongoose
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  serverSelectionTimeoutMS: 50000
 })
 .then(() => {
   console.log('MongoDB connected successfully');
