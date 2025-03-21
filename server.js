@@ -501,7 +501,7 @@ app.get('/debug/admin', async (_req, res) => {
 mongoose.connect('mongodb://localhost:27017/Shopright').then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
