@@ -497,14 +497,23 @@ app.get('/debug/admin', async (_req, res) => {
   res.json({ email: admin.email, role: admin.role, status: admin.status });
 });
 
-const dbURI = process.env.MONGODB_URI || 'mongodb+srv://iyoniccollections:Karani12@cluster1.wd7sr.mongodb.net/shopright';
 
+
+const dbURI = process.env.MONGODB_URI || 'mongodb+srv://iyoniccollections:Karani@shopright.yxrgk.mongodb.net/?retryWrites=true&w=majority&appName=Shopright';
+
+// Connect to MongoDB using Mongoose
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB connection error:', err));
+})
+.then(() => {
+  console.log('MongoDB connected successfully');
+})
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+});
 
+// Your app logic (server setup, routes, etc.)
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
