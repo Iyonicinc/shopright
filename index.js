@@ -497,7 +497,7 @@ app.get('/debug/admin', async (_req, res) => {
   res.json({ email: admin.email, role: admin.role, status: admin.status });
 });
 
-const dbURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/Shopright';
+const dbURI = process.env.MONGODB_URI || 'mongodb+srv://iyoniccollections:Karani12@cluster1.wd7sr.mongodb.net/shopright';
 
 mongoose.connect(dbURI, {
   useNewUrlParser: true,
