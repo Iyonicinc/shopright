@@ -118,16 +118,18 @@
         <img src="/img/Logo.png" alt="Logo" class="h-10">
       </a>
   
-      <!-- Middle Section: Search Bar (Visible on md+ screens) -->
-      <div class="hidden md:flex flex-grow justify-center">
-        <div class="flex border border-gray-300 rounded-lg w-2/3 lg:w-1/2">
-          <input type="text" placeholder="Search products..." 
-                 class="w-full p-3 rounded-l-lg focus:outline-none">
-          <button class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
+<!-- Middle Section: Search Bar -->
+<div class="hidden md:flex flex-grow justify-center relative">
+    <div class="flex border border-gray-300 rounded-lg w-2/3 lg:w-1/2 relative">
+        <input id="search-input" type="text" placeholder="Search products..." 
+               class="w-full p-3 rounded-l-lg focus:outline-none">
+        <button id="search-btn" class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
             <i class="fas fa-search"></i>
-          </button>
-        </div>
-      </div>
+        </button>
+    </div>
+    <!-- Search Results Dropdown -->
+    <div id="search-results" class="absolute top-full left-0 w-full bg-white shadow-md rounded-lg p-3 hidden"></div>
+  </div>
   
       <!-- Right Section: Icons -->
       <div class="flex items-center space-x-4">
@@ -156,15 +158,18 @@
     </ul>
   </div>  
   
-    <!-- Mobile Search Bar (Initially Hidden) -->
-    <div id="mobileSearch" class="hidden bg-white p-3 w-full fixed top-16 left-0 shadow-md">
-      <div class="flex border border-gray-300 rounded-lg">
-        <input type="text" placeholder="Search products..." class="w-full p-3 rounded-l-lg focus:outline-none">
-        <button class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
+  <!-- Mobile Search Bar (Initially Hidden) -->
+  <div id="mobileSearch" class="hidden bg-white p-3 w-full fixed top-16 left-0 shadow-md">
+    <div class="flex border border-gray-300 rounded-lg">
+      <input id="mobile-search-input" type="text" placeholder="Search products..." 
+      class="w-full p-3 rounded-l-lg focus:outline-none">
+      <button id="mobile-search-btn" class="bg-yellow-400 px-6 py-3 rounded-r-lg text-white">
+        <i class="fas fa-search"></i>
+      </button>
     </div>
+     <!-- 🔽 Mobile Search Results Dropdown -->
+    <div id="mobile-search-results" class="absolute bg-white shadow-md rounded-lg p-3 w-full hidden"></div>
+  </div>
   </header>
     
 
@@ -317,7 +322,101 @@ bg-gradient-to-r from-green-50 to-green-100 border border-green-200">
     <h3 class="text-xl font-bold text-gray-800 mb-4">✨ You May Also Like</h3>
     <div id="you-may-like" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
 </section>
+
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const searchInput = document.getElementById("search-input"); // Desktop Search Input
+        const searchButton = document.getElementById("search-btn");
+        const resultsContainer = document.getElementById("search-results"); // Desktop Search Results
+    
+        const mobileSearchInput = document.getElementById("mobile-search-input"); // Mobile Search Input
+        const mobileSearchButton = document.getElementById("mobile-search-btn");
+        const mobileResultsContainer = document.getElementById("mobile-search-results"); // Mobile Search Results
+    
+        // ✅ Fetch Products from LocalStorage
+        function getProducts() {
+            return JSON.parse(localStorage.getItem("productData")) || {};
+        }
+    
+        // ✅ Convert products into a searchable array
+        function getAllProducts() {
+            const products = getProducts();
+            let allItems = [];
+            for (const category in products) {
+                allItems = allItems.concat(products[category]); // Merge all category items
+            }
+            return allItems;
+        }
+    
+        // ✅ Universal Search Function (Now Includes Images)
+        function displayResults(inputElement, resultsContainer) {
+            const input = inputElement.value.trim().toLowerCase();
+            resultsContainer.innerHTML = ""; // Clear previous results
+    
+            if (!input) {
+                resultsContainer.innerHTML = `<p class="text-gray-500 p-2">Start typing to search...</p>`;
+                resultsContainer.classList.remove("hidden");
+                return;
+            }
+    
+            const allItems = getAllProducts();
+            const filteredItems = allItems.filter(item => 
+                item.name.toLowerCase().includes(input) || 
+                item.category.toLowerCase().includes(input)
+            );
+    
+            if (filteredItems.length > 0) {
+                filteredItems.forEach(item => {
+                    const itemElement = document.createElement("a");
+                    itemElement.href = `./product?product=${item.id}`;
+                    itemElement.classList.add("search-item", "flex", "items-center", "p-2", "hover:bg-gray-100", "cursor-pointer");
+    
+                    itemElement.innerHTML = `
+                        <img src="${item.image}" class="w-12 h-12 object-cover rounded mr-3" alt="${item.name}">
+                        <div>
+                            <h4 class="text-sm font-semibold">${item.name}</h4>
+                            <p class="text-red-500 font-bold">KSh ${item.price.toLocaleString()}</p>
+                        </div>
+                    `;
+    
+                    resultsContainer.appendChild(itemElement);
+                });
+            } else {
+                resultsContainer.innerHTML = `<p class="text-red-500 p-2">No matches found.</p>`;
+            }
+    
+            resultsContainer.classList.remove("hidden");
+        }
+    
+        // ✅ Event Listeners for Desktop
+        searchButton.addEventListener("click", function () {
+            displayResults(searchInput, resultsContainer);
+        });
+    
+        searchInput.addEventListener("input", function () {
+            displayResults(searchInput, resultsContainer);
+        });
+    
+        // ✅ Event Listeners for Mobile
+        mobileSearchButton.addEventListener("click", function () {
+            displayResults(mobileSearchInput, mobileResultsContainer);
+        });
+    
+        mobileSearchInput.addEventListener("input", function () {
+            displayResults(mobileSearchInput, mobileResultsContainer);
+        });
+    
+        // ✅ Hide results when clicking outside (For Both Desktop & Mobile)
+        document.addEventListener("click", function (event) {
+            if (!searchInput.contains(event.target) && !resultsContainer.contains(event.target)) {
+                resultsContainer.classList.add("hidden");
+            }
+            if (!mobileSearchInput.contains(event.target) && !mobileResultsContainer.contains(event.target)) {
+                mobileResultsContainer.classList.add("hidden");
+            }
+        });
+    });
+    
 document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = urlParams.get("product"); // Get product ID from URL
