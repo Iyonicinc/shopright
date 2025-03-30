@@ -26,6 +26,7 @@
 
 <body class="bg-gray-100 overflow-x-hidden">
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+
 <script src="products.js"></script>
 
 
@@ -112,7 +113,7 @@
     
     <!-- Logo -->
     <a href="/" class="flex items-center">
-      <img src="/img/Logo.png" alt="Logo" class="h-10">
+      <img src="img/Logo.png" alt="Logo" class="h-10">
     </a>
 
 <!-- Middle Section: Search Bar -->
@@ -240,37 +241,23 @@
   </button>
 </div>
 
+
 <!-- JavaScript for Sidebar Interactions -->
 <script>
   let hideTimeout = null;
 
 document.addEventListener("DOMContentLoaded", function () {
-    const searchToggle = document.getElementById("searchToggle");
-    const mobileSearch = document.getElementById("mobileSearch");
     const toggleCategories = document.getElementById("toggleCategories");
     const categoriesSidebar = document.getElementById("categoriesSidebar");
     const sidebarBar = document.getElementById("sidebarBar");
     const subcategoriesContainer = document.getElementById("subcategoriesContainer");
     const subcategoryList = document.getElementById("subcategoryList");
 
-    // ✅ Search Bar Toggle for Small Screens
-    searchToggle.addEventListener("click", function () {
-        mobileSearch.classList.toggle("hidden");
-        categoriesSidebar.classList.add("hidden"); // Hide categories when search is open
-        sidebarBar.classList.remove("hidden");
-    });
-
-    // ✅ Close search bar when clicking outside
-    document.addEventListener("click", function (event) {
-        if (!mobileSearch.contains(event.target) && !searchToggle.contains(event.target)) {
-            mobileSearch.classList.add("hidden");
-        }
-    });
 
     // ✅ Subcategory Data
     const subcategories = {
         "laptops": ["Dell Laptops", "HP Laptops", "MacBooks", "Gaming Laptops", "Business Laptops", "All-in-One PCs"],
-        "smartphones": ["Smartphones", "Feature Phones", "Tablets", "Tablet Accessories", "Mobile Accessories"],
+        "smartphones": ["Smartphones", "Tablets", "Tablet Accessories", "Mobile Accessories"],
         "audio-headphones": ["Wireless Earbuds", "Over-Ear Headphones", "Bluetooth Speakers", "Home Theater Systems", "Soundbars"],
         "televisions-video": ["Smart TVs", "4K Ultra HD TVs", "LED TVs", "Projectors", "TV Accessories"],
         "power-batteries": ["Power Banks", "UPS & Surge Protectors", "Laptop Batteries", "Rechargeable Batteries", "Solar Chargers"],
@@ -347,111 +334,321 @@ document.addEventListener("DOMContentLoaded", function () {
 
 </script>
 
-<!-- Hero Section (Pushed Below the Header) -->
-<section class=" bg-gradient-to-br from-blue-900 to-blue-800 h-screen flex items-center justify-center pt-20 md:pt-20">
-        <style>
-            /* Hover effect for images */
-            .glow-hover:hover {
-                transform: scale(1.05);
-                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 15px rgba(255, 255, 255, 0.3);
-            }
-    
-            /* Large image style */
-            .image-large {
-                width: 20rem;
-                border-radius: 20px;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-    
-            /* Small image style */
-            .image-small {
-                width: 14rem;
-                border-radius: 16px;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
-            }
-    
-            /* Hover animations */
-            .image-large:hover, .image-small:hover {
-                transform: scale(1.08);
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            }
-    
-            /* Light streak effect */
-            .light-streak {
-                background: linear-gradient(to right, rgba(0, 255, 255, 0.7), rgba(255, 255, 255, 0.1));
-                filter: blur(2px);
-                transform: rotate(-45deg);
-                animation: streak-animation 4s infinite alternate;
-            }
-    
-            @keyframes streak-animation {
-                from {
-                    transform: translateX(-100px) rotate(-45deg);
-                }
-                to {
-                    transform: translateX(100px) rotate(-45deg);
-                }
-            }
-    
-            /* Background dot pattern */
-            .dot-pattern {
-                background-image: radial-gradient(white 1px, transparent 1px);
-                background-size: 10px 10px;
-                opacity: 0.2;
-            }
-        </style>
->
-           <!-- Hero Section Container -->
-        <div class="relative max-w-7xl w-full px-8 lg:px-16 flex flex-col md:flex-row items-center justify-between space-y-12 md:space-y-0">
-    
-            <!-- Text Section -->
-            <div class="text-white space-y-6 max-w-lg">
-                <h1 class="text-5xl md:text-6xl font-extrabold leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-yellow-500 drop-shadow-lg">
-                    Elevate Your Audio Experience
-                </h1>
-                <p class="text-lg md:text-xl text-indigo-200 leading-relaxed tracking-wide">
-                    Discover the finest earphones for your sound journey.
-                </p>
-                <a href="#" class="inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-medium shadow-lg transform hover:scale-105 transition duration-300 ease-in-out">
-                    Explore Now
+
+<section class="relative bg-white min-h-screen flex flex-col justify-center items-center px-6 text-center pt-20">
+
+    <!-- ✅ Light Background Texture for Depth -->
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/asfalt-light.png')] opacity-10"></div>
+
+    <!-- ✅ Main Content Section -->
+    <div class="relative max-w-5xl space-y-6 px-4">
+        <h1 class="text-4xl sm:text-4xl md:text-4xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-wide uppercase">
+            The Future of Sound.
+        </h1>
+
+    </div>
+
+    <!-- ✅ Main Product Image -->
+    <div class="mt-10 max-w-3xl md:max-w-4xl relative">
+        <img src="https://cdn-img.oraimo.com/2025/01/14/1920-820.jpg" 
+             alt="Premium Headphones" 
+             class="w-full rounded-lg shadow-lg">
+    </div>
+    <p class="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600">
+        Next-Gen Noise Cancellation & 50 Hours of Pure Audio Bliss.
+    </p>
+            <!-- 🛒 Call to Action -->
+            <div class="mt-6">
+                <a href="#" class="px-6 sm:px-8 md:px-10 py-4 sm:py-5 bg-black text-white rounded-full text-lg sm:text-xl md:text-2xl font-semibold shadow-lg transition hover:scale-105">
+                    🎧 Get Yours Now
                 </a>
             </div>
-    
-            <!-- Headphones Section (Images) -->
-            <div class="relative w-full flex justify-between items-center">
-                <!-- Large Image positioned on the left -->
-                <div class="absolute left-0 top-20 glow-hover">
-                    <img src="https://multimedia.bbycastatic.ca/multimedia/products/400x400/171/17160/17160835.jpg" alt="Headphone 1" class="image-large">
-                </div>
-    
-                <!-- Small Image positioned on the right -->
-                <div class="absolute right-0 bottom-24 glow-hover">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSE3qd_-ihpRF-0wxJ66dblY0mSy3LB6tYyU9qmb7M_cQWFPquzB0a3Fw2raZopCYaeaEc&usqp=CAU" alt="Headphone 2" class="image-small">
-                </div>
-            </div>
-    
-            <!-- Light Streaks and Background Dot Patterns -->
-            <div class="absolute top-10 left-0 w-80 h-1 light-streak"></div>
-            <div class="absolute bottom-10 right-0 w-80 h-1 light-streak"></div>
-            <div class="absolute top-1/3 right-1/4 w-64 h-64 dot-pattern"></div>
-        </div>
-    
-</section>
 
-<div class="bg-green-500 text-white flex justify-between items-center">
-  <!--  Top Deals Section -->
-  <div class="bg-green-500 text-center py-0 rounded">
-    <h1 class="hidden lg:flex md:flex text-xl font-bold mr-10 p-2 text-white">Top Deals on Phones | UpTo 40% Off</h1> 
-  <h1 class="md:hidden flex font-bold text-md bg-green-500 text-white">Top Deals on Phones</h1>
-    <h2 class="md:hidden flex font-semibold text-sm text-white">UpTo 40% Off</h2>
-  </div>
-<!-- See All Link -->
-<a href="#" class="hidden text-white hover:underline text-sm flex items-center pb-2 mr-4 font-semibold ml-2">
-  SEE ALL &gt;</a> 
-  <a href="#" class="hidden text-white hover:underline text-sm flex items-center pb-0 mr-4 font-semibold">
- SEE ALL &gt;</a>
+<!-- ✅ Large Image Product Showcase -->
+<div class="mt-12 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-6">
+
+    <!-- 🎧 Oraimo BoomBass 930N -->
+    <div class="relative group text-center">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Oraimo BoomBass 930N</h3>
+        <img src="https://cdn-img.oraimo.com/fit-in/600x600/KE/product/2025/01/13/OTW-930-821N.png" 
+             alt="Oraimo BoomBass 930N" 
+             class="w-full rounded-lg shadow-lg transition transform hover:scale-105">
+    </div>
+
+    <!-- 🔊 Oraimo AirBuds Pro 340 -->
+    <div class="relative group text-center">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Oraimo AirBuds Pro 340</h3>
+        <img src="https://cdn-img.oraimo.com/fit-in/600x600/AE/product/2024/02/06/OTW-340-680-1.png" 
+             alt="Oraimo AirBuds Pro 340" 
+             class="w-full rounded-lg shadow-lg transition transform hover:scale-105">
+    </div>
+
+    <!-- 🎧 Oraimo SoundPro 610 -->
+    <div class="relative group text-center">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Oraimo SoundPro 610</h3>
+        <img src="https://cdn-img.oraimo.com/fit-in/360x360/NG/album/ohp-610/ohp-610-black.png" 
+             alt="Oraimo SoundPro 610" 
+             class="w-full rounded-lg shadow-lg transition transform hover:scale-105">
+    </div>
+
+    <!-- 🎶 Oraimo BassBoost 105D -->
+    <div class="relative group text-center">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Oraimo BassBoost 105D</h3>
+        <img src="https://cdn-img.oraimo.com/fit-in/360x360/KE/product/2024/11/29/105D.png" 
+             alt="Oraimo BassBoost 105D" 
+             class="w-full rounded-lg shadow-lg transition transform hover:scale-105">
+    </div>
+
+    <!-- 🔋 Oraimo PowerBeats 5028 -->
+    <div class="relative group text-center">
+        <h3 class="text-xl font-semibold text-gray-900 mb-2">Oraimo PowerBeats 5028</h3>
+        <img src="https://cdn-img.oraimo.com/fit-in/360x360/KE/product/2024/11/16/IMG_5028.png" 
+             alt="Oraimo PowerBeats 5028" 
+             class="w-full rounded-lg shadow-lg transition transform hover:scale-105">
+    </div>
+
 </div>
 
+</section>
+
+<!-- ✅ Sound Collection Categories Section -->
+<section class="mt-12 px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-900">🔊 Discover the Ultimate Sound Experience</h2>
+    <p class="text-gray-600 mt-2">Choose from the best sound solutions for your lifestyle.</p>
+
+    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        
+        <!-- Wireless Earbuds -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://hips.hearstapps.com/hmg-prod/images/connect-wireless-earbuds-1665175548.jpg?crop=0.668xw:1.00xh;0.105xw,0&resize=640:*" 
+                     alt="Wireless Earbuds" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Wireless Earbuds
+                </h3>
+            </a>
+        </div>
+
+        <!-- Over-Ear Headphones -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://cdn-img.oraimo.com/fit-in/600x600/TZ/product/2023/12/13/OHP-610-680-4.jpg" 
+                     alt="Over-Ear Headphones" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Over-Ear Headphones
+                </h3>
+            </a>
+        </div>
+
+        <!-- Bluetooth Speakers -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/25/0978551/1.jpg?0775" 
+                     alt="Bluetooth Speakers" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Bluetooth Speakers
+                </h3>
+            </a>
+        </div>
+
+        <!-- Home Theater Systems -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://vistashop.co.ke/wp-content/uploads/2024/07/16941963419516073630b5a004e02810c303cae4850f9.webp" 
+                     alt="Home Theater Systems" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Home Theater Systems
+                </h3>
+            </a>
+        </div>
+
+        <!-- Soundbars -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://ke.jumia.is/unsafe/fit-in/300x300/filters:fill(white)/product/14/5612952/1.jpg?9101" 
+                     alt="Soundbars" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Soundbars
+                </h3>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
+
+<!-- ✅ Shop by Purpose Section -->
+<section class="mt-12 px-6">
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-8">Shop by Purpose</h2>
+    
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        
+        <!-- 🎧 Work & Productivity -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="https://images.pexels.com/photos/3184312/pexels-photo-3184312.jpeg" 
+                 alt="Work & Productivity" 
+                 class="w-full h-60 object-cover transition-transform group-hover:scale-105">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-4">
+                <h3 class="text-lg font-semibold">Work & Productivity</h3>
+                <p class="text-sm text-center mt-1">Laptops, Wireless Keyboards, Noise-Canceling Headphones</p>
+                <a href="#" class="mt-3 px-4 py-2 bg-white text-black rounded-lg text-sm font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 🎮 Gaming & Entertainment -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="https://images.pexels.com/photos/3165335/pexels-photo-3165335.jpeg" 
+                 alt="Gaming & Entertainment" 
+                 class="w-full h-60 object-cover transition-transform group-hover:scale-105">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-4">
+                <h3 class="text-lg font-semibold">Gaming & Entertainment</h3>
+                <p class="text-sm text-center mt-1">Gaming Headsets, 4K Monitors, VR Headsets</p>
+                <a href="#" class="mt-3 px-4 py-2 bg-white text-black rounded-lg text-sm font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- ✈️ Travel & Portability -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJZhztjT0i30NPl4R7hXSHTCPT0jKVoe4VCw&s" 
+                 alt="Travel & Portability" 
+                 class="w-full h-60 object-cover transition-transform group-hover:scale-105">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-4">
+                <h3 class="text-lg font-semibold">Travel & Portability</h3>
+                <p class="text-sm text-center mt-1">Wireless Earbuds, Power Banks, Bluetooth Speakers</p>
+                <a href="#" class="mt-3 px-4 py-2 bg-white text-black rounded-lg text-sm font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 🏡 Home & Smart Living -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT97hs8QPIiHyQayxLrAWObUCJBvwxkC4Xdfw&s" 
+                 alt="Home & Smart Living" 
+                 class="w-full h-60 object-cover transition-transform group-hover:scale-105">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-4">
+                <h3 class="text-lg font-semibold">Home & Smart Living</h3>
+                <p class="text-sm text-center mt-1">Smart TVs, Home Theaters, Security Cameras</p>
+                <a href="#" class="mt-3 px-4 py-2 bg-white text-black rounded-lg text-sm font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 🏃 Fitness & Sports -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition">
+            <img src="https://images.pexels.com/photos/4429107/pexels-photo-4429107.jpeg" 
+                 alt="Fitness & Sports" 
+                 class="w-full h-60 object-cover transition-transform group-hover:scale-105">
+            <div class="absolute inset-0 bg-black bg-opacity-40 flex flex-col items-center justify-center text-white p-4">
+                <h3 class="text-lg font-semibold">Fitness & Sports</h3>
+                <p class="text-sm text-center mt-1">Smartwatches, Sports Headphones, Fitness Trackers</p>
+                <a href="#" class="mt-3 px-4 py-2 bg-white text-black rounded-lg text-sm font-bold hover:bg-gray-200">Shop Now</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ✅ Top Picks by Category -->
+<section class="mt-12 px-6 bg-[#009688] py-12 rounded-lg shadow-md">
+    <h2 class="text-4xl font-extrabold text-center text-white mb-10 tracking-wide">🔥 Must-Have Phones by Category</h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+
+        <!-- 📷 Best Camera Phones -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition bg-white p-5">
+            <div class="flex justify-center">
+                <img src="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg" 
+                     alt="Best Camera Phones" 
+                     class="w-3/4 h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="text-center mt-5">
+                <h3 class="text-2xl font-bold text-gray-900">📷 Best Camera Phones</h3>
+                <p class="text-md text-gray-700 mt-2">Capture <span class="font-semibold text-black">stunning shots</span> with pro-grade lenses.</p>
+                <a href="#" class="mt-4 inline-block px-5 py-2 bg-gradient-to-r from-blue-500 to-blue-700 text-white text-md font-bold rounded-lg hover:opacity-90 transition-shadow shadow-md">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 🔋 Longest Battery Life -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition bg-white p-5">
+            <div class="flex justify-center">
+                <img src="https://images.pexels.com/photos/267394/pexels-photo-267394.jpeg" 
+                     alt="Longest Battery Life" 
+                     class="w-3/4 h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="text-center mt-5">
+                <h3 class="text-2xl font-bold text-gray-900">🔋 Longest Battery Life</h3>
+                <p class="text-md text-gray-700 mt-2">Stay powered all day with <span class="font-semibold text-black">massive batteries.</span></p>
+                <a href="#" class="mt-4 inline-block px-5 py-2 bg-gradient-to-r from-green-500 to-green-700 text-white text-md font-bold rounded-lg hover:opacity-90 transition-shadow shadow-md">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 🎮 Best Gaming Phones -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition bg-white p-5">
+            <div class="flex justify-center">
+                <img src="https://images.pexels.com/photos/3945654/pexels-photo-3945654.jpeg" 
+                     alt="Best Gaming Phones" 
+                     class="w-3/4 h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="text-center mt-5">
+                <h3 class="text-2xl font-bold text-gray-900">🎮 Best Gaming Phones</h3>
+                <p class="text-md text-gray-700 mt-2">High refresh rates & <span class="font-semibold text-black">powerful processors.</span></p>
+                <a href="#" class="mt-4 inline-block px-5 py-2 bg-gradient-to-r from-purple-500 to-purple-700 text-white text-md font-bold rounded-lg hover:opacity-90 transition-shadow shadow-md">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 💎 Premium Flagships -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition bg-white p-5">
+            <div class="flex justify-center">
+                <img src="https://images.pexels.com/photos/6078120/pexels-photo-6078120.jpeg" 
+                     alt="Premium Flagships" 
+                     class="w-3/4 h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="text-center mt-5">
+                <h3 class="text-2xl font-bold text-gray-900">💎 Premium Flagships</h3>
+                <p class="text-md text-gray-700 mt-2"><span class="font-semibold text-black">Elite design</span> with top-tier performance.</p>
+                <a href="#" class="mt-4 inline-block px-5 py-2 bg-gradient-to-r from-red-500 to-red-700 text-white text-md font-bold rounded-lg hover:opacity-90 transition-shadow shadow-md">Shop Now</a>
+            </div>
+        </div>
+
+        <!-- 💰 Best Budget Phones -->
+        <div class="relative group rounded-lg overflow-hidden shadow-lg hover:shadow-2xl transition bg-white p-5">
+            <div class="flex justify-center">
+                <img src="https://images.pexels.com/photos/3755921/pexels-photo-3755921.jpeg" 
+                     alt="Best Budget Phones" 
+                     class="w-3/4 h-48 object-cover transition-transform duration-300 group-hover:scale-110">
+            </div>
+            <div class="text-center mt-5">
+                <h3 class="text-2xl font-bold text-gray-900">💰 Best Budget Phones</h3>
+                <p class="text-md text-gray-700 mt-2">Affordable yet <span class="font-semibold text-black">feature-packed.</span></p>
+                <a href="#" class="mt-4 inline-block px-5 py-2 bg-gradient-to-r from-orange-500 to-orange-700 text-white text-md font-bold rounded-lg hover:opacity-90 transition-shadow shadow-md">Shop Now</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white flex justify-between items-center px-4 py-2 shadow-md rounded-lg">
+  
+    <!-- 🚀 Top Deals Section -->
+    <div class="text-center">
+      <h1 class="hidden lg:flex md:flex text-xl font-bold p-2 text-white">
+        🚀 Top Deals on Phones | 
+        <span class="text-yellow-300">Up to 40% Off</span>
+      </h1> 
+      <h1 class="md:hidden flex font-bold text-md">🚀 Top Deals on Phones</h1>
+      <h2 class="md:hidden flex font-semibold text-sm text-yellow-300">Up to 40% Off</h2>
+    </div>
+  
+    <!-- 🔗 See All Link -->
+    <a href="#" class="text-white hover:underline text-sm flex items-center font-semibold transition-transform transform hover:scale-105">
+      SEE ALL &gt;
+    </a>
+  </div>
+  
 
 <section class="mt-10">
   <div class="swiper-container relative">
@@ -461,77 +658,162 @@ document.addEventListener("DOMContentLoaded", function () {
 </section>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      const products = JSON.parse(localStorage.getItem("productData")) || {};
-      const smartphonesList = document.getElementById("smartphones-list");
-      
-      // ✅ Possible labels for variety
-      const labels = ["Best Seller", "Limited Stock", "New Arrival", "Hot Deal", "Trending Now", "Exclusive"];
-  
-      function getRandomLabel() {
-          return labels[Math.floor(Math.random() * labels.length)];
-      }
-  
-      function getRandomColor() {
-          const colors = ["red", "yellow", "blue", "green", "purple", "pink"];
-          return colors[Math.floor(Math.random() * colors.length)];
-      }
-  
-      if (!products.smartphones || products.smartphones.length === 0) {
-          smartphonesList.innerHTML = "<p class='text-gray-500 text-center'>No smartphones available.</p>";
-          return;
-      }
-  
-      smartphonesList.innerHTML = products.smartphones
-          .map(product => `
-              <div class="swiper-slide bg-white shadow-lg rounded-lg p-4 flex flex-col justify-between relative">
-                  <!-- ✅ Dynamic Labels -->
-                  <span class="absolute top-2 left-2 bg-${getRandomColor()}-500 text-white text-xs font-bold px-3 py-1 rounded-full">
-                      ${getRandomLabel()}
-                  </span>
-  
-                  <!-- ✅ Clickable Product (Image, Name, Price) -->
-                  <div class="cursor-pointer product-clickable flex flex-col items-center" data-id="${product.id}">
-                      <img src="${product.image}" alt="${product.name}" class="w-3/4 max-h-40 object-contain transition-transform duration-300 hover:scale-105">
-                      <h3 class="font-bold text-lg mt-2 text-gray-800">${product.name}</h3>
-                       <div class="text-red-500 text-2xl font-bold">    
-                      <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
-                        ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+document.addEventListener("DOMContentLoaded", function () {
+    const products = JSON.parse(localStorage.getItem("productData")) || {};
+    const smartphonesList = document.getElementById("smartphones-list");
+
+    // ✅ Possible labels for variety
+    const labels = ["🌟 Best Seller", "🔥 Hot Deal", "✨ New Arrival", "💎 Exclusive", "🚀 Trending Now", "⏳ Limited Stock"];
+
+    // ✅ Predefined color classes (Tailwind-compatible)
+    const colorClasses = ["bg-pink-500", "bg-cyan-500", "bg-purple-500", "bg-green-500", "bg-blue-500", "bg-yellow-500"];
+
+    function getRandomLabel() {
+        return labels[Math.floor(Math.random() * labels.length)];
+    }
+
+    function getRandomColorClass() {
+        return colorClasses[Math.floor(Math.random() * colorClasses.length)];
+    }
+
+    if (!products.smartphones || products.smartphones.length === 0) {
+        smartphonesList.innerHTML = "<p class='text-gray-500 text-center'>No smartphones available.</p>";
+        return;
+    }
+
+    smartphonesList.innerHTML = products.smartphones
+        .map(product => {
+            const randomColorClass = getRandomColorClass();
+            return `
+                <div class="swiper-slide bg-white shadow-lg rounded-lg p-4 flex flex-col justify-between relative">
+                    
+                    <!-- ✅ Cute & Visible Dynamic Labels -->
+                    <span class="absolute top-2 left-2 ${randomColorClass} text-white text-xs font-bold px-3 py-1 rounded-full shadow-md">
+                        ${getRandomLabel()}
+                    </span>
+
+                    <!-- ✅ Clickable Product (Image, Name, Price) -->
+                    <div class="cursor-pointer product-clickable flex flex-col items-center" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}" 
+                             class="w-3/4 max-h-40 object-contain transition-transform duration-300 hover:scale-105">
+                        <h3 class="font-bold text-lg mt-2 text-gray-800">${product.name}</h3>
+                        <div class="text-red-500 text-2xl font-bold">    
+                            <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
+                            ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+                        </div>
                     </div>
-                  </div>
-  
-                  <!-- ✅ Buttons Section (WhatsApp & Order Now) -->
-                  <div class="p-4 bg-gray-100 flex flex-col sm:flex-row justify-between gap-3 mt-3">
-                      <!-- WhatsApp Button -->
-                      <a href="https://wa.me/+254742606408?text=I'm%20interested%20in%20${product.name}"
-                         class="bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto">
-                          <i class="fab fa-whatsapp text-lg"></i> 
-                          <span class="ml-2">Buy on WhatsApp</span>
-                      </a>
-  
-                      <!-- Order Now Button -->
-                      <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto"
-                              data-name="${product.name}" data-price="${product.price}">
-                          <i class="fas fa-shopping-bag text-lg"></i>
-                          <span class="ml-2">Order Now</span>
-                      </button>
-                  </div>
-              </div>
-          `)
-          .join('');
-  
-      // ✅ Make only the image, title, or price clickable for product details
-      document.querySelectorAll(".product-clickable").forEach(element => {
-          element.addEventListener("click", function () {
-              const productId = this.getAttribute("data-id");
-              localStorage.setItem("selectedProduct", JSON.stringify({ id: productId, category: "smartphones" }));
-              window.location.href = `./product/?product=${productId}`;
-          });
-      });
-  
-  });
-  </script>
-  
+
+                    <!-- ✅ Buttons Section (WhatsApp & Order Now) -->
+                    <div class="p-4 bg-gray-100 flex flex-col sm:flex-row justify-between gap-3 mt-3">
+                        
+                        <!-- WhatsApp Button -->
+                        <a href="https://wa.me/+254742606408?text=Hi!%20I'm%20interested%20in%20${product.name}%20for%20Ksh${product.price}.%20Can%20you%20please%20provide%20more%20details%20about%20availability,%20payment%20options,%20and%20delivery%3F"
+                           data-name="${product.name}" data-price="${product.price}"
+                           class="bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto">
+                           <i class="fab fa-whatsapp text-lg"></i> 
+                           <span class="ml-2">Buy on WhatsApp</span>
+                        </a>
+
+                        <!-- Order Now Button -->
+                        <button class="add-to-cart-btn bg-orange-500 hover:bg-orange-600 text-white text-sm px-5 py-2 rounded-lg flex items-center justify-center w-full sm:w-auto"
+                                data-name="${product.name}" data-price="${product.price}">
+                            <i class="fas fa-shopping-bag text-lg"></i>
+                            <span class="ml-2">Order Now</span>
+                        </button>
+                    </div>
+                </div>
+            `;
+        })
+        .join('');
+
+    // ✅ Make only the image, title, or price clickable for product details
+    document.querySelectorAll(".product-clickable").forEach(element => {
+        element.addEventListener("click", function () {
+            const productId = this.getAttribute("data-id");
+            localStorage.setItem("selectedProduct", JSON.stringify({ id: productId, category: "smartphones" }));
+            window.location.href = `./product/?product=${productId}`;
+        });
+    });
+
+});
+
+ </script>
+
+<!-- ✅ Accessories Collection Section (With Working Images) -->
+<section class="mt-12 px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-900">🛠️ Must-Have Accessories for Your Tech</h2>
+    <p class="text-gray-600 mt-2">Upgrade your setup with the best accessories available.</p>
+
+    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        
+        <!-- 📸 Camera Gear -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/62/5074372/1.jpg?5578                                                                                                                                                       "
+                     alt="Camera Gear" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-red-600 transition">
+                    Camera Gear
+                </h3>
+                <p class="text-sm text-gray-600">DSLRs, Mirrorless, Lenses & More</p>
+            </a>
+        </div>
+
+        <!-- 🖱️ Computer Peripherals -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://m.media-amazon.com/images/I/61Ebp3VKsRL.jpg" 
+                     alt="Computer Peripherals" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-blue-600 transition">
+                    Computer Peripherals
+                </h3>
+                <p class="text-sm text-gray-600">Keyboards, Mice, Webcams & More</p>
+            </a>
+        </div>
+
+        <!-- 💼 Laptop Essentials -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://www.digitalstore.co.ke/cdn/shop/files/Ugreen5In1LaptopStandDockingStation_CM359_-i5_800x.jpg?v=1699015403" 
+                     alt="Laptop Essentials" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Laptop Essentials
+                </h3>
+                <p class="text-sm text-gray-600">Laptop Bags, Cooling Pads & Docking Stations</p>
+            </a>
+        </div>
+
+        <!-- 🎥 Mounts & Tripods -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://i.ebayimg.com/images/g/OEcAAOSwp-9g9P9e/s-l1200.jpg" 
+                     alt="Mounts & Tripods" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-purple-600 transition">
+                    Mounts & Tripods
+                </h3>
+                <p class="text-sm text-gray-600">Tripods, Mounts & Stabilizers</p>
+            </a>
+        </div>
+
+        <!-- 💾 Storage & Memory -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfG7hUbZuQeZ1K0_R_oSCutc2yj_dUPNhUxg&s" 
+                     alt="Storage & Memory" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-orange-600 transition">
+                    Storage & Memory
+                </h3>
+                <p class="text-sm text-gray-600">Memory Cards & External Storage</p>
+            </a>
+        </div>
+
+    </div>
+</section>
+ 
 
 <!-- flash sale section -->
 <div class="bg-red-500 text-white flex justify-between items-center px-2 py-2">
@@ -674,15 +956,132 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
 </script>
+
+<!-- ✅ Televisions & Video Collection Section -->
+<section class="mt-12 px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-900">📺 Upgrade Your Viewing Experience</h2>
+    <p class="text-gray-600 mt-2">Discover the best in television and video technology.</p>
+
+    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        
+        <!-- 📡 Smart TVs -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi3Fb__nhzgqZDo9noIjgwLfDbfOrGpOXuYw&s" 
+                     alt="Smart TVs" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-red-600 transition">
+                    Smart TVs
+                </h3>
+                <p class="text-sm text-gray-600">Enjoy streaming, apps & voice control.</p>
+            </a>
+        </div>
+
+        <!-- 🎥 4K Ultra HD TVs -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRvuk4zUdhEMjeW1ZpQ6yeOQLHuqtvWJ_3faw&s" 
+                     alt="4K Ultra HD TVs" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-blue-600 transition">
+                    4K Ultra HD TVs
+                </h3>
+                <p class="text-sm text-gray-600">Stunning clarity and lifelike colors.</p>
+            </a>
+        </div>
+
+        <!-- 🔆 LED TVs -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSvmedCpduyW_OwcJYbjoBpw1OwdgZ3pKiB-g&s" 
+                     alt="LED TVs" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    LED TVs
+                </h3>
+                <p class="text-sm text-gray-600">Bright and energy-efficient displays.</p>
+            </a>
+        </div>
+
+        <!-- 📽️ Projectors -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1JS-PTRGEjbZ52vpNpp1lKK60WVmF-JNV7Q&s" 
+                     alt="Projectors" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-purple-600 transition">
+                    Projectors
+                </h3>
+                <p class="text-sm text-gray-600">Transform any space into a theater.</p>
+            </a>
+        </div>
+
+        <!-- 🔌 TV Accessories -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://hisenseke.co.ke/wp-content/uploads/2025/01/Untitled-design-92.jpg" 
+                     alt="TV Accessories" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-orange-600 transition">
+                    TV Accessories
+                </h3>
+                <p class="text-sm text-gray-600">Mounts, remotes, cables & more.</p>
+            </a>
+        </div>
+
+    </div>
+</section>
+
+
   
 <section>
-  <h2 class="text-md sm:text-2xl md:text-2xl lg:text-2xl font-bold p-2 bg-blue-500 text-white sm:text-center">
-      New Arrivals | On Laptops
-  </h2>
+    <h2 class="text-md sm:text-2xl md:text-2xl lg:text-2xl font-bold p-3 bg-[#1E3A8A] text-white sm:text-center rounded-md">
+        🚀 New Arrivals | Premium Laptops
+    </h2>
 
-  <div id="laptops-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-      <!-- Laptops will be inserted here dynamically using JavaScript -->
-  </div>
+<!-- Laptop Categories (Refined with Real Images) -->
+<div class="flex flex-wrap justify-center gap-6 my-8">
+    <button class="laptop-category active-tab bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="all">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHgZ0zDdE71h3tXaC2qUp9rtG9qGO-5mOYsw&s" alt="All Laptops" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">All Laptops</span>
+</button>
+    
+    <button class="laptop-category bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="dell">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREZ7w4gR7Pop0EYQfOKAJrWCwuIIJXOePhrw&s" alt="Dell Laptops" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">Dell</span>
+</button>
+    
+    <div class="category-thumbnail bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="hp">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTE2gG01CAWfOgN6LOnkI5Vdm5Rk3Vdtoqb0A&s" alt="HP Laptops" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">HP</span>
+    </div>
+    
+    <div class="category-thumbnail bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="macbook">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUIT1yt5Hql-AoNXSpwIeoULcRPIPBCZ0lvA&s" alt="MacBooks" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">MacBooks</span>
+    </div>
+    
+    <div class="category-thumbnail bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="gaming">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRG8lHoB6yglsIV1NMbssjW1CcI4aJ3PJITIg&s" alt="Gaming Laptops" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">Gaming</span>
+    </div>
+    
+    <div class="category-thumbnail bg-white shadow-md hover:shadow-xl transition-all rounded-lg p-4 flex flex-col items-center cursor-pointer"
+         data-category="business">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSduvliweQjYHOw3-HJoS0SjNWMv_ZLOewROw&s" alt="Business Laptops" class="w-32 h-24 object-cover rounded-lg">
+        <span class="mt-2 text-gray-800 font-semibold text-sm sm:text-base">Business</span>
+    </div>
+</div>
+
+    <!-- Laptop List -->
+    <div id="laptops-list" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        <!-- Laptops will be inserted dynamically -->
+    </div>
 </section>
 
 <script>
@@ -697,34 +1096,34 @@ function renderLaptops() {
 
     laptopContainer.innerHTML = products.laptops
         .map((product, index) => `
-            <div class="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer laptop-clickable"
-                 data-id="${product.id}">
-                <div class="relative">
-                    <img src="${product.image}" alt="${product.name}" class="w-full h-48 object-contain p-4">
-                </div>
+            <div class="bg-gradient-to-br from-white to-gray-100 shadow-md rounded-xl overflow-hidden transform transition-all hover:scale-105 hover:shadow-xl cursor-pointer laptop-clickable"
+     data-id="${product.id}">
+    <div class="relative">
+        <img src="${product.image}" alt="${product.name}" 
+             class="w-full h-52 object-contain p-4 transition-transform duration-300 hover:scale-110">
+    </div>
 
-                <div class="p-5 text-center">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-2">${product.name}</h3>
-                    <div class="text-red-500 text-2xl font-bold">
-                        <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
-                        ${product.was ? `<span class="line-through text-gray-400 text-base ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
-                    </div>
-                    <div class="mt-3 text-gray-600 text-sm">
-                        Offer Ends in <span id="hour-product${index}"></span>:<span id="minute-product${index}"></span>:<span id="second-product${index}"></span>
-                    </div>
-                </div>
+    <div class="p-5 text-center">
+        <h3 class="text-lg md:text-xl font-semibold text-gray-800 mb-2">${product.name}</h3>
+        <div class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-700 text-2xl font-extrabold">
+            <span class="underline">Ksh ${product.price.toLocaleString()}</span> 
+            ${product.was ? `<span class="line-through text-gray-400 text-sm ml-2">Ksh ${product.was.toLocaleString()}</span>` : ""}
+        </div>
+    </div>
 
-                <div class="p-5 bg-gray-100 flex sm:justify-between sm:items-center flex-col sm:flex-row">
-                    <a href="https://wa.me/+254742606408?text=I'm%20interested%20in%20${product.name}" class="whatsapp-btn bg-green-500 hover:bg-green-600 text-white text-sm px-5 py-2 rounded-lg flex items-center">
-                        <i class="fab fa-whatsapp mr-2"></i> Buy on WhatsApp
-                    </a>
+    <div class="p-5 bg-gray-100 flex sm:justify-between sm:items-center flex-col sm:flex-row gap-3">
+        <a href="https://wa.me/+254742606408?text=I'm%20interested%20in%20${product.name}" 
+           class="whatsapp-btn flex items-center justify-center bg-gradient-to-r from-green-500 to-green-600 text-white text-sm px-5 py-2 rounded-lg shadow-md hover:from-green-600 hover:to-green-700 hover:shadow-lg transition-all duration-300">
+            <i class="fab fa-whatsapp mr-2"></i> Buy on WhatsApp
+        </a>
 
-                    <button class="add-to-cart-btn bg-blue-500 hover:bg-blue-600 text-white text-sm px-5 py-2 rounded-lg flex items-center"
-                            data-name="${product.name}" data-price="${product.price}">
-                        <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
-                    </button>
-                </div>
-            </div>
+        <button class="add-to-cart-btn flex items-center justify-center bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm px-5 py-2 rounded-lg shadow-md hover:from-blue-600 hover:to-blue-700 hover:shadow-lg transition-all duration-300"
+                data-name="${product.name}" data-price="${product.price}">
+            <i class="fas fa-shopping-cart mr-2"></i> Add to Cart
+        </button>
+    </div>
+</div>
+
         `)
         .join('');
 
@@ -750,6 +1149,82 @@ function attachLaptopClickEvents() {
 // ✅ Render Laptops on Page Load
 renderLaptops();
 </script>
+
+<!-- ✅ Power & Networking Essentials Collection Section -->
+<section class="mt-12 px-6 text-center">
+    <h2 class="text-3xl font-bold text-gray-900">⚡ Stay Powered & Connected</h2>
+    <p class="text-gray-600 mt-2">Reliable power solutions and networking devices for uninterrupted performance.</p>
+
+    <div class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-6">
+        
+        <!-- 🔋 Power Banks -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://brothers4change.com/cdn/shop/articles/1200x1200_a00b216c-3268-4df4-8824-3e7f37f52185.jpg?v=1681197565&width=1100" 
+                     alt="Power Banks" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-red-600 transition">
+                    Power Banks
+                </h3>
+                <p class="text-sm text-gray-600">Fast-charging portable power solutions.</p>
+            </a>
+        </div>
+
+        <!-- 🔌 UPS & Surge Protectors -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://rondamo.co.ke/photok/621158.png" 
+                     alt="UPS & Surge Protectors" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-blue-600 transition">
+                    UPS & Surge Protectors
+                </h3>
+                <p class="text-sm text-gray-600">Safeguard devices from power fluctuations.</p>
+            </a>
+        </div>
+
+        <!-- ☀️ Solar Chargers -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://dablew.pk/wp-content/uploads/2024/06/Buy-Choetech-36W-Foldable-Solar-Charger-in-Pakistan-at-Dab-Lew-Tech-1.jpg" 
+                     alt="Solar Chargers" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-green-600 transition">
+                    Solar Chargers
+                </h3>
+                <p class="text-sm text-gray-600">Eco-friendly charging anytime, anywhere.</p>
+            </a>
+        </div>
+
+        <!-- 📶 Wi-Fi Routers -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://ke.jumia.is/unsafe/fit-in/500x500/filters:fill(white)/product/01/1001872/1.jpg?1951" 
+                     alt="Wi-Fi Routers" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-purple-600 transition">
+                    Wi-Fi Routers
+                </h3>
+                <p class="text-sm text-gray-600">Fast & secure internet connectivity.</p>
+            </a>
+        </div>
+
+        <!-- 🔗 Ethernet & Wi-Fi Adapters -->
+        <div class="group">
+            <a href="#" class="block">
+                <img src="https://images-na.ssl-images-amazon.com/images/I/61bL7srKqoL._SS400_.jpg" 
+                     alt="Ethernet & Wi-Fi Adapters" 
+                     class="rounded-lg shadow-lg w-full transition transform hover:scale-105">
+                <h3 class="text-lg font-semibold text-gray-900 mt-3 group-hover:text-orange-600 transition">
+                    Ethernet & Wi-Fi Adapters
+                </h3>
+                <p class="text-sm text-gray-600">Seamless wired & wireless connections.</p>
+            </a>
+        </div>
+
+    </div>
+</section>
+
 
 
 <!-- 🛒 Fixed Slide-in Cart Section -->
@@ -841,9 +1316,27 @@ renderLaptops();
 <script src="https://js.paystack.co/v1/inline.js"></script>
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () {
-      const cartButtons = document.querySelectorAll(".add-to-cart-btn");
+    
+ document.addEventListener("DOMContentLoaded", function () {
+    const searchToggle = document.getElementById("searchToggle");
+    const mobileSearch = document.getElementById("mobileSearch"); 
+    const cartButtons = document.querySelectorAll(".add-to-cart-btn");
+    
+        // ✅ Search Bar Toggle for Small Screens
+        searchToggle.addEventListener("click", function () {
+        mobileSearch.classList.toggle("hidden");
+        categoriesSidebar.classList.add("hidden"); // Hide categories when search is open
+        sidebarBar.classList.remove("hidden");
+    });
 
+    // ✅ Close search bar when clicking outside
+    document.addEventListener("click", function (event) {
+        if (!mobileSearch.contains(event.target) && !searchToggle.contains(event.target)) {
+            mobileSearch.classList.add("hidden");
+        }
+    });
+
+    
       // Attach event listeners to all "Add to Cart" buttons
       cartButtons.forEach(button => {
           button.addEventListener("click", function () {
@@ -1388,7 +1881,7 @@ document.addEventListener("DOMContentLoaded", fetchSavedAddresses);
       <!-- Logo on the Top (remains same across all screens) -->
       <div class="w-full lg:w-1/4 mb-6 lg:mb-0">
         <a href="/" class="flex items-center">
-          <img src="/img/Logo.png" alt="Logo" class="h-10">
+          <img src="img/Logo.png" alt="Logo" class="h-10">
           <span class="ml-2 text-xl font-bold text-gray-700"></span>
         </a>
       </div>
