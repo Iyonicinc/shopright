@@ -914,8 +914,7 @@ function editAddress(id) {
  
 document.addEventListener('DOMContentLoaded', () => {
       const savedSection = sessionStorage.getItem('selectedSection') || 'accountSection';
-    showSection(savedSection);
-
+      showSection(savedSection);
 
  // Fetch user data and orders
  fetchUserData();
@@ -1077,6 +1076,14 @@ function displayOrders(orders) {
     window.location.href = '../login';
     
   }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    const defaultNav = document.querySelector('a[href="#accountSection"]');
+    if (defaultNav) {
+      navigateToSection('accountSection', defaultNav);
+    }
+  });
+
 </script>
 </body>
 </html>
