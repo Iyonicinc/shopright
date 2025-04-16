@@ -916,9 +916,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const savedSection = sessionStorage.getItem('selectedSection') || 'accountSection';
     showSection(savedSection);
 
-    windowonload = () => {
-      const savedSection = sessionStorage.getItem('selectedSection') || 'accountSection';        
-    };
 
  // Fetch user data and orders
  fetchUserData();
@@ -1078,6 +1075,7 @@ function displayOrders(orders) {
   function logout() {
     sessionStorage.removeItem('token');
     window.location.href = '../login';
+    
   }
 </script>
 </body>
